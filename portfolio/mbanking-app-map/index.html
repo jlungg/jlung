@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mBanking: App Map — Jason Lung</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    @font-face { font-family:'MCQ Global'; src:url('fonts/MCQGlobal_Rg.ttf') format('truetype'); font-weight:400; }
+    @font-face { font-family:'MCQ Global'; src:url('fonts/MCQGlobal_Md.ttf') format('truetype'); font-weight:500; }
+    @font-face { font-family:'MCQ Global'; src:url('fonts/MCQGlobal_Bd.ttf') format('truetype'); font-weight:700; }
+    @font-face { font-family:'MCQ Global Dark'; src:url('fonts/MCQGlobalDark_Rg.ttf') format('truetype'); font-weight:400; }
+    @font-face { font-family:'MCQ Global Dark'; src:url('fonts/MCQGlobalDark_Md.ttf') format('truetype'); font-weight:500; }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'MCQ Global', sans-serif;
+      font-size: 18px; line-height: 1.6;
+      color: #E8E8E8; background: #0A0A0A;
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+
+    :root {
+      --black:        #0A0A0A;
+      --black-mid:    #111111;
+      --white:        #FFFFFF;
+      --off-white:    #F2F2F0;
+      --blue:         #0c6cce;
+      --blue-dim:     rgba(12,108,206,0.12);
+      --blue-border:  rgba(12,108,206,0.25);
+      --text-dim:     rgba(255,255,255,0.42);
+      --text-mid:     rgba(255,255,255,0.65);
+      --text-body:    rgba(255,255,255,0.82);
+      --border:       rgba(255,255,255,0.08);
+      --max-w:        1200px;
+      --pad:          120px;
+      --ease:         cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .grain::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      pointer-events: none; mix-blend-mode: overlay; z-index: 1;
+    }
+
+    /* ─── NAV DOTS ──────────────────────────────────────────────── */
+    #nav-dots {
+      position: fixed; right: 28px; top: 50%; transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 10px;
+      z-index: 999; opacity: 0; transition: opacity 0.4s ease;
+    }
+    #nav-dots.visible { opacity: 1; }
+    .nav-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.4); background: transparent;
+      cursor: pointer; transition: all 0.3s var(--ease); position: relative;
+    }
+    #nav-dots.on-light .nav-dot { border-color: rgba(0,0,0,0.3); }
+    #nav-dots.on-light .nav-dot.active { background: var(--blue); border-color: var(--blue); }
+    .nav-dot.active { background: var(--blue); border-color: var(--blue); transform: scale(1.5); }
+    .nav-dot:hover::after {
+      content: attr(data-label);
+      position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+      font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      white-space: nowrap; color: var(--white);
+      background: rgba(10,10,10,0.92); border: 1px solid var(--border);
+      padding: 4px 9px; border-radius: 2px; pointer-events: none;
+    }
+
+    /* ─── ANIMATIONS ────────────────────────────────────────────── */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.32s; }
+    .delay-4 { transition-delay: 0.46s; }
+    .delay-5 { transition-delay: 0.6s; }
+
+    .hl-sweep {
+      position: relative; display: inline;
+      color: inherit; transition: color 0.15s ease 0.38s;
+    }
+    .hl-sweep::after {
+      content: ''; position: absolute;
+      left: -3px; right: -4px; top: 10%; bottom: 8%;
+      background: var(--blue); z-index: -1; border-radius: 3px;
+      transform: scaleX(0); transform-origin: left center;
+      transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .hl-sweep.hl-active::after { transform: scaleX(1); }
+    .hl-sweep.hl-active { color: #FFFFFF; }
+    .hl-dark { color: rgba(255,255,255,0.3); }
+
+    /* ─── LAYOUT ────────────────────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 48px; }
+    section { position: relative; overflow: hidden; }
+    .two-col { display: grid; grid-template-columns: 340px 1fr; gap: 100px; align-items: start; }
+    .two-col-equal { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .sticky { position: sticky; top: 80px; }
+
+    /* ─── TYPOGRAPHY ────────────────────────────────────────────── */
+    .eyebrow {
+      font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 14px;
+    }
+    .eyebrow.accent { color: var(--blue); }
+    .display-xl {
+      font-family: 'Roboto Mono', monospace; font-weight: 700;
+      text-transform: uppercase; line-height: 0.9; letter-spacing: -0.02em;
+    }
+    .display-lg {
+      font-family: 'Roboto Mono', monospace; font-weight: 700;
+      font-size: clamp(28px, 3.5vw, 46px);
+      text-transform: uppercase; line-height: 1.0; letter-spacing: -0.01em;
+    }
+    .body-copy {
+      font-family: 'MCQ Global', sans-serif;
+      font-size: 17px; line-height: 1.8; color: var(--text-mid); font-weight: 400;
+    }
+    .body-copy p + p { margin-top: 22px; }
+    .body-copy strong { color: var(--white); font-weight: 500; }
+    .body-copy em { font-style: italic; }
+    .divider-bar { width: 36px; height: 2px; background: var(--blue); margin-bottom: 24px; }
+
+    .dot-grid {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 28px 28px; pointer-events: none;
+    }
+
+    /* ──────────────────────────────────────────────────────────────
+       1. HERO
+    ────────────────────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh; background: var(--black);
+      position: relative; padding: var(--pad) 0;
+    }
+    .hero-dot-grid {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.055) 1px, transparent 1px);
+      background-size: 30px 30px;
+      animation: grid-drift 30s linear infinite; pointer-events: none;
+    }
+    @keyframes grid-drift { to { background-position: 30px 30px; } }
+    .hero-glow {
+      position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(12,108,206,0.09) 0%, transparent 70%);
+      top: -150px; right: -120px; pointer-events: none;
+    }
+    .hero-glow-teal {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(12,108,206,0.05) 0%, transparent 70%);
+      bottom: -80px; left: -60px; pointer-events: none;
+    }
+    .hero-kicker {
+      font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 24px;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column;
+      min-height: calc(100vh - var(--pad) * 2);
+      justify-content: center;
+    }
+    .hero-logo { margin-bottom: 64px; }
+    .hero-logo svg { height: 28px; width: auto; }
+    .hero-title { font-size: clamp(48px, 8.5vw, 110px); color: var(--white); margin-bottom: 28px; text-transform: none; }
+    .hero-title .line2 { color: var(--blue); }
+    .hero-tagline {
+      font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 400;
+      letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-dim);
+      max-width: 520px;
+    }
+    .hero-gradient-line {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--blue), transparent);
+      opacity: 0.3;
+    }
+
+    /* ──────────────────────────────────────────────────────────────
+       2. SUMMARY
+    ────────────────────────────────────────────────────────────── */
+    #summary { background: var(--off-white); padding: var(--pad) 0; color: #1A1A1A; }
+    .summary-heading {
+      font-family: 'Roboto Mono', monospace; font-weight: 700;
+      font-size: clamp(38px, 5vw, 64px); text-transform: uppercase;
+      color: #0A0A0A; line-height: 0.92; letter-spacing: -0.02em;
+    }
+    #summary .body-copy { color: #4A4A4A; font-size: 18px; }
+    #summary .body-copy strong { color: #0A0A0A; }
+    #summary .body-copy em { color: #2A2A2A; }
+    #summary .eyebrow { color: #999; }
+
+    /* ──────────────────────────────────────────────────────────────
+       CHAPTER BREAKS
+    ────────────────────────────────────────────────────────────── */
+    .chapter-break {
+      min-height: 100vh; display: flex; align-items: center;
+      padding: var(--pad) 0; position: relative;
+    }
+    .chapter-break .dot-grid { opacity: 0.6; }
+    .ch-problem  { background: linear-gradient(135deg, #0A0A0A 0%, #0A0A0A 45%, #001535 70%, #002060 100%); }
+    .ch-solution { background: linear-gradient(135deg, #0A0A0A 0%, #0A0A0A 40%, #002A33 65%, #003D40 100%); }
+    .ch-results  { background: linear-gradient(135deg, #0A0A0A 0%, #0A0A0A 40%, #0A0A2E 65%, #0A1040 100%); }
+    .chapter-ghost {
+      position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
+      font-family: 'Roboto Mono', monospace; font-weight: 700;
+      font-size: clamp(100px, 16vw, 200px); text-transform: uppercase;
+      color: rgba(255,255,255,0.022); letter-spacing: -0.04em;
+      user-select: none; pointer-events: none; z-index: 2;
+    }
+    .chapter-content { position: relative; z-index: 3; }
+    .chapter-kicker {
+      font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 20px;
+    }
+    .chapter-title {
+      font-family: 'Roboto Mono', monospace; font-weight: 700;
+      font-size: clamp(48px, 7.7vw, 98px);
+      text-transform: uppercase; line-height: 0.9; letter-spacing: -0.03em; color: var(--white);
+    }
+    .chapter-sub {
+      margin-top: 28px; font-size: 15px; color: var(--text-dim);
+      max-width: 400px; line-height: 1.55; font-weight: 300;
+    }
+
+    /* ──────────────────────────────────────────────────────────────
+       3. WHAT I NOTICED
+    ────────────────────────────────────────────────────────────── */
+    #noticed { background: var(--off-white); padding: var(--pad) 0; color: #1A1A1A; }
+    #noticed .display-lg { color: #0A0A0A; }
+    #noticed .eyebrow { color: #999; }
+    #noticed .divider-bar { background: var(--blue); }
+    #noticed .body-copy { color: #4A4A4A; }
+    #noticed .body-copy strong { color: #0A0A0A; }
+
+    /* ──────────────────────────────────────────────────────────────
+       4. PRODUCT PROBLEM
+    ────────────────────────────────────────────────────────────── */
+    #product-problem { background: #0D0D0D; padding: var(--pad) 0; }
+    .problem-lead {
+      font-family: 'Roboto Mono', monospace; font-weight: 700;
+      font-size: clamp(22px, 3vw, 38px); text-transform: uppercase;
+      line-height: 1.15; color: var(--white); letter-spacing: -0.01em;
+    }
+    .bullet-stack { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+    .bullet-stack li {
+      display: flex; gap: 14px; align-items: flex-start;
+      font-size: 16px; color: var(--text-mid); line-height: 1.55;
+      opacity: 0; transform: translateX(-12px);
+      transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+    }
+    .bullet-stack li.visible { opacity: 1; transform: translateX(0); }
+    .bullet-stack li .pip {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--blue); margin-top: 9px; flex-shrink: 0;
+    }
+    .bullet-stack li strong { color: var(--white); font-weight: 500; }
+    .dark-callout {
+      margin-top: 36px; padding: 26px 30px;
+      border: 1px solid var(--border); border-left: 3px solid var(--blue);
+      border-radius: 0 8px 8px 0; background: var(--blue-dim);
+      font-size: 16px; line-height: 1.65; color: var(--text-mid);
+    }
+    .dark-callout strong { color: var(--blue); }
+
+    /* ──────────────────────────────────────────────────────────────
+       5. ROLE & SCOPE
+    ────────────────────────────────────────────────────────────── */
+    #role { background: var(--white); padding: var(--pad) 0; color: #1A1A1A; }
+    #role .display-lg { color: #0A0A0A; }
+    #role .eyebrow { color: #999; }
+    #role .divider-bar { background: var(--blue); }
+    .initiative-tag {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--blue); color: var(--white);
+      font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 2px; margin-bottom: 20px;
+    }
+    .role-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto 1fr;
+      gap: 0 80px;
+    }
+    .role-header { grid-column: 1; grid-row: 1; padding-bottom: 8px; }
+    .role-body { grid-column: 1; grid-row: 2; }
+    .role-callout { grid-column: 2; grid-row: 2; }
+    #role .body-copy { color: #4A4A4A; }
+    #role .body-copy strong { color: #0A0A0A; }
+    .light-callout {
+      background: #F2F2F0; border-radius: 8px; padding: 28px 30px;
+      border-left: 3px solid var(--blue);
+    }
+    .light-callout p { font-size: 16px; line-height: 1.7; color: #4A4A4A; }
+    .light-callout strong { color: #0A0A0A; }
+
+    /* ──────────────────────────────────────────────────────────────
+       6. CORE INSIGHT
+    ────────────────────────────────────────────────────────────── */
+    #insight { background: #080808; padding: calc(var(--pad) * 1.3) 0; }
+    .insight-centred { text-align: center; max-width: 860px; margin: 0 auto; }
+    .insight-headline {
+      font-family: 'Roboto Mono', monospace; font-weight: 700;
+      font-size: clamp(26px, 3.8vw, 50px); text-transform: uppercase;
+      line-height: 1.1; letter-spacing: -0.02em; color: var(--white); margin-bottom: 44px;
+    }
+    .insight-sub { font-size: 16px; color: var(--text-dim); line-height: 1.65; margin-bottom: 48px; font-weight: 300; }
+    .question-trio { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; text-align: left; margin-bottom: 48px; }
+    .q-card {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 8px; padding: 26px 22px;
+      transition: background 0.25s, border-color 0.25s, transform 0.25s var(--ease);
+    }
+    .q-card:hover { background: rgba(255,255,255,0.055); border-color: rgba(12,108,206,0.3); transform: translateY(-3px); }
+    .q-card .q-sym { font-size: 26px; margin-bottom: 12px; line-height: 1; }
+    .q-card p { font-size: 14px; line-height: 1.6; color: var(--text-mid); }
+    .insight-close {
+      font-family: 'Roboto Mono', monospace; font-size: 15px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-mid);
+    }
+    .insight-close strong { color: var(--blue); }
+
+    /* ──────────────────────────────────────────────────────────────
+       7. THE INTERVENTION
+    ────────────────────────────────────────────────────────────── */
+    #intervention { background: var(--off-white); padding: var(--pad) 0; color: #1A1A1A; }
+    #intervention .display-lg { color: #0A0A0A; }
+    #intervention .eyebrow { color: #999; }
+    #intervention .body-copy { color: #4A4A4A; }
+    #intervention .body-copy strong { color: #0A0A0A; }
+    .stats-quad { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; border-radius: 8px; overflow: hidden; }
+    .stat-cell {
+      background: #0A0A0A; padding: 44px 36px;
+      transition: background 0.3s; cursor: default;
+    }
+    .stat-cell:hover { background: #181818; }
+    .stat-num {
+      font-family: 'Roboto Mono', monospace; font-weight: 700;
+      font-size: clamp(40px, 5vw, 60px); color: var(--blue);
+      line-height: 1; letter-spacing: -0.03em; margin-bottom: 10px;
+    }
+    .stat-desc { font-size: 13px; line-height: 1.5; color: rgba(255,255,255,0.45); font-weight: 300; }
+    #intervention .footnote {
+      margin-top: 14px; padding: 16px 20px;
+      background: rgba(0,0,0,0.05); border-radius: 6px;
+      font-size: 13px; line-height: 1.65; color: #7A7A7A; font-style: italic;
+    }
+
+    /* ──────────────────────────────────────────────────────────────
+       8. DESIGN JUDGEMENTS — ACCORDION
+    ────────────────────────────────────────────────────────────── */
+    #judgements { background: var(--white); padding: var(--pad) 0; color: #1A1A1A; }
+    #judgements .display-lg { color: #0A0A0A; }
+    #judgements .eyebrow { color: #999; }
+    #judgements .divider-bar { background: var(--blue); }
+    .judgements-intro { margin-bottom: 52px; }
+    .accordion { border: 1px solid #E2E2E0; border-radius: 8px; overflow: hidden; }
+    .acc-item { border-bottom: 1px solid #E2E2E0; }
+    .acc-item:last-child { border-bottom: none; }
+    .acc-trigger {
+      width: 100%; display: flex; align-items: center; gap: 20px;
+      padding: 28px 36px; background: none; border: none; cursor: pointer;
+      text-align: left; transition: background 0.2s;
+    }
+    .acc-trigger:hover { background: #F8F8F6; }
+    .acc-item.open .acc-trigger { background: #F2F2F0; }
+    .acc-t-num {
+      font-family: 'Roboto Mono', monospace; font-size: 28px; font-weight: 700;
+      color: #0A0A0A; flex-shrink: 0; width: 64px;
+      line-height: 1; letter-spacing: -0.03em;
+    }
+    .acc-t-title {
+      font-family: 'Roboto Mono', monospace; font-size: clamp(14px, 1.6vw, 18px);
+      font-weight: 700; text-transform: uppercase; color: #0A0A0A;
+      line-height: 1.2; letter-spacing: -0.01em; flex: 1;
+    }
+    .acc-vs {
+      display: inline-block; background: var(--blue); color: var(--white);
+      font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+      padding: 2px 6px; border-radius: 2px; vertical-align: middle; margin: 0 5px;
+    }
+    .acc-icon {
+      font-family: 'Roboto Mono', monospace; font-size: 22px; font-weight: 400;
+      color: var(--blue); flex-shrink: 0; width: 24px; text-align: center;
+      transition: transform 0.35s var(--ease); line-height: 1;
+    }
+    .acc-item.open .acc-icon { transform: rotate(45deg); }
+    .acc-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.45s var(--ease), padding 0.3s;
+      padding: 0 36px; background: #FAFAF8;
+    }
+    .acc-body-inner {
+      padding: 20px 0 28px 84px;
+      font-family: 'MCQ Global', sans-serif;
+      font-size: 15px; line-height: 1.7; color: #5A5A5A;
+      border-top: 1px solid #E8E8E6;
+    }
+    .acc-item.open .acc-body { max-height: 400px; }
+
+    /* ──────────────────────────────────────────────────────────────
+       9. TEAM BEHAVIOUR
+    ────────────────────────────────────────────────────────────── */
+    #team-behaviour { background: #0D0D0D; padding: var(--pad) 0; }
+    .team-header { margin-bottom: 72px; }
+    .team-header .eyebrow { color: var(--text-dim); }
+    .team-header .divider-bar { background: var(--blue); }
+    .team-header-title {
+      font-family: 'Roboto Mono', monospace; font-weight: 700;
+      font-size: clamp(28px, 3.5vw, 46px);
+      text-transform: uppercase; color: var(--white); line-height: 1.0; letter-spacing: -0.01em;
+    }
+    .team-behaviour-split {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+      align-items: start; margin-bottom: 60px;
+    }
+    .team-use-title {
+      font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 20px;
+    }
+    .team-use-body { font-size: 16px; line-height: 1.7; color: var(--text-mid); margin-bottom: 24px; }
+    .blue-bullet-list { list-style: none; display: flex; flex-direction: column; gap: 13px; }
+    .blue-bullet-list li {
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: 15px; color: var(--text-mid); line-height: 1.55;
+    }
+    .blue-bullet-list li .pip {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--blue); margin-top: 8px; flex-shrink: 0;
+    }
+    .blue-bullet-list li strong { color: var(--white); font-weight: 500; }
+    .shift-banner {
+      padding: 44px; border: 1px solid var(--border);
+      border-radius: 8px; background: var(--blue-dim);
+    }
+    .shift-label-text {
+      font-family: 'Roboto Mono', monospace; font-size: 9px; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim);
+      text-align: center; margin-bottom: 20px;
+    }
+    .shift-row { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
+    .shift-from { font-size: clamp(14px,1.8vw,18px); color: rgba(255,255,255,0.28); font-style: italic; }
+    .shift-arr { font-family: 'Roboto Mono', monospace; font-size: 20px; color: var(--blue); font-weight: 700; }
+    .shift-to {
+      font-family: 'Roboto Mono', monospace; font-size: clamp(13px,1.6vw,17px);
+      font-weight: 700; text-transform: uppercase; color: var(--white); letter-spacing: -0.01em;
+    }
+
+    .quotes-trio { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    .q-testimonial {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 12px; padding: 36px 30px 30px;
+      display: flex; flex-direction: column;
+      transition: background 0.25s, transform 0.25s var(--ease), border-color 0.25s;
+      position: relative;
+    }
+    .q-testimonial:hover { background: rgba(255,255,255,0.07); transform: translateY(-5px); border-color: rgba(12,108,206,0.3); }
+    .q-glyph {
+      font-family: 'Roboto Mono', monospace; font-size: 36px; font-weight: 700;
+      color: var(--blue); line-height: 1; margin-bottom: 16px;
+    }
+    .q-body {
+      font-family: 'MCQ Global', sans-serif;
+      font-size: 17px; line-height: 1.65; color: var(--white);
+      flex: 1; margin-bottom: 28px;
+    }
+    .q-body strong { color: var(--blue); font-weight: 500; }
+    .q-footer {
+      display: flex; align-items: center; gap: 12px;
+      padding-top: 20px; border-top: 1px solid var(--border);
+    }
+    .q-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--blue-dim); border: 1px solid var(--blue-border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Roboto Mono', monospace; font-size: 9px; font-weight: 700;
+      letter-spacing: 0.06em; color: var(--blue); flex-shrink: 0;
+    }
+    .q-role {
+      font-family: 'Roboto Mono', monospace; font-size: 9px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dim);
+    }
+    .q-context { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 2px; }
+
+    /* ──────────────────────────────────────────────────────────────
+       10. IMPACT
+    ────────────────────────────────────────────────────────────── */
+    #impact { background: var(--off-white); padding: var(--pad) 0; color: #1A1A1A; }
+    #impact .display-lg { color: #0A0A0A; }
+    #impact .eyebrow { color: #999; }
+    #impact .divider-bar { background: var(--blue); }
+    .impact-sub {
+      font-family: 'MCQ Global', sans-serif;
+      font-size: 17px; line-height: 1.75; color: #5A5A5A;
+      margin-top: 16px;
+    }
+    .impact-bullets {
+      list-style: none; display: flex; flex-direction: column; gap: 14px; margin-top: 28px;
+    }
+    .impact-bullets li {
+      font-size: 16px; line-height: 1.6; color: #5A5A5A;
+      padding-left: 18px; position: relative;
+    }
+    .impact-bullets li::before {
+      content: ''; position: absolute; left: 0; top: 10px;
+      width: 5px; height: 5px; border-radius: 50%; background: var(--blue);
+    }
+    .impact-bullets li strong { color: #0A0A0A; font-weight: 500; }
+
+    /* WIREFRAME SCREENS */
+    .screens-canvas {
+      margin-top: 56px; background: #0A0A0A; border-radius: 12px;
+      padding: 48px 24px; position: relative; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .screens-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 40px; padding: 0 16px;
+    }
+    .screens-title {
+      font-family: 'Roboto Mono', monospace; font-size: 9px; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim);
+    }
+    .screens-count {
+      font-family: 'Roboto Mono', monospace; font-size: 9px; font-weight: 500;
+      letter-spacing: 0.1em; color: var(--blue);
+    }
+    .screens-row {
+      display: flex; align-items: flex-start; justify-content: center;
+      gap: 0; position: relative; overflow-x: auto;
+      padding-bottom: 16px;
+      scrollbar-width: none;
+    }
+    .screens-row::-webkit-scrollbar { display: none; }
+    .screen-group {
+      display: flex; flex-direction: column; align-items: center;
+      flex-shrink: 0; position: relative;
+    }
+    .screen-arrow {
+      display: flex; align-items: center; justify-content: center;
+      width: 48px; flex-shrink: 0; align-self: center;
+      margin-top: -30px;
+    }
+    .screen-arrow svg { overflow: visible; }
+    .screen-arrow .arrow-line {
+      stroke-dasharray: 4 3;
+      animation: arrow-flow 0.8s linear infinite;
+    }
+    @keyframes arrow-flow { to { stroke-dashoffset: -7; } }
+    .phone-frame {
+      width: 140px; height: 260px;
+      background: #111; border-radius: 16px;
+      border: 1.5px solid rgba(255,255,255,0.1);
+      padding: 8px;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s var(--ease), border-color 0.3s, box-shadow 0.3s;
+    }
+    .phone-frame:hover {
+      transform: translateY(-6px) scale(1.03);
+      border-color: var(--blue);
+      box-shadow: 0 16px 48px rgba(12,108,206,0.15);
+    }
+    .phone-frame.active {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(12,108,206,0.3);
+    }
+    .phone-notch {
+      width: 40px; height: 4px; background: #222;
+      border-radius: 2px; margin: 2px auto 6px; flex-shrink: 0;
+    }
+    .phone-screen { flex: 1; display: flex; flex-direction: column; gap: 5px; padding: 4px 6px; }
+    .ph-status {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;
+    }
+    .ph-time { width: 16px; height: 3px; background: rgba(255,255,255,0.3); border-radius: 1px; }
+    .ph-icons { display: flex; gap: 2px; }
+    .ph-icons span { width: 5px; height: 3px; background: rgba(255,255,255,0.2); border-radius: 1px; }
+    .ph-bar { height: 4px; border-radius: 2px; }
+    .ph-bar-w { background: rgba(255,255,255,0.25); }
+    .ph-bar-b { background: rgba(12,108,206,0.5); }
+    .ph-bar-t { background: rgba(12,108,206,0.4); }
+    .ph-card {
+      border-radius: 5px; padding: 6px 7px;
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .ph-card-dark { background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.06); }
+    .ph-card-blue { background: rgba(12,108,206,0.12); border: 0.5px solid rgba(12,108,206,0.2); }
+    .ph-card-teal { background: rgba(12,108,206,0.1); border: 0.5px solid rgba(12,108,206,0.15); }
+    .ph-row { display: flex; gap: 4px; align-items: center; }
+    .ph-dot { width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; }
+    .ph-dot-b { background: rgba(12,108,206,0.6); }
+    .ph-dot-t { background: rgba(12,108,206,0.5); }
+    .ph-dot-w { background: rgba(255,255,255,0.15); }
+    .ph-circle { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+    .ph-rect { border-radius: 2px; }
+    .ph-btn {
+      height: 10px; border-radius: 3px; margin-top: auto;
+    }
+    .ph-nav {
+      display: flex; justify-content: space-around; padding: 5px 4px 2px;
+      border-top: 0.5px solid rgba(255,255,255,0.06); margin-top: auto;
+    }
+    .ph-nav-item { width: 8px; height: 8px; border-radius: 2px; background: rgba(255,255,255,0.08); }
+    .ph-nav-item.ph-nav-active { background: rgba(12,108,206,0.5); }
+    .ph-divider { height: 0.5px; background: rgba(255,255,255,0.06); margin: 2px 0; }
+    .screen-label {
+      font-family: 'Roboto Mono', monospace; font-size: 8px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim);
+      margin-top: 14px; text-align: center;
+    }
+    .screen-sublabel {
+      font-family: 'MCQ Global', sans-serif; font-size: 10px;
+      color: rgba(255,255,255,0.25); text-align: center; margin-top: 3px;
+    }
+
+    /* ──────────────────────────────────────────────────────────────
+       11. LEARNINGS
+    ────────────────────────────────────────────────────────────── */
+    #learnings { background: var(--black); padding: var(--pad) 0; }
+    #learnings .display-lg { color: var(--white); }
+    #learnings .eyebrow { color: var(--text-dim); }
+    #learnings .divider-bar { background: var(--blue); }
+    .learnings-intro p { font-size: 17px; line-height: 1.75; color: var(--text-mid); margin-top: 16px; max-width: 560px; }
+    .learnings-trio { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 52px; }
+    .learning-card {
+      background: var(--white); border-radius: 10px; padding: 40px 32px;
+      display: flex; flex-direction: column; gap: 16px;
+      transition: transform 0.3s var(--ease), box-shadow 0.3s;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .learning-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(12,108,206,0.1); }
+    .l-emoji { font-size: 28px; line-height: 1; }
+    .l-text { font-size: 16px; line-height: 1.65; color: #3A3A3A; }
+    .l-text strong { color: var(--blue); font-weight: 500; }
+
+    /* ──────────────────────────────────────────────────────────────
+       12. WHAT'S NEXT
+    ────────────────────────────────────────────────────────────── */
+    #next { background: var(--off-white); padding: var(--pad) 0; color: #1A1A1A; }
+    #next .display-lg { color: #0A0A0A; }
+    #next .eyebrow { color: #999; }
+    #next .divider-bar { background: var(--blue); }
+    #next .body-copy { color: #5A5A5A; margin-top: 16px; }
+    .next-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .next-item {
+      padding: 22px 28px; background: var(--white);
+      border-radius: 6px; font-size: 16px; line-height: 1.65; color: #5A5A5A;
+      border-left: 2px solid var(--blue);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+      transition: transform 0.2s var(--ease), box-shadow 0.2s;
+    }
+    .next-item:hover { transform: translateX(6px); box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    .next-item strong { color: #0A0A0A; font-weight: 500; }
+
+    /* ──────────────────────────────────────────────────────────────
+       13. OUTRO
+    ────────────────────────────────────────────────────────────── */
+    #outro { background: var(--blue); padding: var(--pad) 0; text-align: center; }
+    .outro-inner { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+    .outro-label {
+      font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.5);
+    }
+    .outro-title {
+      font-family: 'Roboto Mono', monospace; font-weight: 700;
+      font-size: clamp(48px, 8vw, 100px);
+      text-transform: uppercase; color: var(--white); letter-spacing: -0.03em; line-height: 0.92;
+    }
+    .outro-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--white); border: 1px solid rgba(255,255,255,0.5);
+      padding: 12px 22px; border-radius: 2px;
+      transition: all 0.25s; cursor: pointer; background: none;
+    }
+    .outro-btn:hover { background: var(--white); color: var(--blue); border-color: var(--white); }
+
+    @media (max-width: 900px) {
+      :root { --pad: 80px; }
+      .container { padding: 0 24px; }
+      .two-col, .two-col-equal, .team-behaviour-split, .role-grid, .impact-layout { grid-template-columns: 1fr; gap: 36px; }
+      .role-header { grid-row: auto; } .role-body { grid-row: auto; } .role-callout { grid-column: 1; grid-row: auto; }
+      .stats-quad, .quotes-trio, .learnings-trio, .question-trio, .impact-cards-grid { grid-template-columns: 1fr; }
+      #nav-dots { display: none; }
+      .sticky { position: static; }
+      .chapter-ghost { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="nav-dots">
+    <div class="nav-dot" data-section="hero"            data-label="Overview"></div>
+    <div class="nav-dot" data-section="summary"         data-label="Summary"></div>
+    <div class="nav-dot" data-section="problem-break"   data-label="The Problem"></div>
+    <div class="nav-dot" data-section="noticed"         data-label="What I Noticed"></div>
+    <div class="nav-dot" data-section="product-problem" data-label="Product Problem"></div>
+    <div class="nav-dot" data-section="role"            data-label="Role &amp; Scope"></div>
+    <div class="nav-dot" data-section="solution-break"  data-label="The Solution"></div>
+    <div class="nav-dot" data-section="insight"         data-label="Core Insight"></div>
+    <div class="nav-dot" data-section="intervention"    data-label="Intervention"></div>
+    <div class="nav-dot" data-section="judgements"      data-label="Judgement Calls"></div>
+    <div class="nav-dot" data-section="results-break"   data-label="The Results"></div>
+    <div class="nav-dot" data-section="team-behaviour"  data-label="Team Impact"></div>
+    <div class="nav-dot" data-section="impact"          data-label="Impact"></div>
+    <div class="nav-dot" data-section="learnings"       data-label="Learnings"></div>
+    <div class="nav-dot" data-section="next"            data-label="What's Next"></div>
+  </nav>
+
+  <!-- ─── 1. HERO ──────────────────────────────────────────────── -->
+  <section id="hero" data-theme="dark">
+    <div class="hero-dot-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-glow-teal"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-logo reveal">
+          <img src="assets/macquarie-logo.svg" alt="Macquarie" style="height:28px;width:auto;">
+        </div>
+        <p class="hero-kicker reveal delay-1">Case Study</p>
+        <h1 class="hero-title display-xl reveal delay-2">
+          mBANKING:<br><span class="line2">APP MAP</span>
+        </h1>
+        <p class="hero-tagline reveal delay-3">Creating clarity at scale to reduce product risk</p>
+      </div>
+    </div>
+    <div class="hero-gradient-line"></div>
+  </section>
+
+  <!-- ─── 2. SUMMARY ───────────────────────────────────────────── -->
+  <section id="summary" data-theme="light">
+    <div class="container">
+      <div class="two-col-equal" style="padding: var(--pad) 0;">
+        <div>
+          <p class="eyebrow reveal">In a sentence</p>
+          <h2 class="summary-heading reveal delay-1">
+            Visibility<br>before<br><span class="hl-sweep">improvement</span>.
+          </h2>
+        </div>
+        <div class="reveal delay-2">
+          <div class="body-copy">
+            <p>At Macquarie Bank, I identified that design and product teams were making decisions about the mobile banking app without a shared, reliable view of what actually existed in production.</p>
+            <p>Rather than treating it as a documentation problem, I framed it as a <strong>product risk</strong>. I self-initiated and led the creation of a comprehensive app map, a living view of the entire live experience, spanning 2,730 screens across the full mobile banking product.</p>
+            <p>The result shifted team conversations from <em>"What exists today?"</em> to <em>"What should we improve next?",</em> enabling safer, faster, more confident product decisions at scale.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CHAPTER BREAK: THE PROBLEM ──────────────────────────── -->
+  <section id="problem-break" class="chapter-break ch-problem grain" data-theme="dark">
+    <div class="dot-grid"></div>
+    <span class="chapter-ghost">01</span>
+    <div class="container">
+      <div class="chapter-content">
+        <p class="chapter-kicker reveal">Chapter One</p>
+        <h2 class="chapter-title reveal delay-1">THE<br>PROBLEM</h2>
+        <p class="chapter-sub reveal delay-2">A self-initiated diagnosis of a risk hiding in plain sight</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 3. WHAT I NOTICED ─────────────────────────────────────  -->
+  <section id="noticed" data-theme="light">
+    <div class="container">
+      <div class="two-col" style="padding: var(--pad) 0;">
+        <div class="sticky">
+          <p class="eyebrow reveal">The observation</p>
+          <div class="divider-bar reveal delay-1"></div>
+          <h2 class="display-lg reveal delay-2">What I<br>Noticed</h2>
+        </div>
+        <div class="reveal delay-2">
+          <div class="body-copy">
+            <p>While working on Macquarie's mobile banking app, I noticed teams lacked a <strong>shared understanding of what actually existed in production</strong>.</p>
+            <p>Designers, product managers, and engineers were working from partial knowledge, outdated files, or assumptions. With thousands of screens and years of iteration behind the app, this created <strong>hidden risk</strong> and slowed decision-making.</p>
+            <p>Before improving the experience, teams first needed clarity. But no one had framed it that way. Not yet.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 4. PRODUCT PROBLEM ───────────────────────────────────── -->
+  <section id="product-problem" data-theme="dark">
+    <div class="dot-grid"></div>
+    <div class="container">
+      <div class="two-col-equal" style="padding: var(--pad) 0;">
+        <div>
+          <p class="eyebrow reveal">The reframe</p>
+          <div class="divider-bar reveal delay-1"></div>
+          <h2 class="display-lg reveal delay-2" style="color:var(--white)">Why This Was a<br>Product Problem</h2>
+          <p class="reveal delay-3" style="font-size:16px;color:var(--text-mid);margin-top:20px;line-height:1.7">Without a reliable view of the current app, the organisation was limited in its ability to evolve the product confidently.</p>
+        </div>
+        <div class="reveal delay-2">
+          <ul class="bullet-stack" id="problem-bullets">
+            <li><span class="pip"></span><span>Teams <strong>re-designed existing functionality</strong> unknowingly</span></li>
+            <li><span class="pip"></span><span>Introduced <strong>inconsistent patterns</strong> across journeys</span></li>
+            <li><span class="pip"></span><span>Took on <strong>unnecessary risk</strong> when making changes</span></li>
+            <li><span class="pip"></span><span>Struggled to align work to the <strong>design system (OneUI)</strong></span></li>
+          </ul>
+          <div class="dark-callout reveal delay-3">
+            This wasn't just inefficiency. It <strong>limited the organisation's ability to evolve the product confidently</strong>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 5. ROLE & SCOPE ──────────────────────────────────────── -->
+  <section id="role" data-theme="light">
+    <div class="container" style="padding: var(--pad) 0;">
+      <div class="role-grid">
+        <div class="role-header">
+          <p class="eyebrow reveal">My position</p>
+          <div class="divider-bar reveal delay-1"></div>
+          <h2 class="display-lg reveal delay-2">My Role &amp; Scope</h2>
+          <span class="initiative-tag reveal delay-3">&#8593; Self-initiated</span>
+        </div>
+        <div class="role-body reveal delay-3">
+          <div class="body-copy">
+            <p><strong>Senior Product Designer.</strong> I initiated and led this work independently, partnering closely with UX, UI, and Engineering leadership across 29 alignment meetings.</p>
+          </div>
+        </div>
+        <div class="role-callout reveal delay-3">
+          <div class="light-callout">
+            <p>Rather than treating this as a documentation task, I framed it as a <strong>product problem</strong>: reducing uncertainty so teams could make better decisions at scale. This reframing changed how leadership engaged with the work and ensured it received the attention it warranted.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CHAPTER BREAK: THE SOLUTION ─────────────────────────── -->
+  <section id="solution-break" class="chapter-break ch-solution grain" data-theme="dark">
+    <div class="dot-grid"></div>
+    <span class="chapter-ghost">02</span>
+    <div class="container">
+      <div class="chapter-content">
+        <p class="chapter-kicker reveal">Chapter Two</p>
+        <h2 class="chapter-title reveal delay-1">THE<br>SOLUTION</h2>
+        <p class="chapter-sub reveal delay-2">How I designed a shared source of truth for 2,730 screens</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 6. CORE INSIGHT ──────────────────────────────────────── -->
+  <section id="insight" data-theme="dark">
+    <div class="container">
+      <div class="insight-centred" style="padding: calc(var(--pad) * 1.2) 0;">
+        <p class="eyebrow accent reveal" style="text-align:center">The core insight</p>
+        <h2 class="insight-headline reveal delay-1">
+          The biggest blocker wasn't a<br>lack of ideas.<br>It was <span class="hl-sweep hl-dark">uncertainty</span>.
+        </h2>
+        <p class="insight-sub reveal delay-2">Teams couldn't confidently answer the most fundamental questions about the product they were building on:</p>
+        <div class="question-trio reveal delay-3">
+          <div class="q-card">
+            <div class="q-sym">📱</div>
+            <p>What screens exist in production today?</p>
+          </div>
+          <div class="q-card">
+            <div class="q-sym">🧩</div>
+            <p>Where are patterns reused or fragmented?</p>
+          </div>
+          <div class="q-card">
+            <div class="q-sym">⚠️</div>
+            <p>What would break if we changed this?</p>
+          </div>
+        </div>
+        <p class="insight-close reveal delay-4"><strong>Clarity had to come before improvement.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 7. THE INTERVENTION ──────────────────────────────────── -->
+  <section id="intervention" data-theme="light">
+    <div class="container">
+      <div class="two-col-equal" style="padding: var(--pad) 0;">
+        <div>
+          <p class="eyebrow reveal">The work</p>
+          <div class="divider-bar reveal delay-1"></div>
+          <h2 class="display-lg reveal delay-2">The<br>Intervention</h2>
+          <div class="body-copy reveal delay-3">
+            <p>I led the creation of a comprehensive <strong>mobile app map</strong> documenting the live production experience, every screen, state, and interaction across the entire banking app.</p>
+            <p>The goal wasn't to prescribe solutions, but to create a <strong>shared source of truth</strong> that made the app understandable at a glance and supported safer product decisions across teams.</p>
+          </div>
+          <p class="footnote reveal delay-4">This level of coverage ensured teams could rely on the map as a true source of truth, not a partial or aspirational view, but an accurate picture of what actually lived in production.</p>
+        </div>
+        <div class="reveal delay-2">
+          <div class="stats-quad" id="stats-quad">
+            <div class="stat-cell">
+              <div class="stat-num" data-target="2730" data-display="2,730">2,730</div>
+              <div class="stat-desc">Screens mapped out and redesigned</div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-num" data-target="159" data-display="159">159</div>
+              <div class="stat-desc">Working days of production states represented</div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-num" data-target="55" data-display="55">55</div>
+              <div class="stat-desc">Local components actively in use</div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-num" data-target="29" data-display="29">29</div>
+              <div class="stat-desc">Alignment meetings with Team Lead and Head of UX &amp; UI</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 8. DESIGN JUDGEMENTS (ACCORDION) ─────────────────────── -->
+  <section id="judgements" data-theme="light">
+    <div class="container" style="padding-top: var(--pad); padding-bottom: var(--pad);">
+      <div class="judgements-intro">
+        <p class="eyebrow reveal">Design craft</p>
+        <div class="divider-bar reveal delay-1"></div>
+        <h2 class="display-lg reveal delay-2">Key Design<br>Judgement Calls</h2>
+      </div>
+      <div class="accordion reveal delay-3" id="judgements-accordion">
+        <div class="acc-item">
+          <button class="acc-trigger" aria-expanded="false">
+            <span class="acc-t-num">01</span>
+            <span class="acc-t-title">Completeness <span class="acc-vs">vs</span> Usability</span>
+            <span class="acc-icon">+</span>
+          </button>
+          <div class="acc-body">
+            <div class="acc-body-inner">
+              I prioritised clear hierarchy and grouping over exhaustive detail so the artefact remained usable, not overwhelming. An unusable map solves nothing. It just moves confusion to a different file.
+            </div>
+          </div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger" aria-expanded="false">
+            <span class="acc-t-num">02</span>
+            <span class="acc-t-title">Speed <span class="acc-vs">vs</span> Perfection</span>
+            <span class="acc-icon">+</span>
+          </button>
+          <div class="acc-body">
+            <div class="acc-body-inner">
+              I focused on documenting what was live in production to maintain momentum and relevance, accepting minor gaps where necessary. A stale, "perfect" map is less valuable than a timely, honest one.
+            </div>
+          </div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger" aria-expanded="false">
+            <span class="acc-t-num">03</span>
+            <span class="acc-t-title">Reality <span class="acc-vs">vs</span> Ideal System Alignment</span>
+            <span class="acc-icon">+</span>
+          </button>
+          <div class="acc-body">
+            <div class="acc-body-inner">
+              Where the app diverged from OneUI standards, I documented what existed rather than forcing alignment, ensuring accuracy over aspiration. Teams needed a map of the real, not the intended.
+            </div>
+          </div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger" aria-expanded="false">
+            <span class="acc-t-num">04</span>
+            <span class="acc-t-title">Ownership <span class="acc-vs">vs</span> Collaboration</span>
+            <span class="acc-icon">+</span>
+          </button>
+          <div class="acc-body">
+            <div class="acc-body-inner">
+              While I drove the initiative, I validated assumptions with designers and engineers throughout to build shared trust in the output. Ownership without buy-in creates shelf-ware, not change.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CHAPTER BREAK: THE RESULTS ──────────────────────────── -->
+  <section id="results-break" class="chapter-break ch-results grain" data-theme="dark">
+    <div class="dot-grid"></div>
+    <span class="chapter-ghost">03</span>
+    <div class="container">
+      <div class="chapter-content">
+        <p class="chapter-kicker reveal">Chapter Three</p>
+        <h2 class="chapter-title reveal delay-1">THE<br>RESULTS</h2>
+        <p class="chapter-sub reveal delay-2">Measurable shifts in team behaviour, alignment, and confidence</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 9. TEAM BEHAVIOUR ─────────────────────────────────────  -->
+  <section id="team-behaviour" data-theme="dark">
+    <div class="container" style="padding-top: var(--pad); padding-bottom: var(--pad);">
+      <div class="team-header">
+        <p class="eyebrow reveal">Heard from the team</p>
+        <div class="divider-bar reveal delay-1"></div>
+        <h2 class="team-header-title reveal delay-2">How This Changed<br>Team Behaviour</h2>
+      </div>
+      <div class="team-behaviour-split">
+        <div class="reveal delay-1">
+          <p class="team-use-title">Teams used it to:</p>
+          <p class="team-use-body">The app map quickly became a reference point across design and product teams.</p>
+          <ul class="blue-bullet-list">
+            <li><span class="pip"></span><span><strong>Identify</strong> duplicated or redundant screens</span></li>
+            <li><span class="pip"></span><span><strong>Understand</strong> downstream impact before making changes</span></li>
+            <li><span class="pip"></span><span><strong>Align</strong> on scope during planning conversations</span></li>
+          </ul>
+        </div>
+        <div class="shift-banner reveal delay-2">
+          <p class="shift-label-text">The shift in team conversation</p>
+          <div class="shift-row">
+            <span class="shift-from">"What exists today?"</span>
+            <span class="shift-arr">&#8594;</span>
+            <span class="shift-to">"What should we improve next?"</span>
+          </div>
+        </div>
+      </div>
+      <div class="quotes-trio">
+        <div class="q-testimonial reveal delay-1">
+          <div class="q-glyph">"</div>
+          <p class="q-body">Sooo useful! This made it very easy for me to quickly identify <strong>problem areas for our squad</strong>.</p>
+          <div class="q-footer">
+            <div class="q-avatar">UX</div>
+            <div>
+              <div class="q-role">UX Designer</div>
+              <div class="q-context">Design Team</div>
+            </div>
+          </div>
+        </div>
+        <div class="q-testimonial reveal delay-2">
+          <div class="q-glyph">"</div>
+          <p class="q-body">Seeing everything mapped made it way easier to understand <strong>what would break before we changed anything</strong>.</p>
+          <div class="q-footer">
+            <div class="q-avatar">UL</div>
+            <div>
+              <div class="q-role">UX &amp; UI Lead</div>
+              <div class="q-context">Design Leadership</div>
+            </div>
+          </div>
+        </div>
+        <div class="q-testimonial reveal delay-3">
+          <div class="q-glyph">"</div>
+          <p class="q-body">Having the app map meant we could <strong>agree on scope early</strong> instead of figuring it out halfway through.</p>
+          <div class="q-footer">
+            <div class="q-avatar">PO</div>
+            <div>
+              <div class="q-role">Product Owner</div>
+              <div class="q-context">Product Team</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 10. IMPACT ───────────────────────────────────────────── -->
+  <section id="impact" data-theme="light">
+    <div class="container" style="padding: var(--pad) 0;">
+      <p class="eyebrow reveal">What changed</p>
+      <div class="divider-bar reveal delay-1"></div>
+      <h2 class="display-lg reveal delay-2">Impact</h2>
+      <p class="impact-sub reveal delay-3">While internal-facing, this work directly enabled higher-quality customer outcomes by removing uncertainty upstream, before it became friction in the experience.</p>
+      <ul class="impact-bullets reveal delay-3">
+        <li>Established a <strong>single source of truth</strong> for Macquarie's mobile app</li>
+        <li><strong>Reduced risk</strong> when evolving core journeys</li>
+        <li><strong>Improved alignment</strong> across design, product, and engineering</li>
+        <li>Enabled <strong>more confident</strong> planning and prioritisation</li>
+        <li>Created a <strong>foundation</strong> for future mobile improvements</li>
+      </ul>
+
+      <!-- Interactive wireframe screens -->
+      <div class="screens-canvas reveal delay-4" id="screens-canvas">
+        <div class="screens-header">
+          <span class="screens-title">mBanking App Map — Key Screens</span>
+          <span class="screens-count">2,730 screens mapped</span>
+        </div>
+        <div class="screens-row" id="screens-row">
+
+          <!-- 1. HOME -->
+          <div class="screen-group">
+            <div class="phone-frame active" data-screen="home">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <div class="ph-status"><span class="ph-time"></span><div class="ph-icons"><span></span><span></span><span></span></div></div>
+                <div class="ph-bar ph-bar-w" style="width:45%;height:5px;margin-bottom:2px"></div>
+                <div class="ph-bar ph-bar-b" style="width:65%;height:3px;opacity:0.5;margin-bottom:6px"></div>
+                <div class="ph-card ph-card-blue" style="padding:8px 7px">
+                  <div class="ph-bar ph-bar-w" style="width:35%;height:3px"></div>
+                  <div class="ph-bar ph-bar-b" style="width:60%;height:6px;margin-top:2px"></div>
+                  <div class="ph-bar ph-bar-w" style="width:80%;height:2px;margin-top:3px;opacity:0.4"></div>
+                </div>
+                <div class="ph-card ph-card-dark" style="margin-top:4px">
+                  <div class="ph-bar ph-bar-w" style="width:40%;height:3px"></div>
+                  <div class="ph-bar ph-bar-b" style="width:55%;height:5px;margin-top:2px"></div>
+                </div>
+                <div class="ph-row" style="margin-top:6px;justify-content:space-between">
+                  <div class="ph-rect ph-card-dark" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center"><div class="ph-dot ph-dot-b"></div></div>
+                  <div class="ph-rect ph-card-dark" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center"><div class="ph-dot ph-dot-t"></div></div>
+                  <div class="ph-rect ph-card-dark" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center"><div class="ph-dot ph-dot-w"></div></div>
+                  <div class="ph-rect ph-card-dark" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center"><div class="ph-dot ph-dot-w"></div></div>
+                </div>
+                <div class="ph-card ph-card-dark" style="margin-top:5px">
+                  <div class="ph-row"><div class="ph-dot ph-dot-w"></div><div class="ph-bar ph-bar-w" style="width:60%;height:2px"></div></div>
+                  <div class="ph-divider"></div>
+                  <div class="ph-row"><div class="ph-dot ph-dot-w"></div><div class="ph-bar ph-bar-w" style="width:50%;height:2px"></div></div>
+                  <div class="ph-divider"></div>
+                  <div class="ph-row"><div class="ph-dot ph-dot-w"></div><div class="ph-bar ph-bar-w" style="width:55%;height:2px"></div></div>
+                </div>
+                <div class="ph-nav">
+                  <div class="ph-nav-item ph-nav-active"></div>
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item"></div>
+                </div>
+              </div>
+            </div>
+            <div class="screen-label">Home</div>
+            <div class="screen-sublabel">Dashboard</div>
+          </div>
+
+          <!-- Arrow -->
+          <div class="screen-arrow">
+            <svg width="48" height="12" viewBox="0 0 48 12"><line class="arrow-line" x1="0" y1="6" x2="40" y2="6" stroke="rgba(12,108,206,0.4)" stroke-width="1"/><polygon points="40,2 48,6 40,10" fill="rgba(12,108,206,0.4)"/></svg>
+          </div>
+
+          <!-- 2. ACCOUNTS -->
+          <div class="screen-group">
+            <div class="phone-frame" data-screen="accounts">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <div class="ph-status"><span class="ph-time"></span><div class="ph-icons"><span></span><span></span><span></span></div></div>
+                <div class="ph-row" style="margin-bottom:6px"><div class="ph-bar ph-bar-w" style="width:50%;height:4px"></div></div>
+                <div class="ph-card ph-card-blue">
+                  <div class="ph-bar ph-bar-w" style="width:50%;height:2px"></div>
+                  <div class="ph-bar ph-bar-b" style="width:70%;height:5px;margin-top:2px"></div>
+                  <div class="ph-row" style="margin-top:3px"><div class="ph-bar ph-bar-w" style="width:30%;height:2px;opacity:0.4"></div></div>
+                </div>
+                <div class="ph-card ph-card-dark" style="margin-top:4px">
+                  <div class="ph-bar ph-bar-w" style="width:45%;height:2px"></div>
+                  <div class="ph-bar ph-bar-b" style="width:55%;height:5px;margin-top:2px;opacity:0.6"></div>
+                </div>
+                <div class="ph-card ph-card-dark" style="margin-top:4px">
+                  <div class="ph-bar ph-bar-w" style="width:55%;height:2px"></div>
+                  <div class="ph-bar ph-bar-t" style="width:45%;height:5px;margin-top:2px"></div>
+                </div>
+                <div class="ph-card ph-card-dark" style="margin-top:4px">
+                  <div class="ph-bar ph-bar-w" style="width:40%;height:2px"></div>
+                  <div class="ph-bar ph-bar-w" style="width:50%;height:5px;margin-top:2px;opacity:0.3"></div>
+                </div>
+                <div class="ph-nav">
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item ph-nav-active"></div>
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item"></div>
+                </div>
+              </div>
+            </div>
+            <div class="screen-label">Accounts</div>
+            <div class="screen-sublabel">Balances</div>
+          </div>
+
+          <!-- Arrow -->
+          <div class="screen-arrow">
+            <svg width="48" height="12" viewBox="0 0 48 12"><line class="arrow-line" x1="0" y1="6" x2="40" y2="6" stroke="rgba(12,108,206,0.4)" stroke-width="1"/><polygon points="40,2 48,6 40,10" fill="rgba(12,108,206,0.4)"/></svg>
+          </div>
+
+          <!-- 3. TRANSACTIONS -->
+          <div class="screen-group">
+            <div class="phone-frame" data-screen="transactions">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <div class="ph-status"><span class="ph-time"></span><div class="ph-icons"><span></span><span></span><span></span></div></div>
+                <div class="ph-bar ph-bar-w" style="width:40%;height:4px;margin-bottom:4px"></div>
+                <div class="ph-card ph-card-dark" style="padding:5px 6px">
+                  <div class="ph-bar ph-bar-w" style="width:100%;height:8px;border-radius:4px;opacity:0.08"></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:3px;margin-top:5px">
+                  <div class="ph-row" style="justify-content:space-between"><div class="ph-row"><div class="ph-circle" style="width:10px;height:10px;background:rgba(12,108,206,0.15)"></div><div style="display:flex;flex-direction:column;gap:1px"><div class="ph-bar ph-bar-w" style="width:45px;height:2px"></div><div class="ph-bar ph-bar-w" style="width:30px;height:2px;opacity:0.3"></div></div></div><div class="ph-bar ph-bar-w" style="width:20px;height:3px"></div></div>
+                  <div class="ph-divider"></div>
+                  <div class="ph-row" style="justify-content:space-between"><div class="ph-row"><div class="ph-circle" style="width:10px;height:10px;background:rgba(12,108,206,0.15)"></div><div style="display:flex;flex-direction:column;gap:1px"><div class="ph-bar ph-bar-w" style="width:50px;height:2px"></div><div class="ph-bar ph-bar-w" style="width:25px;height:2px;opacity:0.3"></div></div></div><div class="ph-bar ph-bar-w" style="width:22px;height:3px"></div></div>
+                  <div class="ph-divider"></div>
+                  <div class="ph-row" style="justify-content:space-between"><div class="ph-row"><div class="ph-circle" style="width:10px;height:10px;background:rgba(255,255,255,0.06)"></div><div style="display:flex;flex-direction:column;gap:1px"><div class="ph-bar ph-bar-w" style="width:40px;height:2px"></div><div class="ph-bar ph-bar-w" style="width:28px;height:2px;opacity:0.3"></div></div></div><div class="ph-bar ph-bar-w" style="width:18px;height:3px"></div></div>
+                  <div class="ph-divider"></div>
+                  <div class="ph-row" style="justify-content:space-between"><div class="ph-row"><div class="ph-circle" style="width:10px;height:10px;background:rgba(12,108,206,0.1)"></div><div style="display:flex;flex-direction:column;gap:1px"><div class="ph-bar ph-bar-w" style="width:48px;height:2px"></div><div class="ph-bar ph-bar-w" style="width:32px;height:2px;opacity:0.3"></div></div></div><div class="ph-bar ph-bar-w" style="width:24px;height:3px"></div></div>
+                  <div class="ph-divider"></div>
+                  <div class="ph-row" style="justify-content:space-between"><div class="ph-row"><div class="ph-circle" style="width:10px;height:10px;background:rgba(255,255,255,0.06)"></div><div style="display:flex;flex-direction:column;gap:1px"><div class="ph-bar ph-bar-w" style="width:42px;height:2px"></div><div class="ph-bar ph-bar-w" style="width:26px;height:2px;opacity:0.3"></div></div></div><div class="ph-bar ph-bar-w" style="width:20px;height:3px"></div></div>
+                </div>
+                <div class="ph-nav">
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item ph-nav-active"></div>
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item"></div>
+                </div>
+              </div>
+            </div>
+            <div class="screen-label">Transactions</div>
+            <div class="screen-sublabel">History</div>
+          </div>
+
+          <!-- Arrow -->
+          <div class="screen-arrow">
+            <svg width="48" height="12" viewBox="0 0 48 12"><line class="arrow-line" x1="0" y1="6" x2="40" y2="6" stroke="rgba(12,108,206,0.4)" stroke-width="1"/><polygon points="40,2 48,6 40,10" fill="rgba(12,108,206,0.4)"/></svg>
+          </div>
+
+          <!-- 4. TRANSFER -->
+          <div class="screen-group">
+            <div class="phone-frame" data-screen="transfer">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <div class="ph-status"><span class="ph-time"></span><div class="ph-icons"><span></span><span></span><span></span></div></div>
+                <div class="ph-bar ph-bar-w" style="width:35%;height:4px;margin-bottom:8px"></div>
+                <div class="ph-card ph-card-dark" style="margin-bottom:5px">
+                  <div class="ph-bar ph-bar-w" style="width:25%;height:2px;opacity:0.4"></div>
+                  <div class="ph-card ph-card-blue" style="margin-top:3px;padding:4px 5px">
+                    <div class="ph-bar ph-bar-w" style="width:55%;height:2px"></div>
+                  </div>
+                </div>
+                <div class="ph-card ph-card-dark" style="margin-bottom:5px">
+                  <div class="ph-bar ph-bar-w" style="width:20%;height:2px;opacity:0.4"></div>
+                  <div class="ph-card ph-card-dark" style="margin-top:3px;padding:4px 5px">
+                    <div class="ph-bar ph-bar-w" style="width:45%;height:2px"></div>
+                  </div>
+                </div>
+                <div class="ph-card ph-card-dark">
+                  <div class="ph-bar ph-bar-w" style="width:28%;height:2px;opacity:0.4"></div>
+                  <div class="ph-bar ph-bar-b" style="width:40%;height:8px;margin-top:3px"></div>
+                </div>
+                <div class="ph-btn" style="background:rgba(12,108,206,0.5);margin-top:10px"></div>
+                <div class="ph-nav">
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item ph-nav-active"></div>
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item"></div>
+                </div>
+              </div>
+            </div>
+            <div class="screen-label">Transfer</div>
+            <div class="screen-sublabel">Payments</div>
+          </div>
+
+          <!-- Arrow -->
+          <div class="screen-arrow">
+            <svg width="48" height="12" viewBox="0 0 48 12"><line class="arrow-line" x1="0" y1="6" x2="40" y2="6" stroke="rgba(12,108,206,0.4)" stroke-width="1"/><polygon points="40,2 48,6 40,10" fill="rgba(12,108,206,0.4)"/></svg>
+          </div>
+
+          <!-- 5. CARDS -->
+          <div class="screen-group">
+            <div class="phone-frame" data-screen="cards">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <div class="ph-status"><span class="ph-time"></span><div class="ph-icons"><span></span><span></span><span></span></div></div>
+                <div class="ph-bar ph-bar-w" style="width:30%;height:4px;margin-bottom:6px"></div>
+                <div class="ph-card ph-card-blue" style="padding:10px 8px;min-height:52px">
+                  <div class="ph-bar ph-bar-w" style="width:30%;height:2px;opacity:0.5"></div>
+                  <div style="display:flex;gap:3px;margin-top:auto">
+                    <div class="ph-dot ph-dot-b"></div><div class="ph-dot ph-dot-b"></div><div class="ph-dot ph-dot-b"></div><div class="ph-dot ph-dot-b"></div>
+                    <div style="width:3px"></div>
+                    <div class="ph-dot ph-dot-b"></div><div class="ph-dot ph-dot-b"></div><div class="ph-dot ph-dot-b"></div><div class="ph-dot ph-dot-b"></div>
+                  </div>
+                  <div class="ph-bar ph-bar-w" style="width:45%;height:2px;margin-top:6px;opacity:0.4"></div>
+                </div>
+                <div class="ph-row" style="margin-top:8px;gap:6px;justify-content:center">
+                  <div class="ph-rect ph-card-dark" style="width:32px;height:24px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px"><div class="ph-dot ph-dot-b" style="width:6px;height:6px"></div><div class="ph-bar ph-bar-w" style="width:18px;height:1.5px"></div></div>
+                  <div class="ph-rect ph-card-dark" style="width:32px;height:24px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px"><div class="ph-dot ph-dot-t" style="width:6px;height:6px"></div><div class="ph-bar ph-bar-w" style="width:18px;height:1.5px"></div></div>
+                  <div class="ph-rect ph-card-dark" style="width:32px;height:24px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px"><div class="ph-dot ph-dot-w" style="width:6px;height:6px"></div><div class="ph-bar ph-bar-w" style="width:18px;height:1.5px"></div></div>
+                </div>
+                <div class="ph-card ph-card-dark" style="margin-top:8px">
+                  <div class="ph-row"><div class="ph-dot ph-dot-w"></div><div class="ph-bar ph-bar-w" style="width:60%;height:2px"></div></div>
+                  <div class="ph-divider"></div>
+                  <div class="ph-row"><div class="ph-dot ph-dot-w"></div><div class="ph-bar ph-bar-w" style="width:50%;height:2px"></div></div>
+                </div>
+                <div class="ph-nav">
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item ph-nav-active"></div>
+                  <div class="ph-nav-item"></div>
+                </div>
+              </div>
+            </div>
+            <div class="screen-label">Cards</div>
+            <div class="screen-sublabel">Manage</div>
+          </div>
+
+          <!-- Arrow -->
+          <div class="screen-arrow">
+            <svg width="48" height="12" viewBox="0 0 48 12"><line class="arrow-line" x1="0" y1="6" x2="40" y2="6" stroke="rgba(255,255,255,0.1)" stroke-width="1"/><polygon points="40,2 48,6 40,10" fill="rgba(255,255,255,0.1)"/></svg>
+          </div>
+
+          <!-- 6. SETTINGS -->
+          <div class="screen-group">
+            <div class="phone-frame" data-screen="settings">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <div class="ph-status"><span class="ph-time"></span><div class="ph-icons"><span></span><span></span><span></span></div></div>
+                <div class="ph-bar ph-bar-w" style="width:35%;height:4px;margin-bottom:6px"></div>
+                <div class="ph-row" style="gap:8px;margin-bottom:8px">
+                  <div class="ph-circle" style="background:rgba(12,108,206,0.12);width:22px;height:22px"></div>
+                  <div style="display:flex;flex-direction:column;gap:2px"><div class="ph-bar ph-bar-w" style="width:50px;height:3px"></div><div class="ph-bar ph-bar-w" style="width:35px;height:2px;opacity:0.3"></div></div>
+                </div>
+                <div class="ph-divider" style="margin-bottom:5px"></div>
+                <div style="display:flex;flex-direction:column;gap:5px">
+                  <div class="ph-row"><div class="ph-dot ph-dot-w" style="width:6px;height:6px;border-radius:1px"></div><div class="ph-bar ph-bar-w" style="width:55%;height:2px"></div></div>
+                  <div class="ph-row"><div class="ph-dot ph-dot-w" style="width:6px;height:6px;border-radius:1px"></div><div class="ph-bar ph-bar-w" style="width:50%;height:2px"></div></div>
+                  <div class="ph-row"><div class="ph-dot ph-dot-w" style="width:6px;height:6px;border-radius:1px"></div><div class="ph-bar ph-bar-w" style="width:60%;height:2px"></div></div>
+                  <div class="ph-divider"></div>
+                  <div class="ph-row"><div class="ph-dot ph-dot-w" style="width:6px;height:6px;border-radius:1px"></div><div class="ph-bar ph-bar-w" style="width:45%;height:2px"></div></div>
+                  <div class="ph-row"><div class="ph-dot ph-dot-w" style="width:6px;height:6px;border-radius:1px"></div><div class="ph-bar ph-bar-w" style="width:55%;height:2px"></div></div>
+                  <div class="ph-divider"></div>
+                  <div class="ph-row"><div class="ph-dot ph-dot-w" style="width:6px;height:6px;border-radius:1px"></div><div class="ph-bar ph-bar-w" style="width:50%;height:2px"></div></div>
+                </div>
+                <div class="ph-nav">
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item"></div>
+                  <div class="ph-nav-item ph-nav-active"></div>
+                </div>
+              </div>
+            </div>
+            <div class="screen-label">Settings</div>
+            <div class="screen-sublabel">Profile</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 11. LEARNINGS ────────────────────────────────────────── -->
+  <section id="learnings" data-theme="dark">
+    <div class="container" style="padding-top: var(--pad); padding-bottom: var(--pad);">
+      <div class="learnings-intro">
+        <p class="eyebrow reveal">Looking back</p>
+        <div class="divider-bar reveal delay-1"></div>
+        <h2 class="display-lg reveal delay-2">What This<br>Taught Me</h2>
+        <p class="reveal delay-3">This project reinforced a set of principles I now carry into every engagement.</p>
+      </div>
+      <div class="learnings-trio">
+        <div class="learning-card reveal delay-1">
+          <div class="l-emoji">💡</div>
+          <p class="l-text">Reducing ambiguity can be <strong>higher impact</strong> than shipping features</p>
+        </div>
+        <div class="learning-card reveal delay-2">
+          <div class="l-emoji">🔑</div>
+          <p class="l-text">Internal clarity is often a <strong>prerequisite</strong> for customer-facing quality</p>
+        </div>
+        <div class="learning-card reveal delay-3">
+          <div class="l-emoji">🧭</div>
+          <p class="l-text">Senior designers create value by <strong>enabling better decisions</strong>, not just better screens</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 12. WHAT'S NEXT ──────────────────────────────────────── -->
+  <section id="next" data-theme="light">
+    <div class="container">
+      <div class="two-col" style="padding: var(--pad) 0;">
+        <div class="sticky">
+          <p class="eyebrow reveal">Forward thinking</p>
+          <div class="divider-bar reveal delay-1"></div>
+          <h2 class="display-lg reveal delay-2">What I'd<br>Do Next</h2>
+          <div class="body-copy reveal delay-3">
+            <p>With more ownership, the map evolves from an artefact into a living product planning tool.</p>
+          </div>
+        </div>
+        <div class="reveal delay-2">
+          <ul class="next-list">
+            <li class="next-item"><strong>Layer usage data</strong> onto the app map to highlight high-impact areas and guide investment decisions</li>
+            <li class="next-item"><strong>Identify opportunities</strong> to consolidate redundant patterns and reduce design system debt</li>
+            <li class="next-item"><strong>Use the map</strong> to guide design system investment, evidence over instinct</li>
+            <li class="next-item"><strong>Evolve it into</strong> a living product planning tool, updated continuously alongside production changes</li>
+            <li class="next-item"><strong>Explore AI-assisted capture</strong>—automated screen crawling plus visual similarity to detect duplicates and flag drift from production</li>
+            <li class="next-item"><strong>Add natural language search</strong> so teams can ask "Where do we show account balance?" and surface relevant screens instantly</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── OUTRO ─────────────────────────────────────────────────── -->
+  <section id="outro" data-theme="dark">
+    <div class="container">
+      <div class="outro-inner" style="padding: var(--pad) 0;">
+        <p class="outro-label reveal">Case Study</p>
+        <h2 class="outro-title reveal delay-1">Thank<br>You.</h2>
+        <button class="outro-btn reveal delay-2" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+          &#8593; Back to top
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    const hlObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('hl-active'), 450);
+          hlObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('.hl-sweep').forEach(el => hlObs.observe(el));
+
+    const navEl = document.getElementById('nav-dots');
+    const dots  = document.querySelectorAll('.nav-dot');
+    const LIGHT = new Set(['summary','noticed','role','intervention','judgements','impact','next']);
+
+    const showObs = new IntersectionObserver(entries => {
+      navEl.classList.toggle('visible', !entries[0].isIntersecting);
+    }, { threshold: 0 });
+    showObs.observe(document.getElementById('hero'));
+
+    const sectionObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        dots.forEach(d => d.classList.remove('active'));
+        const hit = document.querySelector(`.nav-dot[data-section="${e.target.id}"]`);
+        if (hit) hit.classList.add('active');
+        navEl.classList.toggle('on-light', LIGHT.has(e.target.id));
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('section[id]').forEach(s => sectionObs.observe(s));
+
+    dots.forEach(d => d.addEventListener('click', () => {
+      document.getElementById(d.dataset.section)?.scrollIntoView({ behavior: 'smooth' });
+    }));
+
+    function countUp(el, target, duration) {
+      const start = performance.now();
+      const fmt = n => target >= 1000 ? n.toLocaleString() : String(n);
+      const step = ts => {
+        const p = Math.min((ts - start) / duration, 1);
+        const v = Math.round((1 - Math.pow(1 - p, 3)) * target);
+        el.textContent = fmt(v);
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = el.dataset.display;
+      };
+      requestAnimationFrame(step);
+    }
+    let counted = false;
+    const statsObs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && !counted) {
+        counted = true;
+        document.querySelectorAll('.stat-num[data-target]').forEach((el, i) => {
+          setTimeout(() => countUp(el, parseInt(el.dataset.target), 1400), i * 150);
+        });
+      }
+    }, { threshold: 0.3 });
+    statsObs.observe(document.getElementById('stats-quad'));
+
+    document.querySelectorAll('.acc-trigger').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.acc-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.acc-item.open').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.acc-trigger').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+    const firstItem = document.querySelector('.acc-item');
+    if (firstItem) {
+      firstItem.classList.add('open');
+      firstItem.querySelector('.acc-trigger').setAttribute('aria-expanded', 'true');
+    }
+
+    const bulletObs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        entries[0].target.querySelectorAll('li').forEach((li, i) => {
+          setTimeout(() => li.classList.add('visible'), i * 120);
+        });
+        bulletObs.unobserve(entries[0].target);
+      }
+    }, { threshold: 0.2 });
+    const bList = document.getElementById('problem-bullets');
+    if (bList) bulletObs.observe(bList);
+
+    const heroBg = document.querySelector('.hero-dot-grid');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY < window.innerHeight * 1.5)
+        heroBg.style.transform = `translateY(${window.scrollY * 0.1}px)`;
+    }, { passive: true });
+
+    // ─── PHONE SCREEN INTERACTIONS ─────────────────────────────
+    (function() {
+      const frames = document.querySelectorAll('.phone-frame');
+      const groups = document.querySelectorAll('.screen-group');
+      const arrows = document.querySelectorAll('.screen-arrow');
+
+      frames.forEach(frame => {
+        frame.addEventListener('click', () => {
+          frames.forEach(f => f.classList.remove('active'));
+          frame.classList.add('active');
+
+          frames.forEach(f => {
+            if (f !== frame) {
+              f.style.opacity = '0.35';
+              f.style.transform = 'scale(0.96)';
+            } else {
+              f.style.opacity = '';
+              f.style.transform = 'translateY(-6px) scale(1.03)';
+            }
+          });
+
+          setTimeout(() => {
+            frames.forEach(f => { f.style.opacity = ''; f.style.transform = ''; });
+          }, 800);
+        });
+      });
+
+      let screensAnimated = false;
+      const screensObs = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && !screensAnimated) {
+          screensAnimated = true;
+          const items = document.querySelectorAll('#screens-row > *');
+          items.forEach((el, i) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = `opacity 0.6s ${i * 100}ms var(--ease), transform 0.6s ${i * 100}ms var(--ease)`;
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; });
+            });
+          });
+        }
+      }, { threshold: 0.15 });
+      const sc = document.getElementById('screens-canvas');
+      if (sc) screensObs.observe(sc);
+    })();
+  </script>
+</body>
+</html>
