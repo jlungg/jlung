@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Know Your Customer (KYC) · Jason Lung, Product Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black:       #1E1E1E;
+      --white:       #FFFFFF;
+      --grey-light:  #F4F4F4;
+      --yellow:      #FAEC20;
+      --blue:        #1175B5;
+      --dark-grey:   #4F4C4D;
+      --green:       #5FA841;
+      --orange:      #FF9900;
+      --font:        'Work Sans', sans-serif;
+      --max-w:       1136px;
+      --pad-x:       152px;
+      --section-min: 100vh;
+      --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--grey-light); color: var(--black); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    img, svg { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    /* Nav dots */
+    #chapter-nav { position: fixed; right: 32px; top: 50%; transform: translateY(-50%); z-index: 100; display: flex; flex-direction: column; gap: 10px; opacity: 0; transition: opacity 0.4s; }
+    #chapter-nav.visible { opacity: 1; }
+    .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(30,30,30,0.2); cursor: pointer; transition: all 0.3s var(--ease-out); position: relative; }
+    .nav-dot::after { content: attr(data-label); position: absolute; right: 16px; top: 50%; transform: translateY(-50%); white-space: nowrap; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; background: var(--black); color: var(--white); padding: 4px 8px; border-radius: 4px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+    .nav-dot:hover::after { opacity: 1; }
+    .nav-dot.active { background: var(--black); transform: scale(1.4); }
+    .nav-dot.on-dark { background: rgba(255,255,255,0.3); }
+    .nav-dot.on-dark.active { background: var(--yellow); }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.35s; }
+    .reveal-delay-4 { transition-delay: 0.5s; }
+    .reveal-delay-5 { transition-delay: 0.65s; }
+
+    /* Layout */
+    .container { max-width: calc(100% - 2*var(--pad-x)); margin: 0 var(--pad-x); }
+    .section { min-height: var(--section-min); display: flex; align-items: center; position: relative; overflow: hidden; }
+    .section__inner { width: 100%; padding: 120px 0; }
+    .label { display: inline-flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 32px; }
+    .section-title { font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+    .section-subtitle { font-size: clamp(1rem, 1.5vw, 1.25rem); font-weight: 400; line-height: 1.5; max-width: 640px; }
+    .body-text { font-size: clamp(1rem, 1.4vw, 1.2rem); font-weight: 400; line-height: 1.6; }
+
+    /* ── HERO ─────────────────────────────────────────────────── */
+    #hero { background: var(--black); min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; position: relative; overflow: hidden; }
+    .hero-bg-circle { position: absolute; width: 780px; height: 780px; border-radius: 0; border: 2px solid rgba(255,255,255,0.06); top: 50%; right: -220px; transform: translateY(-50%) rotate(45deg); pointer-events: none; }
+    .hero-bg-circle-2 { position: absolute; width: 520px; height: 520px; border-radius: 0; border: 2px solid rgba(250,236,32,0.09); top: 50%; right: 20px; transform: translateY(-50%) rotate(45deg); pointer-events: none; }
+    .hero-left { padding: 120px 0 120px var(--pad-x); position: relative; z-index: 2; }
+    .hero-logo { height: 52px; width: auto; margin-bottom: 72px; }
+    .hero-title { font-size: clamp(2.5rem, 4.5vw, 4.5rem); font-weight: 900; line-height: 0.95; letter-spacing: -0.03em; color: var(--white); margin-bottom: 28px; }
+    .hero-title .accent { color: var(--yellow); }
+    .hero-subtitle { font-size: clamp(1rem, 1.5vw, 1.2rem); font-weight: 400; line-height: 1.5; color: rgba(255,255,255,0.65); max-width: 480px; }
+    .hero-right { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .hero-mockup { width: 108%; max-width: 720px; position: relative; z-index: 2; filter: drop-shadow(0 40px 80px rgba(0,0,0,0.6)); animation: float 6s ease-in-out infinite; }
+    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-16px); } }
+
+    /* ── PROJECT SUMMARY ──────────────────────────────────────── */
+    #summary { background: var(--grey-light); overflow: hidden; }
+    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .summary-meta-list { display: flex; flex-direction: column; gap: 0; padding-top: 108px; }
+    .meta-item { padding: 20px 0; border-bottom: 1px solid rgba(30,30,30,0.08); cursor: default; position: relative; overflow: hidden; transition: padding-left 0.35s var(--ease-out); }
+    .meta-item:first-child { border-top: 1px solid rgba(30,30,30,0.08); }
+    .meta-item::before { content: ''; position: absolute; left: 0; top: 0; width: 3px; height: 100%; background: var(--yellow); transform: scaleY(0); transform-origin: top; transition: transform 0.3s var(--ease-out); }
+    .meta-item:hover::before { transform: scaleY(1); }
+    .meta-item:hover { padding-left: 16px; }
+    .meta-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(79,76,77,0.55); margin-bottom: 4px; transition: color 0.25s; }
+    .meta-item:hover .meta-label { color: var(--black); }
+    .meta-value { font-size: 0.8125rem; font-weight: 400; line-height: 1.45; color: var(--dark-grey); transition: color 0.25s; }
+    .meta-item:hover .meta-value { color: var(--black); }
+    .meta-expand { display: block; max-height: 0; overflow: hidden; transition: max-height 0.4s var(--ease-out), opacity 0.3s; opacity: 0; font-size: 0.75rem; font-weight: 400; line-height: 1.5; color: var(--dark-grey); margin-top: 0; }
+    .meta-item:hover .meta-expand { max-height: 60px; opacity: 1; margin-top: 8px; }
+
+    /* ── BUSINESS CONTEXT ─────────────────────────────────────── */
+    #context { background: var(--yellow); }
+    #context .section-title { color: var(--black); }
+    #context .label { color: var(--black); opacity: 0.5; }
+    .context-split { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .context-stats { display: flex; flex-direction: column; gap: 20px; padding-top: 80px; }
+    .context-stat { background: var(--white); border-radius: 16px; padding: 32px; transition: transform 0.3s var(--ease-out), box-shadow 0.3s; cursor: default; }
+    .context-stat:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+    .context-stat-number { font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1; margin-bottom: 8px; }
+    .context-stat-label { font-size: 0.8125rem; font-weight: 500; line-height: 1.4; color: var(--dark-grey); }
+
+    /* ── PRODUCT CHALLENGES ───────────────────────────────────── */
+    #challenges { background: var(--white); }
+    .challenges-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .challenge-card { background: var(--grey-light); border-radius: 16px; padding: 40px; }
+    .challenge-card.dark { background: var(--black); color: var(--white); }
+    .challenge-icon { font-size: 2rem; margin-bottom: 20px; line-height: 1; }
+    .challenge-title { font-size: 1.125rem; font-weight: 700; margin-bottom: 16px; }
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 0; counter-reset: ch; }
+    .challenge-list li { font-size: 0.9375rem; font-weight: 400; line-height: 1.5; padding: 12px 0 12px 0; border-bottom: 1px solid rgba(0,0,0,0.06); position: relative; cursor: default; transition: padding-left 0.25s var(--ease-out); }
+    .challenge-card.dark .challenge-list li { border-color: rgba(255,255,255,0.08); }
+    .challenge-list li:hover { padding-left: 12px; }
+    .challenge-list li:last-child { border-bottom: none; }
+
+    /* ── MY ROLE ──────────────────────────────────────────────── */
+    #role { background: var(--black); color: var(--white); }
+    #role .label { color: rgba(255,255,255,0.4); }
+    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .role-responsibilities { padding-top: 126px; }
+    .role-title-block { position: sticky; top: 120px; }
+    .role-title { font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; color: var(--white); margin-bottom: 20px; }
+    .role-subtitle { font-size: clamp(1.125rem, 2vw, 1.5rem); font-weight: 500; line-height: 1.3; color: rgba(255,255,255,0.5); margin-top: 16px; }
+    .responsibilities-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
+    .responsibility-item { padding: 24px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 1rem; font-weight: 400; line-height: 1.5; color: rgba(255,255,255,0.5); padding-left: 20px; position: relative; cursor: default; transition: color 0.25s, padding-left 0.25s var(--ease-out); }
+    .responsibility-item:hover { color: var(--white); padding-left: 28px; }
+    .responsibility-item::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; background: rgba(250,236,32,0.3); transition: background 0.25s, transform 0.25s var(--ease-out); }
+    .responsibility-item:hover::before { background: var(--yellow); transform: translateY(-50%) scale(1.5); }
+
+    /* ── EXPERIENCE STRATEGY ──────────────────────────────────── */
+    #strategy { background: var(--grey-light); }
+    .strategy-intro { max-width: 600px; margin-bottom: 80px; }
+    .principles-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .principle-card { background: var(--white); border-radius: 20px; padding: 36px; display: flex; flex-direction: column; gap: 16px; transition: transform 0.3s var(--ease-out), box-shadow 0.3s; cursor: default; }
+    .principle-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+    .principle-emoji { font-size: 2rem; }
+    .principle-title { font-size: 1.0625rem; font-weight: 700; line-height: 1.2; }
+    .principle-desc { font-size: 0.875rem; font-weight: 400; line-height: 1.55; color: var(--dark-grey); }
+
+    /* ── INTRODUCING PATH ─────────────────────────────────────── */
+    #path-intro { background: var(--black); color: var(--white); overflow: hidden; }
+    #path-intro .label { color: rgba(255,255,255,0.4); }
+    .path-grid { display: flex; flex-direction: column; gap: 0; }
+    .path-header { margin-bottom: 32px; }
+    .path-body-row { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .path-body { display: flex; flex-direction: column; justify-content: center; }
+    .path-visual { display: flex; align-items: center; justify-content: center; }
+    .path-title { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; line-height: 1; letter-spacing: -0.03em; margin-bottom: 32px; }
+    .path-title .highlight { color: var(--yellow); }
+    .path-text { font-size: 1.05rem; font-weight: 400; line-height: 1.65; color: rgba(255,255,255,0.72); }
+    .path-text + .path-text { margin-top: 20px; }
+    .path-visual { position: relative; }
+    .path-visual img { width: 100%; border-radius: 12px; }
+    .path-deco { position: absolute; width: 400px; height: 400px; border-radius: 0; border: 2px solid rgba(250,236,32,0.15); top: 50%; right: -100px; transform: translateY(-50%) rotate(45deg); pointer-events: none; }
+
+    /* ── DESIGN DECISIONS ─────────────────────────────────────── */
+    #decisions { background: var(--yellow); }
+    #decisions .label { opacity: 0.5; }
+    .decisions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 56px; }
+    .decision-card { background: var(--white); border-radius: 16px; padding: 36px; display: grid; grid-template-rows: auto auto 1fr; gap: 12px; transition: transform 0.3s var(--ease-out), box-shadow 0.3s; cursor: default; }
+    .decision-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+    .decision-emoji { font-size: 2rem; line-height: 1; }
+    .decision-title { font-size: 1rem; font-weight: 700; }
+    .decision-text { font-size: 0.9rem; font-weight: 400; line-height: 1.55; color: var(--dark-grey); }
+
+    /* ── HOW PATH WORKS ───────────────────────────────────────── */
+    #how-path { background: var(--black); color: var(--white); overflow: visible; }
+    #how-path .label { color: rgba(255,255,255,0.4); }
+    .how-path-header { margin-bottom: 80px; max-width: 600px; }
+    @media (min-width: 900px) {
+      #how-path .how-path-header { max-width: 880px; }
+    }
+    #how-path .how-path-header .section-title { white-space: nowrap; }
+    @media (max-width: 899px) {
+      #how-path .how-path-header .section-title { white-space: normal; }
+    }
+    .pillar-carousel { position: relative; width: 100%; margin: 0 auto; }
+    .pillar-carousel-inner { display: flex; align-items: center; gap: 12px; justify-content: center; }
+    @media (max-width: 899px) {
+      .pillar-carousel { width: calc(100% + 2*var(--pad-x)); margin-left: calc(-1 * var(--pad-x)); margin-right: calc(-1 * var(--pad-x)); }
+      .pillar-carousel-inner { padding: 0 var(--pad-x); }
+    }
+    @media (min-width: 900px) {
+      .pillar-carousel { max-width: calc(33.33vw + 108px); }
+    }
+    .pillar-carousel-arrow {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.25);
+      background: transparent;
+      color: rgba(255,255,255,0.8);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 700; line-height: 1;
+      flex-shrink: 0;
+      transition: border-color 0.25s, color 0.25s, background 0.25s;
+    }
+    .pillar-carousel-arrow.hidden { visibility: hidden; pointer-events: none; opacity: 0; width: 0; height: 0; padding: 0; margin: 0; min-width: 0; flex-shrink: 0; }
+    .pillar-carousel-track { overflow: hidden; flex: 1; min-width: 0; cursor: grab; touch-action: pan-y; user-select: none; }
+    @media (min-width: 900px) {
+      .pillar-carousel-track { width: 33.33vw; flex: 0 0 33.33vw; }
+    }
+    .pillar-carousel-track:active { cursor: grabbing; }
+    .pillar-cards { display: flex; gap: 0; transition: transform 0.4s var(--ease-out); width: 400%; }
+    .pillar-cards .pillar-card { flex: 0 0 25%; min-width: 0; }
+    .pillar-carousel-indicator {
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 32px;
+    }
+    .pillar-carousel-counter {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.5);
+    }
+    .pillar-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 36px; overflow: hidden; }
+    .pillar-anim { height: 160px; margin-bottom: 28px; position: relative; border-radius: 12px; background: rgba(255,255,255,0.03); overflow: hidden; }
+    .pillar-title { font-size: 1.0625rem; font-weight: 700; margin-bottom: 10px; }
+    .pillar-desc { font-size: 0.875rem; font-weight: 400; line-height: 1.55; color: rgba(255,255,255,0.5); }
+
+    /* Anim 1: Guided progression — grey → expand blue/white → contract grey */
+    .anim-steps { display: flex; align-items: center; justify-content: center; height: 100%; padding: 0 16px; position: relative; gap: 24px; }
+    .anim-steps::before { content: ''; position: absolute; top: calc(50% - 9px); left: 50%; transform: translateX(-50%); width: 50%; height: 2px; background: rgba(255,255,255,0.1); z-index: 1; }
+    .anim-step { display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 2; }
+    .anim-step-circle { width: 36px; height: 36px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; background: var(--black); color: rgba(255,255,255,0.35); position: relative; }
+    .anim-step:nth-child(1) .anim-step-circle { animation: gp-c1 10s ease-in-out infinite; }
+    .anim-step:nth-child(2) .anim-step-circle { animation: gp-c2 10s ease-in-out infinite; }
+    .anim-step:nth-child(3) .anim-step-circle { animation: gp-c3 10s ease-in-out infinite; }
+    .anim-step:nth-child(4) .anim-step-circle { animation: gp-c4 10s ease-in-out infinite; }
+    @keyframes gp-c1 {
+      0%,2% { width: 36px; height: 36px; border-color: rgba(255,255,255,0.15); background: var(--black); color: rgba(255,255,255,0.35); }
+      6%,14% { width: 46px; height: 46px; border-color: var(--blue); background: var(--white); color: var(--blue); }
+      20%,100% { width: 36px; height: 36px; border-color: rgba(255,255,255,0.15); background: var(--black); color: rgba(255,255,255,0.35); }
+    }
+    @keyframes gp-c2 {
+      0%,24% { width: 36px; height: 36px; border-color: rgba(255,255,255,0.15); background: var(--black); color: rgba(255,255,255,0.35); }
+      28%,38% { width: 46px; height: 46px; border-color: var(--blue); background: var(--white); color: var(--blue); }
+      44%,100% { width: 36px; height: 36px; border-color: rgba(255,255,255,0.15); background: var(--black); color: rgba(255,255,255,0.35); }
+    }
+    @keyframes gp-c3 {
+      0%,48% { width: 36px; height: 36px; border-color: rgba(255,255,255,0.15); background: var(--black); color: rgba(255,255,255,0.35); }
+      52%,62% { width: 46px; height: 46px; border-color: var(--blue); background: var(--white); color: var(--blue); }
+      68%,100% { width: 36px; height: 36px; border-color: rgba(255,255,255,0.15); background: var(--black); color: rgba(255,255,255,0.35); }
+    }
+    @keyframes gp-c4 {
+      0%,72% { width: 36px; height: 36px; border-color: rgba(255,255,255,0.15); background: var(--black); color: rgba(255,255,255,0.35); }
+      76%,86% { width: 46px; height: 46px; border-color: var(--blue); background: var(--white); color: var(--blue); }
+      92%,100% { width: 36px; height: 36px; border-color: rgba(255,255,255,0.15); background: var(--black); color: rgba(255,255,255,0.35); }
+    }
+    .anim-step-label { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.3); white-space: nowrap; }
+
+    /* Anim 2: Progress visibility — white/blue circle with number → green tick */
+    .anim-progress { display: flex; align-items: center; justify-content: center; height: 100%; padding: 20px 28px; }
+    .anim-prog-inner { display: flex; flex-direction: column; gap: 14px; }
+    .anim-prog-row { display: flex; align-items: center; gap: 12px; }
+    .anim-prog-circle { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; position: relative; background: transparent; color: rgba(255,255,255,0.35); }
+    .anim-prog-circle .pv-num, .anim-prog-circle .pv-tick { position: absolute; }
+    .anim-prog-circle .pv-tick { opacity: 0; }
+    .anim-prog-row:nth-child(1) .anim-prog-circle { animation: pv-c1 8s ease-in-out infinite; }
+    .anim-prog-row:nth-child(1) .pv-num { animation: pv-n1 8s ease-in-out infinite; }
+    .anim-prog-row:nth-child(1) .pv-tick { animation: pv-t1 8s ease-in-out infinite; }
+    .anim-prog-row:nth-child(2) .anim-prog-circle { animation: pv-c2 8s ease-in-out infinite; }
+    .anim-prog-row:nth-child(2) .pv-num { animation: pv-n2 8s ease-in-out infinite; }
+    .anim-prog-row:nth-child(2) .pv-tick { animation: pv-t2 8s ease-in-out infinite; }
+    @keyframes pv-c1 {
+      0%,8% { border-color: var(--blue); background: var(--white); color: var(--blue); }
+      18%,95% { border-color: var(--green); background: var(--green); color: var(--white); }
+      100% { border-color: rgba(255,255,255,0.15); background: transparent; color: rgba(255,255,255,0.35); }
+    }
+    @keyframes pv-c2 {
+      0%,20% { border-color: rgba(255,255,255,0.15); background: transparent; color: rgba(255,255,255,0.35); }
+      28%,38% { border-color: var(--blue); background: var(--white); color: var(--blue); }
+      48%,95% { border-color: var(--green); background: var(--green); color: var(--white); }
+      100% { border-color: rgba(255,255,255,0.15); background: transparent; color: rgba(255,255,255,0.35); }
+    }
+    @keyframes pv-n1 { 0%,12% { opacity: 1; } 18%,95% { opacity: 0; } 100% { opacity: 1; } }
+    @keyframes pv-t1 { 0%,12% { opacity: 0; } 18%,95% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes pv-n2 { 0%,42% { opacity: 1; } 48%,95% { opacity: 0; } 100% { opacity: 1; } }
+    @keyframes pv-t2 { 0%,42% { opacity: 0; } 48%,95% { opacity: 1; } 100% { opacity: 0; } }
+    .anim-prog-label { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.5); flex: 1; }
+
+    /* Anim 3: Flexible completion — bar + active/paused/completed pills */
+    .anim-flex { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 16px; padding: 0 24px; }
+    .anim-flex-bar-track { width: 100%; max-width: 220px; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
+    .anim-flex-bar-fill { height: 100%; background: var(--yellow); border-radius: 4px; animation: flex-bar 10s ease-in-out infinite; }
+    @keyframes flex-bar {
+      0% { width: 10%; background: var(--blue); }
+      18% { width: 45%; background: var(--blue); }
+      22%,48% { width: 45%; background: var(--orange); }
+      52% { width: 45%; background: var(--blue); }
+      87% { width: 100%; background: var(--blue); }
+      88% { width: 100%; background: var(--green); }
+      95%,100% { width: 100%; background: var(--green); }
+    }
+    .anim-flex-states { display: flex; gap: 10px; }
+    .anim-flex-state { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 16px; border-radius: 100px; border: 2px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.25); background: transparent; }
+    .anim-flex-state:nth-child(1) { animation: fs-active 10s ease-in-out infinite; }
+    .anim-flex-state:nth-child(2) { animation: fs-pause 10s ease-in-out infinite; }
+    .anim-flex-state:nth-child(3) { animation: fs-completed 10s ease-in-out infinite; }
+    @keyframes fs-active {
+      0%,18% { border-color: var(--blue); background: var(--white); color: var(--blue); }
+      22%,48% { border-color: rgba(255,255,255,0.1); background: transparent; color: rgba(255,255,255,0.25); }
+      52%,85% { border-color: var(--blue); background: var(--white); color: var(--blue); }
+      90%,100% { border-color: rgba(255,255,255,0.1); background: transparent; color: rgba(255,255,255,0.25); }
+    }
+    @keyframes fs-pause {
+      0%,20% { border-color: rgba(255,255,255,0.1); background: transparent; color: rgba(255,255,255,0.25); }
+      25%,48% { border-color: var(--orange); background: var(--white); color: var(--orange); }
+      52%,100% { border-color: rgba(255,255,255,0.1); background: transparent; color: rgba(255,255,255,0.25); }
+    }
+    @keyframes fs-completed {
+      0%,85% { border-color: rgba(255,255,255,0.1); background: transparent; color: rgba(255,255,255,0.25); }
+      90%,97% { border-color: var(--green); background: var(--white); color: var(--green); }
+      100% { border-color: rgba(255,255,255,0.1); background: transparent; color: rgba(255,255,255,0.25); }
+    }
+
+    /* Anim 4: Adaptability — individual ↔ business flow toggle */
+    .anim-adapt { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 16px; }
+    .anim-adapt-toggle { display: flex; background: rgba(255,255,255,0.06); border-radius: 100px; padding: 3px; gap: 0; margin-bottom: 8px; }
+    .anim-adapt-opt { font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; color: rgba(255,255,255,0.35); }
+    .anim-adapt-opt:nth-child(1) { animation: adapt-opt1 6s ease-in-out infinite; }
+    .anim-adapt-opt:nth-child(2) { animation: adapt-opt2 6s ease-in-out infinite; }
+    @keyframes adapt-opt1 { 0%,45% { background: var(--white); color: var(--black); } 50%,95% { background: transparent; color: rgba(255,255,255,0.35); } 100% { background: var(--white); color: var(--black); } }
+    @keyframes adapt-opt2 { 0%,45% { background: transparent; color: rgba(255,255,255,0.35); } 50%,95% { background: var(--white); color: var(--black); } 100% { background: transparent; color: rgba(255,255,255,0.35); } }
+    .anim-adapt-rows { display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 180px; }
+    .anim-adapt-row { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08); }
+    .anim-adapt-row:nth-child(1) { width: 100%; animation: adapt-r1 6s ease-in-out infinite; }
+    .anim-adapt-row:nth-child(2) { width: 70%; animation: adapt-r2 6s ease-in-out infinite; }
+    .anim-adapt-row:nth-child(3) { width: 85%; animation: adapt-r3 6s ease-in-out infinite; }
+    @keyframes adapt-r1 { 0%,45% { width: 100%; } 50%,95% { width: 80%; } 100% { width: 100%; } }
+    @keyframes adapt-r2 { 0%,45% { width: 70%; } 50%,95% { width: 100%; } 100% { width: 70%; } }
+    @keyframes adapt-r3 { 0%,45% { width: 85%; } 50%,95% { width: 60%; } 100% { width: 85%; } }
+
+    /* ── VALIDATION ───────────────────────────────────────────── */
+    #validation { background: var(--grey-light); color: var(--black); }
+    .validation-split { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; align-items: start; }
+    .validation-left { position: sticky; top: 120px; }
+    .validation-intro { margin-bottom: 40px; }
+    .validation-learnings { padding-top: 350px; }
+    .quote-card { border-radius: 16px; padding: 28px; background: var(--white); border: 1px solid rgba(0,0,0,0.06); display: flex; flex-direction: column; gap: 20px; transition: transform 0.3s var(--ease-out), box-shadow 0.3s; cursor: default; }
+    .quote-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.06); }
+    .quote-card.negative { background: #FFF8EC; border-color: rgba(255,153,0,0.2); grid-column: 1 / -1; padding: 28px 32px; }
+    .quote-card.negative:hover { box-shadow: 0 16px 48px rgba(255,153,0,0.12); }
+    .quote-sentiment { font-size: 1.5rem; line-height: 1; }
+    .quote-text { font-size: 0.9375rem; font-weight: 400; line-height: 1.55; color: var(--dark-grey); font-style: italic; }
+    .quote-text::before { content: '\201C'; }
+    .quote-text::after { content: '\201D'; }
+    .learnings-title { font-size: clamp(1.25rem, 2vw, 1.5rem); font-weight: 800; color: var(--black); margin-bottom: 20px; }
+    .learnings-list { list-style: none; padding: 0; margin: 0; }
+    .learnings-list li { font-size: 0.9375rem; font-weight: 400; line-height: 1.55; color: var(--dark-grey); padding: 12px 0 12px 20px; border-left: 3px solid var(--yellow); margin-bottom: 8px; background: rgba(255,255,255,0.6); border-radius: 0 8px 8px 0; transition: border-color 0.25s, background 0.25s; }
+    .learnings-list li:last-child { margin-bottom: 0; }
+    .learnings-list li:hover { border-left-color: var(--black); background: var(--white); }
+    .validation-quotes { display: flex; flex-direction: column; gap: 20px; }
+    .quotes-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+    /* ── IMPACT ────────────────────────────────────────────────── */
+    #impact { background: var(--yellow); }
+    #impact .section-title, #impact .label { color: var(--black); }
+    #impact .label { opacity: 0.5; }
+    .impact-header { margin-bottom: 56px; }
+    .impact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .impact-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 36px;
+      background: var(--white);
+      border-radius: 20px;
+      cursor: default;
+      transition: transform 0.3s var(--ease-out), box-shadow 0.3s;
+    }
+    .impact-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+    .impact-card-emoji { font-size: 2rem; line-height: 1; }
+    .impact-card-title { font-size: 1.0625rem; font-weight: 700; line-height: 1.2; color: var(--black); }
+    .impact-card-desc { font-size: 0.875rem; font-weight: 400; line-height: 1.55; color: var(--dark-grey); }
+
+    /* ── FINAL SOLUTION ───────────────────────────────────────── */
+    #solution { background: var(--grey-light); color: var(--black); }
+    .solution-split { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .solution-list { list-style: none; display: flex; flex-direction: column; gap: 0; counter-reset: sol; }
+    .solution-list li { display: flex; align-items: center; gap: 20px; font-size: 1rem; font-weight: 500; line-height: 1.4; padding: 20px 0; border-bottom: 1px solid rgba(0,0,0,0.08); counter-increment: sol; color: var(--dark-grey); cursor: default; transition: color 0.25s, padding-left 0.25s var(--ease-out); }
+    .solution-list li:hover { color: var(--black); padding-left: 12px; }
+    .solution-list li::before { content: counter(sol); display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: var(--black); color: var(--yellow); font-size: 13px; font-weight: 700; flex-shrink: 0; transition: transform 0.25s var(--ease-out); }
+    .solution-list li:hover::before { transform: scale(1.15); }
+    .solution-list li:last-child { border-bottom: none; }
+
+    /* ── CLOSING ───────────────────────────────────────────────── */
+    #closing { background: var(--black); color: var(--white); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; }
+    .closing-deco { position: absolute; border-radius: 0; pointer-events: none; }
+    .closing-deco-1 { width: 700px; height: 700px; border: 2px solid rgba(250,236,32,0.06); top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); }
+    .closing-deco-2 { width: 440px; height: 440px; border: 2px solid rgba(250,236,32,0.1); top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); }
+    .closing-inner { position: relative; z-index: 2; transform: translateY(-6%); }
+    .closing-logo { height: 64px; margin: 0 auto 40px; opacity: 0.9; }
+    .closing-title { font-size: clamp(3.2rem, 6.4vw, 6.4rem); font-weight: 900; letter-spacing: -0.04em; line-height: 0.9; color: var(--white); }
+    .closing-title .yellow { color: var(--yellow); }
+    .closing-back-top { display: inline-flex; align-items: center; gap: 6px; margin-top: 48px; padding: 10px 19px; font-family: var(--font); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white); background: transparent; border: 2px solid rgba(255,255,255,0.25); border-radius: 100px; cursor: pointer; transition: border-color 0.25s, color 0.25s, background 0.25s; }
+    .closing-back-top:hover { border-color: var(--yellow); color: var(--yellow); background: rgba(250,236,32,0.08); }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    .closing-inner { padding: 0 var(--pad-x); }
+    @media (max-width: 1100px) { :root { --pad-x: 80px; } }
+    @media (max-width: 900px) {
+      :root { --pad-x: 40px; }
+      #hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 100px var(--pad-x); }
+      .hero-right { display: none; }
+      .summary-grid, .context-split, .role-grid, .path-body-row, .solution-split { grid-template-columns: 1fr; gap: 40px; }
+      .impact-grid { grid-template-columns: 1fr; }
+      .principles-grid { grid-template-columns: 1fr 1fr; }
+      .validation-split { grid-template-columns: 1fr; }
+      .validation-left { position: static; }
+      .validation-learnings { padding-top: 0; }
+      .quotes-row { grid-template-columns: 1fr; }
+      .decisions-grid { grid-template-columns: 1fr; }
+      .context-stats { padding-top: 0; }
+      .challenges-grid { grid-template-columns: 1fr; }
+      .role-responsibilities { padding-top: 80px; }
+    }
+    @media (max-width: 768px) {
+      :root { --pad-x: 32px; }
+    }
+    @media (max-width: 600px) {
+      :root { --pad-x: 24px; }
+      .section__inner { padding: 80px 0; }
+      .container { margin-left: max(24px, env(safe-area-inset-left)); margin-right: max(24px, env(safe-area-inset-right)); }
+      .hero-left { padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
+      .closing-inner { padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
+      .principles-grid { grid-template-columns: 1fr; }
+      .role-responsibilities { padding-top: 60px; }
+      #chapter-nav { display: none; }
+      .challenge-card, .context-stat, .principle-card, .decision-card, .pillar-card, .quote-card, .impact-card { padding: max(8px, 1.5rem); }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="chapter-nav" aria-label="Page sections">
+    <div class="nav-dot" data-section="hero"        data-label="Overview"         onclick="scrollToSection('hero')"></div>
+    <div class="nav-dot" data-section="summary"     data-label="Project Summary"  onclick="scrollToSection('summary')"></div>
+    <div class="nav-dot" data-section="context"     data-label="Business Context" onclick="scrollToSection('context')"></div>
+    <div class="nav-dot" data-section="challenges"  data-label="The Problem"      onclick="scrollToSection('challenges')"></div>
+    <div class="nav-dot" data-section="role"        data-label="My Role"          onclick="scrollToSection('role')"></div>
+    <div class="nav-dot" data-section="strategy"    data-label="Strategy"         onclick="scrollToSection('strategy')"></div>
+    <div class="nav-dot" data-section="path-intro"  data-label="Introducing Path" onclick="scrollToSection('path-intro')"></div>
+    <div class="nav-dot" data-section="decisions"   data-label="Design Decisions" onclick="scrollToSection('decisions')"></div>
+    <div class="nav-dot" data-section="how-path"    data-label="How Path Works"   onclick="scrollToSection('how-path')"></div>
+    <div class="nav-dot" data-section="validation"  data-label="Validation"       onclick="scrollToSection('validation')"></div>
+    <div class="nav-dot" data-section="impact"      data-label="Impact"           onclick="scrollToSection('impact')"></div>
+    <div class="nav-dot" data-section="solution"    data-label="Final Solution"   onclick="scrollToSection('solution')"></div>
+    <div class="nav-dot" data-section="closing"     data-label="Close"            onclick="scrollToSection('closing')"></div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero" data-theme="dark">
+    <div class="hero-bg-circle"></div>
+    <div class="hero-bg-circle-2"></div>
+    <div class="hero-left">
+      <img src="assets/cba-logo.png" alt="CommBank" class="hero-logo reveal">
+      <h1 class="hero-title reveal reveal-delay-1">Know Your<br>Customer<span class="accent"> (KYC)</span></h1>
+      <p class="hero-subtitle reveal reveal-delay-2">Enabling secure, self-serve identity verification at scale, and the introduction of Path, a reusable pattern that changed how CommBank designs complex journeys.</p>
+    </div>
+    <div class="hero-right">
+      <img src="assets/kyc-mockup.svg" alt="KYC digital experience mockup" class="hero-mockup">
+    </div>
+  </section>
+
+  <!-- PROJECT SUMMARY -->
+  <section id="summary" class="section" data-theme="light">
+    <div class="container section__inner">
+      <div class="summary-grid">
+        <div>
+          <p class="label reveal">Case Study</p>
+          <h2 class="section-title reveal reveal-delay-1">Project Summary</h2>
+          <p class="body-text reveal reveal-delay-2" style="margin-top: 28px; max-width: 520px;">CommBank is required to regularly review and update customer identity information to meet KYC regulatory obligations. Historically, this process often required customers to visit a branch, creating friction for customers and operational overhead for staff.</p>
+          <p class="body-text reveal reveal-delay-3" style="margin-top: 20px; max-width: 520px;">I worked as a Product Designer embedded within a cross-functional squad to design a self-serve digital KYC experience. A key outcome was the introduction of <strong>Path</strong>, a reusable interaction pattern designed to support complex, multi-step journeys, enabling customers to complete KYC in one or multiple sittings while maintaining clarity, control, and compliance.</p>
+        </div>
+        <div class="summary-meta-list">
+          <div class="meta-item reveal reveal-delay-1">
+            <p class="meta-label">Organisation</p>
+            <p class="meta-value">Commonwealth Bank of Australia</p>
+            <p class="meta-expand">Australia's largest bank, serving over 17 million customers.</p>
+          </div>
+          <div class="meta-item reveal reveal-delay-2">
+            <p class="meta-label">My Role</p>
+            <p class="meta-value">Product Designer, embedded in a cross-functional squad</p>
+            <p class="meta-expand">Owning end-to-end experience from research through to delivery.</p>
+          </div>
+          <div class="meta-item reveal reveal-delay-3">
+            <p class="meta-label">Collaborators</p>
+            <p class="meta-value">Product Managers, Engineers, UX Researchers, Content Designers</p>
+            <p class="meta-expand">Working as a tightly integrated squad with shared outcomes.</p>
+          </div>
+          <div class="meta-item reveal reveal-delay-4">
+            <p class="meta-label">Key Outcome</p>
+            <p class="meta-value">Digital KYC at scale + Path design pattern adopted across CommBank</p>
+            <p class="meta-expand">Path was added to the design system and reused by other product teams.</p>
+          </div>
+          <div class="meta-item reveal reveal-delay-5">
+            <p class="meta-label">Focus Areas</p>
+            <p class="meta-value">End-to-end experience design · Interaction patterns · Design systems · Stakeholder alignment</p>
+            <p class="meta-expand">Balancing regulatory compliance with a genuinely usable experience.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUSINESS CONTEXT -->
+  <section id="context" class="section" data-theme="yellow">
+    <div class="container section__inner">
+      <div class="context-split">
+        <div>
+          <p class="label reveal">The Mandate</p>
+          <h2 class="section-title reveal reveal-delay-1">Business Context</h2>
+          <p class="body-text reveal reveal-delay-2" style="margin-top: 28px;">KYC compliance is critical to CommBank's ability to provide customers with uninterrupted access to their banking services. Failure to complete KYC checks can result in account restrictions, creating frustration and eroding trust.</p>
+          <p class="body-text reveal reveal-delay-3" style="margin-top: 20px;">Customer research showed strong negative sentiment toward KYC, particularly when re-verification required branch visits. The opportunity was to shift KYC from a disruptive, branch-dependent process to a clear, self-serve digital experience that met regulatory obligations while reducing customer friction and operational load.</p>
+        </div>
+        <div class="context-stats">
+          <div class="context-stat reveal reveal-delay-2">
+            <div class="context-stat-number">17M+</div>
+            <div class="context-stat-label">Customers impacted by KYC requirements</div>
+          </div>
+          <div class="context-stat reveal reveal-delay-3">
+            <div class="context-stat-number">High</div>
+            <div class="context-stat-label">Branch staff time spent on KYC administration</div>
+          </div>
+          <div class="context-stat reveal reveal-delay-4">
+            <div class="context-stat-number">Negative</div>
+            <div class="context-stat-label">Customer sentiment toward re-verification</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCT CHALLENGES -->
+  <section id="challenges" class="section" data-theme="light">
+    <div class="container section__inner">
+      <p class="label reveal">Defining the Space</p>
+      <h2 class="section-title reveal reveal-delay-1">Product Challenges<br>& User Problems</h2>
+      <div class="challenges-grid" style="margin-top: 56px;">
+        <div class="challenge-card reveal reveal-delay-2">
+          <div class="challenge-icon">🚫</div>
+          <h3 class="challenge-title">Product Challenges</h3>
+          <ul class="challenge-list">
+            <li>Strict regulatory and compliance requirements</li>
+            <li>Long, multi-step journeys with high drop-off risk</li>
+            <li>Need to support both individual and business verification</li>
+            <li>Historically negative customer sentiment toward KYC</li>
+            <li>Desire to reduce reliance on branch staff</li>
+          </ul>
+        </div>
+        <div class="challenge-card dark reveal reveal-delay-3">
+          <div class="challenge-icon">🚫</div>
+          <h3 class="challenge-title">User Problems</h3>
+          <ul class="challenge-list">
+            <li>A clear explanation of why KYC was required</li>
+            <li>Confidence the request was legitimate and secure</li>
+            <li>The ability to complete verification without a branch visit</li>
+            <li>Flexibility to complete the process over multiple sessions</li>
+            <li>Visibility into progress through a long journey</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MY ROLE -->
+  <section id="role" class="section" data-theme="dark">
+    <div class="container section__inner">
+      <div class="role-grid">
+        <div class="role-title-block">
+          <p class="label reveal">Ownership</p>
+          <h2 class="role-title reveal reveal-delay-1">Roles &<br>Responsibilities</h2>
+          <h3 class="role-subtitle reveal reveal-delay-2">Product Designer, embedded in a cross-functional squad</h3>
+          <p class="body-text reveal reveal-delay-3" style="color: rgba(255,255,255,0.6); margin-top: 16px; font-size: 1rem;">I owned the end-to-end customer experience for the digital KYC journey, partnering closely with Product Managers, Engineers, UX, and Content.</p>
+        </div>
+        <div class="role-responsibilities">
+          <ul class="responsibilities-list reveal reveal-delay-2">
+            <li class="responsibility-item">Shaping experience strategy for a compliance-driven flow</li>
+            <li class="responsibility-item">Translating regulatory requirements into user-centred journeys</li>
+            <li class="responsibility-item">Defining interaction patterns for long, multi-step processes</li>
+            <li class="responsibility-item">Advocating for structural changes to reduce perceived effort</li>
+            <li class="responsibility-item">Partnering with Content and stakeholders to balance clarity and compliance</li>
+            <li class="responsibility-item">Collaborating directly with Engineering on feasibility and delivery</li>
+            <li class="responsibility-item">Driving usability improvements through testing and iteration</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE STRATEGY -->
+  <section id="strategy" class="section" data-theme="light">
+    <div class="container section__inner">
+      <div class="strategy-intro">
+        <p class="label reveal">Strategic Foundation</p>
+        <h2 class="section-title reveal reveal-delay-1">Experience Strategy</h2>
+        <p class="body-text reveal reveal-delay-2" style="margin-top: 24px;">Early on, we aligned on a set of principles to guide prioritisation. These principles directly informed the decision to introduce Path:</p>
+      </div>
+      <div class="principles-grid">
+        <div class="principle-card reveal reveal-delay-1">
+          <div class="principle-emoji">🧭</div>
+          <h3 class="principle-title">Make complexity manageable</h3>
+          <p class="principle-desc">Break long regulatory journeys into clear, understandable steps.</p>
+        </div>
+        <div class="principle-card reveal reveal-delay-2">
+          <div class="principle-emoji">😮‍💨</div>
+          <h3 class="principle-title">Reduce anxiety</h3>
+          <p class="principle-desc">Frame KYC as a reminder rather than a warning, using calm language and visual treatment.</p>
+        </div>
+        <div class="principle-card reveal reveal-delay-3">
+          <div class="principle-emoji">📌</div>
+          <h3 class="principle-title">Support progress over time</h3>
+          <p class="principle-desc">Allow customers to leave and return without losing context or progress.</p>
+        </div>
+        <div class="principle-card reveal reveal-delay-4">
+          <div class="principle-emoji">🔁</div>
+          <h3 class="principle-title">Design for reuse</h3>
+          <p class="principle-desc">Create patterns that could scale beyond KYC to other complex journeys.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRODUCING PATH -->
+  <section id="path-intro" class="section" data-theme="dark">
+    <div class="path-deco"></div>
+    <div class="container section__inner">
+      <div class="path-grid">
+        <div class="path-header">
+          <p class="label reveal">A Product Decision</p>
+          <h2 class="path-title reveal reveal-delay-1">Introducing<br><span class="highlight">Path:</span></h2>
+        </div>
+        <div class="path-body-row">
+          <div class="path-body">
+            <p class="path-text reveal reveal-delay-2">As the KYC journey evolved, it became clear that traditional page-by-page flows were not suitable for long, compliance-heavy experiences.</p>
+            <p class="path-text reveal reveal-delay-3">Path was introduced as a structural solution to support complex journeys, providing a consistent way for customers to understand what's required, track progress, and complete tasks over time. It was designed as a reusable pattern that could scale beyond KYC to other multi-step journeys across the bank.</p>
+            <p class="path-text reveal reveal-delay-4">Path was implemented into CommBank's design system and adopted by other teams to support similar use cases.</p>
+          </div>
+          <div class="path-visual reveal reveal-delay-2">
+            <img src="assets/path-mockup.png" alt="Path design pattern - laptop and phone showing multi-step KYC journey">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEY DESIGN DECISIONS -->
+  <section id="decisions" class="section" data-theme="yellow">
+    <div class="container section__inner">
+      <p class="label reveal">Design Craft</p>
+      <h2 class="section-title reveal reveal-delay-1">Key Product Design Decisions</h2>
+      <p class="section-subtitle reveal reveal-delay-2" style="margin-top: 20px;">Four pivotal decisions that shaped the experience and drove meaningful outcomes:</p>
+      <div class="decisions-grid">
+        <div class="decision-card reveal reveal-delay-1">
+          <div class="decision-emoji">⚖️</div>
+          <h3 class="decision-title">Balanced compliance with clarity</h3>
+          <p class="decision-text">Regulatory language caused confusion in testing, so I pushed back using evidence and worked with Content and stakeholders to simplify terminology while remaining compliant.</p>
+        </div>
+        <div class="decision-card reveal reveal-delay-2">
+          <div class="decision-emoji">🌏</div>
+          <h3 class="decision-title">Designed for real-world completion</h3>
+          <p class="decision-text">Customers couldn't always finish KYC in one sitting, so I advocated for multi-session completion despite added technical complexity. A critical win for the user experience.</p>
+        </div>
+        <div class="decision-card reveal reveal-delay-3">
+          <div class="decision-emoji">🔔</div>
+          <h3 class="decision-title">Framed KYC as a reminder, not a warning</h3>
+          <p class="decision-text">Alarmist language increased anxiety in testing. Copy and visual treatment were softened to encourage completion without reducing urgency. A delicate but critical balance.</p>
+        </div>
+        <div class="decision-card reveal reveal-delay-4">
+          <div class="decision-emoji">👀</div>
+          <h3 class="decision-title">Reduced perceived effort in a long journey</h3>
+          <p class="decision-text">KYC required many steps. I introduced Path to structure the flow and make the journey feel manageable, transforming a daunting task into a series of clear, achievable steps.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW PATH WORKS -->
+  <section id="how-path" class="section" data-theme="dark">
+    <div class="container section__inner">
+      <div class="how-path-header">
+        <p class="label reveal">The System</p>
+        <h2 class="section-title reveal reveal-delay-1" style="color: var(--white); font-size: clamp(1.75rem, 3vw, 2.25rem);">How Path Supports Complex Journeys</h2>
+        <p class="body-text reveal reveal-delay-2" style="color: rgba(255,255,255,0.6); margin-top: 20px;">Path supports long, compliance-driven journeys through four core capabilities, each addressing a real failure point identified in research.</p>
+      </div>
+
+      <div class="pillar-carousel">
+        <div class="pillar-carousel-inner">
+          <button type="button" class="pillar-carousel-arrow pillar-carousel-prev" aria-label="Previous frame">←</button>
+          <div class="pillar-carousel-track">
+            <div class="pillar-cards" id="pillar-cards">
+        <div class="pillar-card reveal reveal-delay-1">
+          <div class="pillar-anim">
+            <div class="anim-steps">
+              <div class="anim-step"><div class="anim-step-circle">1</div><div class="anim-step-label">Personal</div></div>
+              <div class="anim-step"><div class="anim-step-circle">2</div><div class="anim-step-label">Identity</div></div>
+              <div class="anim-step"><div class="anim-step-circle">3</div><div class="anim-step-label">Documents</div></div>
+              <div class="anim-step"><div class="anim-step-circle">4</div><div class="anim-step-label">Review</div></div>
+            </div>
+          </div>
+          <h3 class="pillar-title">Guided progression</h3>
+          <p class="pillar-desc">Breaking the journey into clear, sequential steps so customers always know where they are and what comes next.</p>
+        </div>
+
+        <div class="pillar-card reveal reveal-delay-2">
+          <div class="pillar-anim">
+            <div class="anim-progress">
+              <div class="anim-prog-inner">
+                <div class="anim-prog-row"><div class="anim-prog-circle"><span class="pv-num">1</span><span class="pv-tick">✓</span></div><div class="anim-prog-label">Personal details</div></div>
+                <div class="anim-prog-row"><div class="anim-prog-circle"><span class="pv-num">2</span><span class="pv-tick">✓</span></div><div class="anim-prog-label">Identity documents</div></div>
+              </div>
+            </div>
+          </div>
+          <h3 class="pillar-title">Progress visibility</h3>
+          <p class="pillar-desc">Showing customers what's complete and what remains, building confidence throughout the journey.</p>
+        </div>
+
+        <div class="pillar-card reveal reveal-delay-3">
+          <div class="pillar-anim">
+            <div class="anim-flex">
+              <div class="anim-flex-bar-track"><div class="anim-flex-bar-fill"></div></div>
+              <div class="anim-flex-states">
+                <span class="anim-flex-state">Active</span>
+                <span class="anim-flex-state">Paused</span>
+                <span class="anim-flex-state">Completed</span>
+              </div>
+            </div>
+          </div>
+          <h3 class="pillar-title">Flexible completion</h3>
+          <p class="pillar-desc">Allowing customers to pause and resume without losing progress, completing at their own pace.</p>
+        </div>
+
+        <div class="pillar-card reveal reveal-delay-4">
+          <div class="pillar-anim">
+            <div class="anim-adapt">
+              <div class="anim-adapt-toggle">
+                <span class="anim-adapt-opt">Individual</span>
+                <span class="anim-adapt-opt">Business</span>
+              </div>
+              <div class="anim-adapt-rows">
+                <div class="anim-adapt-row"></div>
+                <div class="anim-adapt-row"></div>
+                <div class="anim-adapt-row"></div>
+              </div>
+            </div>
+          </div>
+          <h3 class="pillar-title">Adaptability</h3>
+          <p class="pillar-desc">Supporting both individual and business verification flows with flexible configuration.</p>
+        </div>
+            </div>
+          </div>
+          <button type="button" class="pillar-carousel-arrow pillar-carousel-next" aria-label="Next frame">→</button>
+        </div>
+        <div class="pillar-carousel-indicator">
+          <span class="pillar-carousel-counter" id="pillar-counter">1 / 4</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALIDATION -->
+  <section id="validation" class="section" data-theme="light">
+    <div class="container section__inner">
+      <div class="validation-split">
+        <div class="validation-left">
+          <div class="validation-intro">
+            <p class="label reveal">Evidence-based Design</p>
+            <h2 class="section-title reveal reveal-delay-1">Validation & Insights</h2>
+            <p class="body-text reveal reveal-delay-2" style="margin-top: 24px;">We tested the digital KYC experience with existing customers completing realistic verification scenarios. The research generated both confirmatory signals and critical insights that directly shaped the final design.</p>
+          </div>
+          <div class="validation-quotes">
+            <div class="quotes-row">
+              <div class="quote-card positive reveal reveal-delay-1">
+                <div class="quote-sentiment">✅</div>
+                <p class="quote-text">Oh the process was very easy! The only problem is that I rushed through without looking carefully.</p>
+              </div>
+              <div class="quote-card positive reveal reveal-delay-2">
+                <div class="quote-sentiment">✅</div>
+                <p class="quote-text">The process was quite clear, I know exactly what I need to do and don't need assistance.</p>
+              </div>
+            </div>
+            <div class="quote-card negative reveal reveal-delay-3">
+              <div class="quote-sentiment">⚠️</div>
+              <p class="quote-text">The process felt way too long, I felt quite frustrated if I'm being honest.</p>
+            </div>
+          </div>
+        </div>
+        <div class="validation-learnings">
+          <h3 class="learnings-title reveal">💡 Key Learnings</h3>
+          <ul class="learnings-list">
+            <li class="reveal reveal-delay-1">Customers needed reassurance that the request was legitimate. Clear branding and calm language were essential.</li>
+            <li class="reveal reveal-delay-2">Progress visibility significantly reduced frustration in longer flows, confirming the Path decision.</li>
+            <li class="reveal reveal-delay-3">Softer language improved willingness to engage, directly informing copy changes throughout the journey.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMPACT -->
+  <section id="impact" class="section" data-theme="yellow">
+    <div class="container section__inner">
+      <div class="impact-header">
+        <p class="label reveal">Outcomes</p>
+        <h2 class="section-title reveal reveal-delay-1">Impact</h2>
+        <p class="body-text reveal reveal-delay-2" style="margin-top: 24px; max-width: 480px;">The digital KYC experience and the Path pattern delivered measurable value for customers, the bank, and the design practice.</p>
+      </div>
+      <div class="impact-grid">
+        <div class="impact-card reveal reveal-delay-1">
+          <div class="impact-card-emoji">💻</div>
+          <div class="impact-card-title">Digital scale</div>
+          <p class="impact-card-desc">Enabled CommBank to confidently scale digital KYC verification, removing the reliance on branch visits.</p>
+        </div>
+        <div class="impact-card reveal reveal-delay-2">
+          <div class="impact-card-emoji">🔁</div>
+          <div class="impact-card-title">Repeatable pattern</div>
+          <p class="impact-card-desc">Established a repeatable approach for compliance-heavy flows, reducing future design and engineering overhead.</p>
+        </div>
+        <div class="impact-card reveal reveal-delay-3">
+          <div class="impact-card-emoji">📐</div>
+          <div class="impact-card-title">Design system adoption</div>
+          <p class="impact-card-desc">Path was adopted into CommBank's design system and picked up by other product teams across the organisation.</p>
+        </div>
+        <div class="impact-card reveal reveal-delay-4">
+          <div class="impact-card-emoji">📉</div>
+          <div class="impact-card-title">Reduced overhead</div>
+          <p class="impact-card-desc">Reduced operational overhead for branch staff previously required to support customers through administrative verification.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL SOLUTION -->
+  <section id="solution" class="section" data-theme="light">
+    <div class="container section__inner">
+      <div class="solution-split">
+        <div>
+          <p class="label reveal">Delivered</p>
+          <h2 class="section-title reveal reveal-delay-1">Final Solution</h2>
+          <p class="body-text reveal reveal-delay-2" style="margin-top: 24px; max-width: 440px;">A complete digital KYC experience that met regulatory obligations, reduced friction, and introduced a lasting design pattern.</p>
+        </div>
+        <ul class="solution-list reveal reveal-delay-2">
+          <li>Enabled customers to update and verify details entirely online</li>
+          <li>Reduced the need for in-branch visits for KYC compliance</li>
+          <li>Provided clear progress and guidance through long flows via Path</li>
+          <li>Supported completion across one or multiple sessions</li>
+          <li>Reduced manual handling required from branch staff</li>
+          <li>Path pattern adopted across CommBank design system</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section id="closing" data-theme="dark">
+    <div class="closing-deco closing-deco-1"></div>
+    <div class="closing-deco closing-deco-2"></div>
+    <div class="closing-inner reveal">
+      <img src="assets/cba-logo.png" alt="CommBank" class="closing-logo">
+      <h2 class="closing-title">Thank<br><span class="yellow">you.</span></h2>
+      <button type="button" class="closing-back-top" onclick="scrollToSection('hero')">↑ Back to top</button>
+    </div>
+  </section>
+
+  <script>
+    const chapterNav = document.getElementById('chapter-nav');
+    const sections = document.querySelectorAll('[id]');
+    const navDots = document.querySelectorAll('.nav-dot');
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          if (id !== 'hero') chapterNav.classList.add('visible');
+          navDots.forEach(dot => {
+            dot.classList.remove('active');
+            if (dot.dataset.section === id) dot.classList.add('active');
+          });
+          const theme = entry.target.dataset.theme;
+          navDots.forEach(dot => {
+            dot.classList.remove('on-dark');
+            if (theme === 'dark') dot.classList.add('on-dark');
+          });
+        }
+      });
+    }, { threshold: 0.5, rootMargin: '-10% 0px' });
+    sections.forEach(s => sectionObserver.observe(s));
+
+    function scrollToSection(id) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    window.addEventListener('load', () => {
+      document.querySelectorAll('#hero .reveal').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), i * 100);
+      });
+    });
+
+    const heroMockup = document.querySelector('.hero-mockup');
+    if (heroMockup) {
+      window.addEventListener('scroll', () => {
+        heroMockup.style.transform = `translateY(${window.scrollY * 0.15}px)`;
+      }, { passive: true });
+    }
+
+    // Pillar carousel
+    const pillarCards = document.getElementById('pillar-cards');
+    const pillarTrack = document.querySelector('.pillar-carousel-track');
+    const pillarCounter = document.getElementById('pillar-counter');
+    const pillarPrev = document.querySelector('.pillar-carousel-prev');
+    const pillarNext = document.querySelector('.pillar-carousel-next');
+    const PILLAR_TOTAL = 4;
+    const SWIPE_THRESHOLD = 50;
+
+    function goToPillar(index) {
+      const i = Math.max(0, Math.min(index, PILLAR_TOTAL - 1));
+      if (pillarCards) pillarCards.style.transform = `translateX(-${i * 25}%)`;
+      if (pillarCounter) pillarCounter.textContent = `${i + 1} / ${PILLAR_TOTAL}`;
+      pillarPrev?.classList.toggle('hidden', i === 0);
+      pillarNext?.classList.toggle('hidden', i === PILLAR_TOTAL - 1);
+      return i;
+    }
+
+    let pillarIndex = 0;
+    pillarPrev?.addEventListener('click', () => { pillarIndex = goToPillar(pillarIndex - 1); });
+    pillarNext?.addEventListener('click', () => { pillarIndex = goToPillar(pillarIndex + 1); });
+
+    let swipeStartX = 0;
+    function handleSwipeStart(clientX) {
+      swipeStartX = clientX;
+    }
+    function handleSwipeEnd(clientX) {
+      const delta = swipeStartX - clientX;
+      if (delta > SWIPE_THRESHOLD && pillarIndex < PILLAR_TOTAL - 1) pillarIndex = goToPillar(pillarIndex + 1);
+      else if (delta < -SWIPE_THRESHOLD && pillarIndex > 0) pillarIndex = goToPillar(pillarIndex - 1);
+    }
+
+    pillarTrack?.addEventListener('touchstart', (e) => handleSwipeStart(e.touches[0].clientX), { passive: true });
+    pillarTrack?.addEventListener('touchend', (e) => handleSwipeEnd(e.changedTouches[0].clientX), { passive: true });
+    pillarTrack?.addEventListener('mousedown', (e) => { handleSwipeStart(e.clientX); const up = (e2) => { handleSwipeEnd(e2.clientX); document.removeEventListener('mouseup', up); }; document.addEventListener('mouseup', up); });
+
+    goToPillar(0);
+    window.addEventListener('resize', () => goToPillar(pillarIndex));
+  </script>
+</body>
+</html>
