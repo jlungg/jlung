@@ -59,39 +59,20 @@
 
     /* ── HERO ─────────────────────────────────────────────────── */
     #hero { background: var(--black); min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; position: relative; overflow: hidden; }
-    .hero-bg-circle { position: absolute; width: 780px; height: 780px; border-radius: 0; border: 2px solid rgba(255,255,255,0.06); top: 50%; right: -220px; transform: translateY(-50%) rotate(45deg); pointer-events: none; }
-    .hero-bg-circle-2 { position: absolute; width: 520px; height: 520px; border-radius: 0; border: 2px solid rgba(250,236,32,0.09); top: 50%; right: 20px; transform: translateY(-50%) rotate(45deg); pointer-events: none; }
     .hero-left { padding: 120px 0 120px var(--pad-x); position: relative; z-index: 2; }
     .hero-logo { height: 52px; width: auto; margin-bottom: 72px; }
     .hero-title { font-size: clamp(2.5rem, 4.5vw, 4.5rem); font-weight: 900; line-height: 0.95; letter-spacing: -0.03em; color: var(--white); margin-bottom: 28px; }
     .hero-title .accent { color: var(--yellow); }
     .hero-subtitle { font-size: clamp(1rem, 1.5vw, 1.2rem); font-weight: 400; line-height: 1.5; color: rgba(255,255,255,0.65); max-width: 480px; }
-    .hero-right { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .hero-mockup { width: 108%; max-width: 720px; position: relative; z-index: 2; filter: drop-shadow(0 40px 80px rgba(0,0,0,0.6)); animation: float 6s ease-in-out infinite; }
+    .hero-right { position: relative; height: 100vh; display: flex; align-items: center; justify-content: flex-end; overflow: hidden; }
+    .hero-mockup { width: 130%; max-width: none; min-width: 850px; position: relative; z-index: 2; filter: drop-shadow(0 40px 80px rgba(0,0,0,0.6)); animation: float 6s ease-in-out infinite; object-fit: contain; object-position: left center; margin-right: -15%; mix-blend-mode: lighten; }
     @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-16px); } }
 
     /* ── PROJECT SUMMARY ──────────────────────────────────────── */
-    #summary { background: var(--grey-light); overflow: hidden; }
-    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-    .summary-meta-list { display: flex; flex-direction: column; gap: 0; padding-top: 108px; }
-    .meta-item { padding: 20px 0; border-bottom: 1px solid rgba(30,30,30,0.08); cursor: default; position: relative; overflow: hidden; transition: padding-left 0.35s var(--ease-out); }
-    .meta-item:first-child { border-top: 1px solid rgba(30,30,30,0.08); }
-    .meta-item::before { content: ''; position: absolute; left: 0; top: 0; width: 3px; height: 100%; background: var(--yellow); transform: scaleY(0); transform-origin: top; transition: transform 0.3s var(--ease-out); }
-    .meta-item:hover::before { transform: scaleY(1); }
-    .meta-item:hover { padding-left: 16px; }
-    .meta-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(79,76,77,0.55); margin-bottom: 4px; transition: color 0.25s; }
-    .meta-item:hover .meta-label { color: var(--black); }
-    .meta-value { font-size: 0.8125rem; font-weight: 400; line-height: 1.45; color: var(--dark-grey); transition: color 0.25s; }
-    .meta-item:hover .meta-value { color: var(--black); }
-    .meta-expand { display: block; max-height: 0; overflow: hidden; transition: max-height 0.4s var(--ease-out), opacity 0.3s; opacity: 0; font-size: 0.75rem; font-weight: 400; line-height: 1.5; color: var(--dark-grey); margin-top: 0; }
-    .meta-item:hover .meta-expand { max-height: 60px; opacity: 1; margin-top: 8px; }
-
-    /* ── BUSINESS CONTEXT ─────────────────────────────────────── */
-    #context { background: var(--yellow); }
-    #context .section-title { color: var(--black); }
-    #context .label { color: var(--black); opacity: 0.5; }
-    .context-split { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-    .context-stats { display: flex; flex-direction: column; gap: 20px; padding-top: 80px; }
+    #summary { background: var(--yellow); overflow: hidden; }
+    #summary .section-title, #summary .label { color: var(--black); }
+    #summary .label { opacity: 0.5; }
+    .context-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     .context-stat { background: var(--white); border-radius: 16px; padding: 32px; transition: transform 0.3s var(--ease-out), box-shadow 0.3s; cursor: default; }
     .context-stat:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
     .context-stat-number { font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1; margin-bottom: 8px; }
@@ -111,18 +92,18 @@
     .challenge-list li:last-child { border-bottom: none; }
 
     /* ── MY ROLE ──────────────────────────────────────────────── */
-    #role { background: var(--black); color: var(--white); }
-    #role .label { color: rgba(255,255,255,0.4); }
+    #role { background: var(--yellow); color: var(--black); }
+    #role .label { color: var(--black); }
     .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
     .role-responsibilities { padding-top: 126px; }
     .role-title-block { position: sticky; top: 120px; }
-    .role-title { font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; color: var(--white); margin-bottom: 20px; }
-    .role-subtitle { font-size: clamp(1.125rem, 2vw, 1.5rem); font-weight: 500; line-height: 1.3; color: rgba(255,255,255,0.5); margin-top: 16px; }
+    .role-title { font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; color: var(--black); margin-bottom: 20px; }
+    .role-subtitle { font-size: clamp(1.125rem, 2vw, 1.5rem); font-weight: 500; line-height: 1.3; color: var(--black); margin-top: 16px; }
     .responsibilities-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
-    .responsibility-item { padding: 24px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 1rem; font-weight: 400; line-height: 1.5; color: rgba(255,255,255,0.5); padding-left: 20px; position: relative; cursor: default; transition: color 0.25s, padding-left 0.25s var(--ease-out); }
-    .responsibility-item:hover { color: var(--white); padding-left: 28px; }
-    .responsibility-item::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; background: rgba(250,236,32,0.3); transition: background 0.25s, transform 0.25s var(--ease-out); }
-    .responsibility-item:hover::before { background: var(--yellow); transform: translateY(-50%) scale(1.5); }
+    .responsibility-item { padding: 24px 0; border-bottom: 1px solid var(--black); font-size: 1rem; font-weight: 400; line-height: 1.5; color: var(--black); padding-left: 20px; position: relative; cursor: default; transition: padding-left 0.25s var(--ease-out); }
+    .responsibility-item:hover { padding-left: 28px; }
+    .responsibility-item::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; background: var(--black); transition: transform 0.25s var(--ease-out); }
+    .responsibility-item:hover::before { transform: translateY(-50%) scale(1.5); }
 
     /* ── EXPERIENCE STRATEGY ──────────────────────────────────── */
     #strategy { background: var(--grey-light); }
@@ -137,22 +118,25 @@
     /* ── INTRODUCING PATH ─────────────────────────────────────── */
     #path-intro { background: var(--black); color: var(--white); overflow: hidden; }
     #path-intro .label { color: rgba(255,255,255,0.4); }
+    #path-intro .path-title { color: var(--white); }
+    #path-intro .path-title .highlight { color: var(--yellow); }
+    #path-intro .path-text { color: rgba(255,255,255,0.72); }
     .path-grid { display: flex; flex-direction: column; gap: 0; }
     .path-header { margin-bottom: 32px; }
-    .path-body-row { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .path-body { display: flex; flex-direction: column; justify-content: center; }
-    .path-visual { display: flex; align-items: center; justify-content: center; }
+    .path-body-row { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .path-body { display: flex; flex-direction: column; justify-content: start; }
     .path-title { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; line-height: 1; letter-spacing: -0.03em; margin-bottom: 32px; }
     .path-title .highlight { color: var(--yellow); }
     .path-text { font-size: 1.05rem; font-weight: 400; line-height: 1.65; color: rgba(255,255,255,0.72); }
     .path-text + .path-text { margin-top: 20px; }
-    .path-visual { position: relative; }
+    .path-visual { position: relative; min-width: 0; }
     .path-visual img { width: 100%; border-radius: 12px; }
-    .path-deco { position: absolute; width: 400px; height: 400px; border-radius: 0; border: 2px solid rgba(250,236,32,0.15); top: 50%; right: -100px; transform: translateY(-50%) rotate(45deg); pointer-events: none; }
+    #path-intro .pillar-carousel { margin-top: 0; }
 
     /* ── DESIGN DECISIONS ─────────────────────────────────────── */
-    #decisions { background: var(--yellow); }
+    #decisions { background: var(--grey-light); }
     #decisions .label { opacity: 0.5; }
+    #decisions .section-subtitle { color: var(--dark-grey); }
     .decisions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 56px; }
     .decision-card { background: var(--white); border-radius: 16px; padding: 36px; display: grid; grid-template-rows: auto auto 1fr; gap: 12px; transition: transform 0.3s var(--ease-out), box-shadow 0.3s; cursor: default; }
     .decision-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
@@ -213,7 +197,7 @@
     .pillar-title { font-size: 1.0625rem; font-weight: 700; margin-bottom: 10px; }
     .pillar-desc { font-size: 0.875rem; font-weight: 400; line-height: 1.55; color: rgba(255,255,255,0.5); }
 
-    /* Anim 1: Guided progression — grey → expand blue/white → contract grey */
+    /* Anim 1: Guided progression */
     .anim-steps { display: flex; align-items: center; justify-content: center; height: 100%; padding: 0 16px; position: relative; gap: 24px; }
     .anim-steps::before { content: ''; position: absolute; top: calc(50% - 9px); left: 50%; transform: translateX(-50%); width: 50%; height: 2px; background: rgba(255,255,255,0.1); z-index: 1; }
     .anim-step { display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 2; }
@@ -244,7 +228,7 @@
     }
     .anim-step-label { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.3); white-space: nowrap; }
 
-    /* Anim 2: Progress visibility — white/blue circle with number → green tick */
+    /* Anim 2: Progress visibility */
     .anim-progress { display: flex; align-items: center; justify-content: center; height: 100%; padding: 20px 28px; }
     .anim-prog-inner { display: flex; flex-direction: column; gap: 14px; }
     .anim-prog-row { display: flex; align-items: center; gap: 12px; }
@@ -274,7 +258,7 @@
     @keyframes pv-t2 { 0%,42% { opacity: 0; } 48%,95% { opacity: 1; } 100% { opacity: 0; } }
     .anim-prog-label { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.5); flex: 1; }
 
-    /* Anim 3: Flexible completion — bar + active/paused/completed pills */
+    /* Anim 3: Flexible completion */
     .anim-flex { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 16px; padding: 0 24px; }
     .anim-flex-bar-track { width: 100%; max-width: 220px; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
     .anim-flex-bar-fill { height: 100%; background: var(--yellow); border-radius: 4px; animation: flex-bar 10s ease-in-out infinite; }
@@ -309,7 +293,7 @@
       100% { border-color: rgba(255,255,255,0.1); background: transparent; color: rgba(255,255,255,0.25); }
     }
 
-    /* Anim 4: Adaptability — individual ↔ business flow toggle */
+    /* Anim 4: Adaptability */
     .anim-adapt { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 16px; }
     .anim-adapt-toggle { display: flex; background: rgba(255,255,255,0.06); border-radius: 100px; padding: 3px; gap: 0; margin-bottom: 8px; }
     .anim-adapt-opt { font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; color: rgba(255,255,255,0.35); }
@@ -327,26 +311,28 @@
     @keyframes adapt-r3 { 0%,45% { width: 85%; } 50%,95% { width: 60%; } 100% { width: 85%; } }
 
     /* ── VALIDATION ───────────────────────────────────────────── */
-    #validation { background: var(--grey-light); color: var(--black); }
-    .validation-split { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; align-items: start; }
-    .validation-left { position: sticky; top: 120px; }
-    .validation-intro { margin-bottom: 40px; }
-    .validation-learnings { padding-top: 350px; }
-    .quote-card { border-radius: 16px; padding: 28px; background: var(--white); border: 1px solid rgba(0,0,0,0.06); display: flex; flex-direction: column; gap: 20px; transition: transform 0.3s var(--ease-out), box-shadow 0.3s; cursor: default; }
-    .quote-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.06); }
-    .quote-card.negative { background: #FFF8EC; border-color: rgba(255,153,0,0.2); grid-column: 1 / -1; padding: 28px 32px; }
-    .quote-card.negative:hover { box-shadow: 0 16px 48px rgba(255,153,0,0.12); }
-    .quote-sentiment { font-size: 1.5rem; line-height: 1; }
-    .quote-text { font-size: 0.9375rem; font-weight: 400; line-height: 1.55; color: var(--dark-grey); font-style: italic; }
-    .quote-text::before { content: '\201C'; }
-    .quote-text::after { content: '\201D'; }
-    .learnings-title { font-size: clamp(1.25rem, 2vw, 1.5rem); font-weight: 800; color: var(--black); margin-bottom: 20px; }
-    .learnings-list { list-style: none; padding: 0; margin: 0; }
-    .learnings-list li { font-size: 0.9375rem; font-weight: 400; line-height: 1.55; color: var(--dark-grey); padding: 12px 0 12px 20px; border-left: 3px solid var(--yellow); margin-bottom: 8px; background: rgba(255,255,255,0.6); border-radius: 0 8px 8px 0; transition: border-color 0.25s, background 0.25s; }
-    .learnings-list li:last-child { margin-bottom: 0; }
-    .learnings-list li:hover { border-left-color: var(--black); background: var(--white); }
-    .validation-quotes { display: flex; flex-direction: column; gap: 20px; }
-    .quotes-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    #validation { background: var(--white); color: var(--black); }
+    #validation .label { color: rgba(0,0,0,0.5); }
+    #validation .section-title { color: var(--black); }
+    #validation .body-text { color: var(--black); }
+    .validation-split { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto 1fr; gap: 0 48px; align-items: start; }
+    .validation-label { grid-column: 1; grid-row: 1; }
+    .validation-heading { grid-column: 1; grid-row: 2; }
+    .validation-body { grid-column: 1; grid-row: 3; margin-top: 24px; }
+    .validation-learnings { grid-column: 2; grid-row: 3; margin-top: 24px; }
+    .learnings-alert { background: var(--grey-light); border-radius: 16px; padding: 28px 32px; border-left: 4px solid var(--yellow); color: var(--black); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .learnings-alert .learnings-title { font-size: 1rem; font-weight: 700; color: var(--black); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .learnings-alert .learnings-list { list-style: disc; padding-left: 24px; margin: 0; color: var(--black); }
+    .learnings-alert .learnings-list li { font-size: 0.9375rem; font-weight: 400; line-height: 1.55; color: var(--black); margin-bottom: 8px; padding-left: 8px; }
+    .learnings-alert .learnings-list li::marker { color: var(--black); }
+    .learnings-alert .learnings-list li:last-child { margin-bottom: 0; }
+    @media (max-width: 899px) {
+      .validation-split { grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; }
+      .validation-label { grid-row: 1; }
+      .validation-heading { grid-row: 2; }
+      .validation-body { grid-column: 1; grid-row: 3; }
+      .validation-learnings { grid-column: 1; grid-row: 4; margin-top: 32px; }
+    }
 
     /* ── IMPACT ────────────────────────────────────────────────── */
     #impact { background: var(--yellow); }
@@ -369,16 +355,6 @@
     .impact-card-title { font-size: 1.0625rem; font-weight: 700; line-height: 1.2; color: var(--black); }
     .impact-card-desc { font-size: 0.875rem; font-weight: 400; line-height: 1.55; color: var(--dark-grey); }
 
-    /* ── FINAL SOLUTION ───────────────────────────────────────── */
-    #solution { background: var(--grey-light); color: var(--black); }
-    .solution-split { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-    .solution-list { list-style: none; display: flex; flex-direction: column; gap: 0; counter-reset: sol; }
-    .solution-list li { display: flex; align-items: center; gap: 20px; font-size: 1rem; font-weight: 500; line-height: 1.4; padding: 20px 0; border-bottom: 1px solid rgba(0,0,0,0.08); counter-increment: sol; color: var(--dark-grey); cursor: default; transition: color 0.25s, padding-left 0.25s var(--ease-out); }
-    .solution-list li:hover { color: var(--black); padding-left: 12px; }
-    .solution-list li::before { content: counter(sol); display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: var(--black); color: var(--yellow); font-size: 13px; font-weight: 700; flex-shrink: 0; transition: transform 0.25s var(--ease-out); }
-    .solution-list li:hover::before { transform: scale(1.15); }
-    .solution-list li:last-child { border-bottom: none; }
-
     /* ── CLOSING ───────────────────────────────────────────────── */
     #closing { background: var(--black); color: var(--white); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; }
     .closing-deco { position: absolute; border-radius: 0; pointer-events: none; }
@@ -399,15 +375,12 @@
       #hero { grid-template-columns: 1fr; }
       .hero-left { padding: 100px var(--pad-x); }
       .hero-right { display: none; }
-      .summary-grid, .context-split, .role-grid, .path-body-row, .solution-split { grid-template-columns: 1fr; gap: 40px; }
+      .role-grid, .path-body-row { grid-template-columns: 1fr; gap: 40px; }
       .impact-grid { grid-template-columns: 1fr; }
       .principles-grid { grid-template-columns: 1fr 1fr; }
+      .context-stats { grid-template-columns: 1fr; }
       .validation-split { grid-template-columns: 1fr; }
-      .validation-left { position: static; }
-      .validation-learnings { padding-top: 0; }
-      .quotes-row { grid-template-columns: 1fr; }
       .decisions-grid { grid-template-columns: 1fr; }
-      .context-stats { padding-top: 0; }
       .challenges-grid { grid-template-columns: 1fr; }
       .role-responsibilities { padding-top: 80px; }
     }
@@ -423,7 +396,7 @@
       .principles-grid { grid-template-columns: 1fr; }
       .role-responsibilities { padding-top: 60px; }
       #chapter-nav { display: none; }
-      .challenge-card, .context-stat, .principle-card, .decision-card, .pillar-card, .quote-card, .impact-card { padding: max(8px, 1.5rem); }
+      .challenge-card, .context-stat, .principle-card, .decision-card, .pillar-card, .impact-card { padding: max(8px, 1.5rem); }
     }
   </style>
 </head>
@@ -432,97 +405,48 @@
   <nav id="chapter-nav" aria-label="Page sections">
     <div class="nav-dot" data-section="hero"        data-label="Overview"         onclick="scrollToSection('hero')"></div>
     <div class="nav-dot" data-section="summary"     data-label="Project Summary"  onclick="scrollToSection('summary')"></div>
-    <div class="nav-dot" data-section="context"     data-label="Business Context" onclick="scrollToSection('context')"></div>
     <div class="nav-dot" data-section="challenges"  data-label="The Problem"      onclick="scrollToSection('challenges')"></div>
     <div class="nav-dot" data-section="role"        data-label="My Role"          onclick="scrollToSection('role')"></div>
     <div class="nav-dot" data-section="strategy"    data-label="Strategy"         onclick="scrollToSection('strategy')"></div>
-    <div class="nav-dot" data-section="path-intro"  data-label="Introducing Path" onclick="scrollToSection('path-intro')"></div>
-    <div class="nav-dot" data-section="decisions"   data-label="Design Decisions" onclick="scrollToSection('decisions')"></div>
-    <div class="nav-dot" data-section="how-path"    data-label="How Path Works"   onclick="scrollToSection('how-path')"></div>
     <div class="nav-dot" data-section="validation"  data-label="Validation"       onclick="scrollToSection('validation')"></div>
+    <div class="nav-dot" data-section="path-intro"  data-label="Path Solution"   onclick="scrollToSection('path-intro')"></div>
     <div class="nav-dot" data-section="impact"      data-label="Impact"           onclick="scrollToSection('impact')"></div>
-    <div class="nav-dot" data-section="solution"    data-label="Final Solution"   onclick="scrollToSection('solution')"></div>
+    <div class="nav-dot" data-section="decisions"   data-label="Design Decisions" onclick="scrollToSection('decisions')"></div>
     <div class="nav-dot" data-section="closing"     data-label="Close"            onclick="scrollToSection('closing')"></div>
   </nav>
 
   <!-- HERO -->
   <section id="hero" data-theme="dark">
-    <div class="hero-bg-circle"></div>
-    <div class="hero-bg-circle-2"></div>
     <div class="hero-left">
       <img src="assets/cba-logo.png" alt="CommBank" class="hero-logo reveal">
       <h1 class="hero-title reveal reveal-delay-1">Know Your<br>Customer<span class="accent"> (KYC)</span></h1>
-      <p class="hero-subtitle reveal reveal-delay-2">Enabling secure, self-serve identity verification at scale, and the introduction of Path, a reusable pattern that changed how CommBank designs complex journeys.</p>
+      <p class="hero-subtitle reveal reveal-delay-2">Leading the end-to-end experience design for digital KYC at Australia's largest bank. Shifting a branch-dependent, compliance-heavy process into a self-serve journey that met regulatory obligations and reduced friction for 17M+ customers.</p>
     </div>
     <div class="hero-right">
-      <img src="assets/kyc-mockup.svg" alt="KYC digital experience mockup" class="hero-mockup">
+      <img src="assets/kyc-screen.png" alt="KYC digital experience on laptop and phone" class="hero-mockup">
     </div>
   </section>
 
   <!-- PROJECT SUMMARY -->
-  <section id="summary" class="section" data-theme="light">
+  <section id="summary" class="section" data-theme="yellow">
     <div class="container section__inner">
-      <div class="summary-grid">
-        <div>
-          <p class="label reveal">Case Study</p>
-          <h2 class="section-title reveal reveal-delay-1">Project Summary</h2>
-          <p class="body-text reveal reveal-delay-2" style="margin-top: 28px; max-width: 520px;">CommBank is required to regularly review and update customer identity information to meet KYC regulatory obligations. Historically, this process often required customers to visit a branch, creating friction for customers and operational overhead for staff.</p>
-          <p class="body-text reveal reveal-delay-3" style="margin-top: 20px; max-width: 520px;">I worked as a Product Designer embedded within a cross-functional squad to design a self-serve digital KYC experience. A key outcome was the introduction of <strong>Path</strong>, a reusable interaction pattern designed to support complex, multi-step journeys, enabling customers to complete KYC in one or multiple sittings while maintaining clarity, control, and compliance.</p>
-        </div>
-        <div class="summary-meta-list">
-          <div class="meta-item reveal reveal-delay-1">
-            <p class="meta-label">Organisation</p>
-            <p class="meta-value">Commonwealth Bank of Australia</p>
-            <p class="meta-expand">Australia's largest bank, serving over 17 million customers.</p>
-          </div>
-          <div class="meta-item reveal reveal-delay-2">
-            <p class="meta-label">My Role</p>
-            <p class="meta-value">Product Designer, embedded in a cross-functional squad</p>
-            <p class="meta-expand">Owning end-to-end experience from research through to delivery.</p>
-          </div>
-          <div class="meta-item reveal reveal-delay-3">
-            <p class="meta-label">Collaborators</p>
-            <p class="meta-value">Product Managers, Engineers, UX Researchers, Content Designers</p>
-            <p class="meta-expand">Working as a tightly integrated squad with shared outcomes.</p>
-          </div>
-          <div class="meta-item reveal reveal-delay-4">
-            <p class="meta-label">Key Outcome</p>
-            <p class="meta-value">Digital KYC at scale + Path design pattern adopted across CommBank</p>
-            <p class="meta-expand">Path was added to the design system and reused by other product teams.</p>
-          </div>
-          <div class="meta-item reveal reveal-delay-5">
-            <p class="meta-label">Focus Areas</p>
-            <p class="meta-value">End-to-end experience design · Interaction patterns · Design systems · Stakeholder alignment</p>
-            <p class="meta-expand">Balancing regulatory compliance with a genuinely usable experience.</p>
-          </div>
-        </div>
+      <div>
+        <p class="label reveal">Case Study</p>
+        <h2 class="section-title reveal reveal-delay-1">Project Summary</h2>
+        <p class="body-text reveal reveal-delay-2" style="margin-top: 28px; max-width: 640px;">CommBank is required to regularly review and update customer identity information to meet KYC regulatory obligations. Historically, this process often required branch visits, creating friction for customers and significant operational overhead for staff. KYC compliance is critical: failure to complete checks can result in account restrictions and erode trust.</p>
       </div>
-    </div>
-  </section>
-
-  <!-- BUSINESS CONTEXT -->
-  <section id="context" class="section" data-theme="yellow">
-    <div class="container section__inner">
-      <div class="context-split">
-        <div>
-          <p class="label reveal">The Mandate</p>
-          <h2 class="section-title reveal reveal-delay-1">Business Context</h2>
-          <p class="body-text reveal reveal-delay-2" style="margin-top: 28px;">KYC compliance is critical to CommBank's ability to provide customers with uninterrupted access to their banking services. Failure to complete KYC checks can result in account restrictions, creating frustration and eroding trust.</p>
-          <p class="body-text reveal reveal-delay-3" style="margin-top: 20px;">Customer research showed strong negative sentiment toward KYC, particularly when re-verification required branch visits. The opportunity was to shift KYC from a disruptive, branch-dependent process to a clear, self-serve digital experience that met regulatory obligations while reducing customer friction and operational load.</p>
+      <div class="context-stats" style="margin-top: 48px;">
+        <div class="context-stat reveal reveal-delay-2">
+          <div class="context-stat-number">17M+</div>
+          <div class="context-stat-label">Customers impacted by KYC requirements</div>
         </div>
-        <div class="context-stats">
-          <div class="context-stat reveal reveal-delay-2">
-            <div class="context-stat-number">17M+</div>
-            <div class="context-stat-label">Customers impacted by KYC requirements</div>
-          </div>
-          <div class="context-stat reveal reveal-delay-3">
-            <div class="context-stat-number">High</div>
-            <div class="context-stat-label">Branch staff time spent on KYC administration</div>
-          </div>
-          <div class="context-stat reveal reveal-delay-4">
-            <div class="context-stat-number">Negative</div>
-            <div class="context-stat-label">Customer sentiment toward re-verification</div>
-          </div>
+        <div class="context-stat reveal reveal-delay-3">
+          <div class="context-stat-number">High</div>
+          <div class="context-stat-label">Branch staff time spent on KYC administration</div>
+        </div>
+        <div class="context-stat reveal reveal-delay-4">
+          <div class="context-stat-number">Negative</div>
+          <div class="context-stat-label">Customer sentiment toward re-verification</div>
         </div>
       </div>
     </div>
@@ -561,24 +485,22 @@
   </section>
 
   <!-- MY ROLE -->
-  <section id="role" class="section" data-theme="dark">
+  <section id="role" class="section" data-theme="light">
     <div class="container section__inner">
       <div class="role-grid">
         <div class="role-title-block">
           <p class="label reveal">Ownership</p>
           <h2 class="role-title reveal reveal-delay-1">Roles &<br>Responsibilities</h2>
           <h3 class="role-subtitle reveal reveal-delay-2">Product Designer, embedded in a cross-functional squad</h3>
-          <p class="body-text reveal reveal-delay-3" style="color: rgba(255,255,255,0.6); margin-top: 16px; font-size: 1rem;">I owned the end-to-end customer experience for the digital KYC journey, partnering closely with Product Managers, Engineers, UX, and Content.</p>
+          <p class="body-text reveal reveal-delay-3" style="color: var(--black); margin-top: 16px; font-size: 1rem;">I led the end-to-end experience design, partnering with Product, Engineering, UX Research, and Content to ship a compliant, user-centred solution.</p>
         </div>
         <div class="role-responsibilities">
           <ul class="responsibilities-list reveal reveal-delay-2">
-            <li class="responsibility-item">Shaping experience strategy for a compliance-driven flow</li>
-            <li class="responsibility-item">Translating regulatory requirements into user-centred journeys</li>
-            <li class="responsibility-item">Defining interaction patterns for long, multi-step processes</li>
-            <li class="responsibility-item">Advocating for structural changes to reduce perceived effort</li>
-            <li class="responsibility-item">Partnering with Content and stakeholders to balance clarity and compliance</li>
-            <li class="responsibility-item">Collaborating directly with Engineering on feasibility and delivery</li>
-            <li class="responsibility-item">Driving usability improvements through testing and iteration</li>
+            <li class="responsibility-item">Own end-to-end experience design for digital KYC</li>
+            <li class="responsibility-item">Define the user journey for business customers</li>
+            <li class="responsibility-item">Ensure the flow meets regulatory requirements</li>
+            <li class="responsibility-item">Work within CBA's design system and governance</li>
+            <li class="responsibility-item">Work with Product, Compliance, Engineering, Research, and Content and run validation with users</li>
           </ul>
         </div>
       </div>
@@ -591,165 +513,28 @@
       <div class="strategy-intro">
         <p class="label reveal">Strategic Foundation</p>
         <h2 class="section-title reveal reveal-delay-1">Experience Strategy</h2>
-        <p class="body-text reveal reveal-delay-2" style="margin-top: 24px;">Early on, we aligned on a set of principles to guide prioritisation. These principles directly informed the decision to introduce Path:</p>
+        <p class="body-text reveal reveal-delay-2" style="margin-top: 24px;">We knew our customers: business owners and operators who needed to complete KYC without disrupting their day. That clarity shaped my approach. Before designing, I established decision lenses to evaluate every choice:</p>
       </div>
       <div class="principles-grid">
         <div class="principle-card reveal reveal-delay-1">
-          <div class="principle-emoji">🧭</div>
-          <h3 class="principle-title">Make complexity manageable</h3>
-          <p class="principle-desc">Break long regulatory journeys into clear, understandable steps.</p>
+          <div class="principle-emoji">⏸️</div>
+          <h3 class="principle-title">Design for interruption</h3>
+          <p class="principle-desc">Assume people will pause and resume. The flow had to support multi-session from the start.</p>
         </div>
         <div class="principle-card reveal reveal-delay-2">
-          <div class="principle-emoji">😮‍💨</div>
-          <h3 class="principle-title">Reduce anxiety</h3>
-          <p class="principle-desc">Frame KYC as a reminder rather than a warning, using calm language and visual treatment.</p>
+          <div class="principle-emoji">✅</div>
+          <h3 class="principle-title">Completion over compliance theatre</h3>
+          <p class="principle-desc">We optimised for completion, not just the audit. Multi-session support was core.</p>
         </div>
         <div class="principle-card reveal reveal-delay-3">
-          <div class="principle-emoji">📌</div>
-          <h3 class="principle-title">Support progress over time</h3>
-          <p class="principle-desc">Allow customers to leave and return without losing context or progress.</p>
+          <div class="principle-emoji">🧭</div>
+          <h3 class="principle-title">Complexity as structure, not content</h3>
+          <p class="principle-desc">Content is fixed by regulation. The problem is how the journey feels. We tackled perceived effort through structure: chunking, progress, control.</p>
         </div>
         <div class="principle-card reveal reveal-delay-4">
           <div class="principle-emoji">🔁</div>
-          <h3 class="principle-title">Design for reuse</h3>
-          <p class="principle-desc">Create patterns that could scale beyond KYC to other complex journeys.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- INTRODUCING PATH -->
-  <section id="path-intro" class="section" data-theme="dark">
-    <div class="path-deco"></div>
-    <div class="container section__inner">
-      <div class="path-grid">
-        <div class="path-header">
-          <p class="label reveal">A Product Decision</p>
-          <h2 class="path-title reveal reveal-delay-1">Introducing<br><span class="highlight">Path:</span></h2>
-        </div>
-        <div class="path-body-row">
-          <div class="path-body">
-            <p class="path-text reveal reveal-delay-2">As the KYC journey evolved, it became clear that traditional page-by-page flows were not suitable for long, compliance-heavy experiences.</p>
-            <p class="path-text reveal reveal-delay-3">Path was introduced as a structural solution to support complex journeys, providing a consistent way for customers to understand what's required, track progress, and complete tasks over time. It was designed as a reusable pattern that could scale beyond KYC to other multi-step journeys across the bank.</p>
-            <p class="path-text reveal reveal-delay-4">Path was implemented into CommBank's design system and adopted by other teams to support similar use cases.</p>
-          </div>
-          <div class="path-visual reveal reveal-delay-2">
-            <img src="assets/path-mockup.png" alt="Path design pattern - laptop and phone showing multi-step KYC journey">
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- KEY DESIGN DECISIONS -->
-  <section id="decisions" class="section" data-theme="yellow">
-    <div class="container section__inner">
-      <p class="label reveal">Design Craft</p>
-      <h2 class="section-title reveal reveal-delay-1">Key Product Design Decisions</h2>
-      <p class="section-subtitle reveal reveal-delay-2" style="margin-top: 20px;">Four pivotal decisions that shaped the experience and drove meaningful outcomes:</p>
-      <div class="decisions-grid">
-        <div class="decision-card reveal reveal-delay-1">
-          <div class="decision-emoji">⚖️</div>
-          <h3 class="decision-title">Balanced compliance with clarity</h3>
-          <p class="decision-text">Regulatory language caused confusion in testing, so I pushed back using evidence and worked with Content and stakeholders to simplify terminology while remaining compliant.</p>
-        </div>
-        <div class="decision-card reveal reveal-delay-2">
-          <div class="decision-emoji">🌏</div>
-          <h3 class="decision-title">Designed for real-world completion</h3>
-          <p class="decision-text">Customers couldn't always finish KYC in one sitting, so I advocated for multi-session completion despite added technical complexity. A critical win for the user experience.</p>
-        </div>
-        <div class="decision-card reveal reveal-delay-3">
-          <div class="decision-emoji">🔔</div>
-          <h3 class="decision-title">Framed KYC as a reminder, not a warning</h3>
-          <p class="decision-text">Alarmist language increased anxiety in testing. Copy and visual treatment were softened to encourage completion without reducing urgency. A delicate but critical balance.</p>
-        </div>
-        <div class="decision-card reveal reveal-delay-4">
-          <div class="decision-emoji">👀</div>
-          <h3 class="decision-title">Reduced perceived effort in a long journey</h3>
-          <p class="decision-text">KYC required many steps. I introduced Path to structure the flow and make the journey feel manageable, transforming a daunting task into a series of clear, achievable steps.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW PATH WORKS -->
-  <section id="how-path" class="section" data-theme="dark">
-    <div class="container section__inner">
-      <div class="how-path-header">
-        <p class="label reveal">The System</p>
-        <h2 class="section-title reveal reveal-delay-1" style="color: var(--white); font-size: clamp(1.75rem, 3vw, 2.25rem);">How Path Supports Complex Journeys</h2>
-        <p class="body-text reveal reveal-delay-2" style="color: rgba(255,255,255,0.6); margin-top: 20px;">Path supports long, compliance-driven journeys through four core capabilities, each addressing a real failure point identified in research.</p>
-      </div>
-
-      <div class="pillar-carousel">
-        <div class="pillar-carousel-inner">
-          <button type="button" class="pillar-carousel-arrow pillar-carousel-prev" aria-label="Previous frame">←</button>
-          <div class="pillar-carousel-track">
-            <div class="pillar-cards" id="pillar-cards">
-        <div class="pillar-card reveal reveal-delay-1">
-          <div class="pillar-anim">
-            <div class="anim-steps">
-              <div class="anim-step"><div class="anim-step-circle">1</div><div class="anim-step-label">Personal</div></div>
-              <div class="anim-step"><div class="anim-step-circle">2</div><div class="anim-step-label">Identity</div></div>
-              <div class="anim-step"><div class="anim-step-circle">3</div><div class="anim-step-label">Documents</div></div>
-              <div class="anim-step"><div class="anim-step-circle">4</div><div class="anim-step-label">Review</div></div>
-            </div>
-          </div>
-          <h3 class="pillar-title">Guided progression</h3>
-          <p class="pillar-desc">Breaking the journey into clear, sequential steps so customers always know where they are and what comes next.</p>
-        </div>
-
-        <div class="pillar-card reveal reveal-delay-2">
-          <div class="pillar-anim">
-            <div class="anim-progress">
-              <div class="anim-prog-inner">
-                <div class="anim-prog-row"><div class="anim-prog-circle"><span class="pv-num">1</span><span class="pv-tick">✓</span></div><div class="anim-prog-label">Personal details</div></div>
-                <div class="anim-prog-row"><div class="anim-prog-circle"><span class="pv-num">2</span><span class="pv-tick">✓</span></div><div class="anim-prog-label">Identity documents</div></div>
-              </div>
-            </div>
-          </div>
-          <h3 class="pillar-title">Progress visibility</h3>
-          <p class="pillar-desc">Showing customers what's complete and what remains, building confidence throughout the journey.</p>
-        </div>
-
-        <div class="pillar-card reveal reveal-delay-3">
-          <div class="pillar-anim">
-            <div class="anim-flex">
-              <div class="anim-flex-bar-track"><div class="anim-flex-bar-fill"></div></div>
-              <div class="anim-flex-states">
-                <span class="anim-flex-state">Active</span>
-                <span class="anim-flex-state">Paused</span>
-                <span class="anim-flex-state">Completed</span>
-              </div>
-            </div>
-          </div>
-          <h3 class="pillar-title">Flexible completion</h3>
-          <p class="pillar-desc">Allowing customers to pause and resume without losing progress, completing at their own pace.</p>
-        </div>
-
-        <div class="pillar-card reveal reveal-delay-4">
-          <div class="pillar-anim">
-            <div class="anim-adapt">
-              <div class="anim-adapt-toggle">
-                <span class="anim-adapt-opt">Individual</span>
-                <span class="anim-adapt-opt">Business</span>
-              </div>
-              <div class="anim-adapt-rows">
-                <div class="anim-adapt-row"></div>
-                <div class="anim-adapt-row"></div>
-                <div class="anim-adapt-row"></div>
-              </div>
-            </div>
-          </div>
-          <h3 class="pillar-title">Adaptability</h3>
-          <p class="pillar-desc">Supporting both individual and business verification flows with flexible configuration.</p>
-        </div>
-            </div>
-          </div>
-          <button type="button" class="pillar-carousel-arrow pillar-carousel-next" aria-label="Next frame">→</button>
-        </div>
-        <div class="pillar-carousel-indicator">
-          <span class="pillar-carousel-counter" id="pillar-counter">1 / 4</span>
+          <h3 class="principle-title">Reuse as a design criterion</h3>
+          <p class="principle-desc">Design patterns that scale to other flows. Every pattern was evaluated for use beyond KYC.</p>
         </div>
       </div>
     </div>
@@ -759,36 +544,112 @@
   <section id="validation" class="section" data-theme="light">
     <div class="container section__inner">
       <div class="validation-split">
-        <div class="validation-left">
-          <div class="validation-intro">
-            <p class="label reveal">Evidence-based Design</p>
-            <h2 class="section-title reveal reveal-delay-1">Validation & Insights</h2>
-            <p class="body-text reveal reveal-delay-2" style="margin-top: 24px;">We tested the digital KYC experience with existing customers completing realistic verification scenarios. The research generated both confirmatory signals and critical insights that directly shaped the final design.</p>
-          </div>
-          <div class="validation-quotes">
-            <div class="quotes-row">
-              <div class="quote-card positive reveal reveal-delay-1">
-                <div class="quote-sentiment">✅</div>
-                <p class="quote-text">Oh the process was very easy! The only problem is that I rushed through without looking carefully.</p>
-              </div>
-              <div class="quote-card positive reveal reveal-delay-2">
-                <div class="quote-sentiment">✅</div>
-                <p class="quote-text">The process was quite clear, I know exactly what I need to do and don't need assistance.</p>
-              </div>
-            </div>
-            <div class="quote-card negative reveal reveal-delay-3">
-              <div class="quote-sentiment">⚠️</div>
-              <p class="quote-text">The process felt way too long, I felt quite frustrated if I'm being honest.</p>
-            </div>
-          </div>
+        <div class="validation-label">
+          <p class="label reveal">Evidence-based Design</p>
+        </div>
+        <div class="validation-heading">
+          <h2 class="section-title reveal reveal-delay-1">Validation & Insights</h2>
+        </div>
+        <div class="validation-body">
+          <p class="body-text reveal reveal-delay-2">I led validation with existing customers completing realistic verification scenarios. Three themes emerged that shaped the solution: trust, flow structure, and language.</p>
         </div>
         <div class="validation-learnings">
-          <h3 class="learnings-title reveal">💡 Key Learnings</h3>
-          <ul class="learnings-list">
-            <li class="reveal reveal-delay-1">Customers needed reassurance that the request was legitimate. Clear branding and calm language were essential.</li>
-            <li class="reveal reveal-delay-2">Progress visibility significantly reduced frustration in longer flows, confirming the Path decision.</li>
-            <li class="reveal reveal-delay-3">Softer language improved willingness to engage, directly informing copy changes throughout the journey.</li>
-          </ul>
+          <div class="learnings-alert reveal reveal-delay-2">
+            <h3 class="learnings-title">💡 Key Learnings</h3>
+            <ul class="learnings-list">
+              <li><strong>Trust:</strong> Customers needed reassurance that the request was legitimate. Clear branding and calm language mattered.</li>
+              <li><strong>Structure:</strong> Progress visibility reduced frustration in longer flows. I identified Path as the right structural solution and drove its adoption for KYC.</li>
+              <li><strong>Language:</strong> Softer copy improved willingness to engage and informed changes across the flow.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRODUCING PATH -->
+  <section id="path-intro" class="section" data-theme="dark">
+    <div class="container section__inner">
+      <div class="path-grid">
+        <div class="path-header">
+          <p class="label reveal">A product decision</p>
+          <h2 class="path-title reveal reveal-delay-1">Introducing:<br><span class="highlight">Path</span></h2>
+        </div>
+        <div class="path-body-row">
+          <div class="path-body">
+            <p class="path-text reveal reveal-delay-2">Path is CommBank's design-system pattern for long, compliance-driven flows. It breaks journeys into clear steps, shows progress, and supports pause-and-resume, exactly what KYC needed. Unlike one-question-at-a-time approaches, Path gives customers a map of the whole journey while keeping each step focused.</p>
+            <p class="path-text reveal reveal-delay-3">It was built for another business banking product and already supported both individual and business verification. I proposed we adopt it for KYC, aligned stakeholders, and we shipped on Path. The animations below show how it works.</p>
+          </div>
+          <div class="path-visual reveal reveal-delay-2">
+            <div class="pillar-carousel">
+              <div class="pillar-carousel-inner">
+                <button type="button" class="pillar-carousel-arrow pillar-carousel-prev" aria-label="Previous frame">←</button>
+                <div class="pillar-carousel-track">
+                  <div class="pillar-cards" id="pillar-cards">
+                    <div class="pillar-card reveal reveal-delay-1">
+                      <div class="pillar-anim">
+                        <div class="anim-steps">
+                          <div class="anim-step"><div class="anim-step-circle">1</div><div class="anim-step-label">Personal</div></div>
+                          <div class="anim-step"><div class="anim-step-circle">2</div><div class="anim-step-label">Identity</div></div>
+                          <div class="anim-step"><div class="anim-step-circle">3</div><div class="anim-step-label">Documents</div></div>
+                          <div class="anim-step"><div class="anim-step-circle">4</div><div class="anim-step-label">Review</div></div>
+                        </div>
+                      </div>
+                      <h3 class="pillar-title">Guided progression</h3>
+                      <p class="pillar-desc">Breaking the journey into clear, sequential steps so customers always know where they are and what comes next.</p>
+                    </div>
+                    <div class="pillar-card reveal reveal-delay-2">
+                      <div class="pillar-anim">
+                        <div class="anim-progress">
+                          <div class="anim-prog-inner">
+                            <div class="anim-prog-row"><div class="anim-prog-circle"><span class="pv-num">1</span><span class="pv-tick">✓</span></div><div class="anim-prog-label">Personal details</div></div>
+                            <div class="anim-prog-row"><div class="anim-prog-circle"><span class="pv-num">2</span><span class="pv-tick">✓</span></div><div class="anim-prog-label">Identity documents</div></div>
+                          </div>
+                        </div>
+                      </div>
+                      <h3 class="pillar-title">Progress visibility</h3>
+                      <p class="pillar-desc">Showing customers what's complete and what remains so they know where they stand.</p>
+                    </div>
+                    <div class="pillar-card reveal reveal-delay-3">
+                      <div class="pillar-anim">
+                        <div class="anim-flex">
+                          <div class="anim-flex-bar-track"><div class="anim-flex-bar-fill"></div></div>
+                          <div class="anim-flex-states">
+                            <span class="anim-flex-state">Active</span>
+                            <span class="anim-flex-state">Paused</span>
+                            <span class="anim-flex-state">Completed</span>
+                          </div>
+                        </div>
+                      </div>
+                      <h3 class="pillar-title">Flexible completion</h3>
+                      <p class="pillar-desc">Allowing customers to pause and resume without losing progress, completing at their own pace.</p>
+                    </div>
+                    <div class="pillar-card reveal reveal-delay-4">
+                      <div class="pillar-anim">
+                        <div class="anim-adapt">
+                          <div class="anim-adapt-toggle">
+                            <span class="anim-adapt-opt">Individual</span>
+                            <span class="anim-adapt-opt">Business</span>
+                          </div>
+                          <div class="anim-adapt-rows">
+                            <div class="anim-adapt-row"></div>
+                            <div class="anim-adapt-row"></div>
+                            <div class="anim-adapt-row"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <h3 class="pillar-title">Adaptability</h3>
+                      <p class="pillar-desc">Supporting both individual and business verification flows with flexible configuration.</p>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="pillar-carousel-arrow pillar-carousel-next" aria-label="Next frame">→</button>
+              </div>
+              <div class="pillar-carousel-indicator">
+                <span class="pillar-carousel-counter" id="pillar-counter">1 / 4</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -800,50 +661,60 @@
       <div class="impact-header">
         <p class="label reveal">Outcomes</p>
         <h2 class="section-title reveal reveal-delay-1">Impact</h2>
-        <p class="body-text reveal reveal-delay-2" style="margin-top: 24px; max-width: 480px;">The digital KYC experience and the Path pattern delivered measurable value for customers, the bank, and the design practice.</p>
+        <p class="body-text reveal reveal-delay-2" style="margin-top: 24px; max-width: 480px;">The digital KYC experience I led delivered value for customers, the business, and the design practice.</p>
       </div>
       <div class="impact-grid">
         <div class="impact-card reveal reveal-delay-1">
           <div class="impact-card-emoji">💻</div>
           <div class="impact-card-title">Digital scale</div>
-          <p class="impact-card-desc">Enabled CommBank to confidently scale digital KYC verification, removing the reliance on branch visits.</p>
+          <p class="impact-card-desc">Enabled CommBank to scale digital KYC verification, removing the reliance on branch visits.</p>
         </div>
         <div class="impact-card reveal reveal-delay-2">
-          <div class="impact-card-emoji">🔁</div>
-          <div class="impact-card-title">Repeatable pattern</div>
-          <p class="impact-card-desc">Established a repeatable approach for compliance-heavy flows, reducing future design and engineering overhead.</p>
-        </div>
-        <div class="impact-card reveal reveal-delay-3">
-          <div class="impact-card-emoji">📐</div>
-          <div class="impact-card-title">Design system adoption</div>
-          <p class="impact-card-desc">Path was adopted into CommBank's design system and picked up by other product teams across the organisation.</p>
-        </div>
-        <div class="impact-card reveal reveal-delay-4">
           <div class="impact-card-emoji">📉</div>
           <div class="impact-card-title">Reduced overhead</div>
           <p class="impact-card-desc">Reduced operational overhead for branch staff previously required to support customers through administrative verification.</p>
+        </div>
+        <div class="impact-card reveal reveal-delay-3">
+          <div class="impact-card-emoji">🔁</div>
+          <div class="impact-card-title">Repeatable pattern</div>
+          <p class="impact-card-desc">Path, which I proposed for KYC, established an approach for compliance-heavy flows across the bank that other teams could reuse.</p>
+        </div>
+        <div class="impact-card reveal reveal-delay-4">
+          <div class="impact-card-emoji">📐</div>
+          <div class="impact-card-title">Design system adoption</div>
+          <p class="impact-card-desc">Path was picked up by other product teams across the organisation for similar use cases.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FINAL SOLUTION -->
-  <section id="solution" class="section" data-theme="light">
+  <!-- KEY DESIGN DECISIONS -->
+  <section id="decisions" class="section" data-theme="light">
     <div class="container section__inner">
-      <div class="solution-split">
-        <div>
-          <p class="label reveal">Delivered</p>
-          <h2 class="section-title reveal reveal-delay-1">Final Solution</h2>
-          <p class="body-text reveal reveal-delay-2" style="margin-top: 24px; max-width: 440px;">A complete digital KYC experience that met regulatory obligations, reduced friction, and introduced a lasting design pattern.</p>
+      <p class="label reveal">Design Craft</p>
+      <h2 class="section-title reveal reveal-delay-1">Key Product Design Decisions</h2>
+      <p class="section-subtitle reveal reveal-delay-2" style="margin-top: 20px;">Four decisions where I influenced direction:</p>
+      <div class="decisions-grid">
+        <div class="decision-card reveal reveal-delay-1">
+          <div class="decision-emoji">⚖️</div>
+          <h3 class="decision-title">Balanced compliance with clarity</h3>
+          <p class="decision-text">Regulatory language caused confusion in validation. I pushed back with evidence, influenced Content and stakeholders to simplify terminology, and maintained full compliance.</p>
         </div>
-        <ul class="solution-list reveal reveal-delay-2">
-          <li>Enabled customers to update and verify details entirely online</li>
-          <li>Reduced the need for in-branch visits for KYC compliance</li>
-          <li>Provided clear progress and guidance through long flows via Path</li>
-          <li>Supported completion across one or multiple sessions</li>
-          <li>Reduced manual handling required from branch staff</li>
-          <li>Path pattern adopted across CommBank design system</li>
-        </ul>
+        <div class="decision-card reveal reveal-delay-2">
+          <div class="decision-emoji">🌏</div>
+          <h3 class="decision-title">Designed for real-world completion</h3>
+          <p class="decision-text">Validation showed customers couldn't always complete KYC in one sitting. I championed multi-session completion, negotiated the technical trade-offs with Engineering, and secured buy-in.</p>
+        </div>
+        <div class="decision-card reveal reveal-delay-3">
+          <div class="decision-emoji">🔔</div>
+          <h3 class="decision-title">Framed KYC as a reminder, not a warning</h3>
+          <p class="decision-text">Alarmist language increased anxiety in validation. I drove changes to copy and visual treatment, softening tone to encourage completion without reducing regulatory urgency.</p>
+        </div>
+        <div class="decision-card reveal reveal-delay-4">
+          <div class="decision-emoji">👀</div>
+          <h3 class="decision-title">Reduced perceived effort in a long journey</h3>
+          <p class="decision-text">KYC required many steps. I advocated for a structural approach to reduce perceived effort, turning it into a series of clear steps. This led to the adoption of Path when validation surfaced the need.</p>
+        </div>
       </div>
     </div>
   </section>
