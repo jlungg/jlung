@@ -395,34 +395,6 @@
     }
 
     /* ──────────────────────────────────────────────────────────────
-       KEY DESIGN DECISIONS (KYC-style)
-    ────────────────────────────────────────────────────────────── */
-    #decisions { background: var(--grey-light); }
-    #decisions .label, #decisions .section-label { opacity: 0.5; }
-    #decisions .section-subtitle { color: var(--dark-grey); }
-    .decisions-heading-row { margin-bottom: 0; }
-    .decisions-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-top: 56px;
-    }
-    .decision-item {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 36px;
-      display: grid;
-      grid-template-rows: auto auto 1fr;
-      gap: 12px;
-      transition: transform 0.3s var(--ease-out), box-shadow 0.3s;
-      cursor: default;
-    }
-    .decision-item:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
-    .decision-emoji { font-size: 2rem; line-height: 1; }
-    .decision-title { font-size: 1rem; font-weight: 700; color: var(--black); }
-    .decision-body { font-size: 0.9rem; font-weight: 400; line-height: 1.55; color: var(--dark-grey); }
-
-    /* ──────────────────────────────────────────────────────────────
        9. USER FLOW DIAGRAM
     ────────────────────────────────────────────────────────────── */
     #flow { background: var(--white); align-items: flex-start; overflow: visible; }
@@ -863,7 +835,6 @@
       .impact-grid,
       .quotes-split, .quotes-row, .strategy-principles,
       .challenges-grid,
-      .decisions-grid,
       .solution-split { grid-template-columns: 1fr; gap: 48px; }
       .solution-phones { order: -1; }
       .solution-grid,
@@ -880,7 +851,7 @@
       .container { margin-left: max(24px, env(safe-area-inset-left)); margin-right: max(24px, env(safe-area-inset-right)); }
       .hero-left { padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
       .outro-inner, .closing-inner { padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
-      .impact-card, .quote-card, .principle-card, .solution-card, .challenge-card, .decision-item { padding: max(8px, 1.5rem); }
+      .impact-card, .quote-card, .principle-card, .solution-card, .challenge-card { padding: max(8px, 1.5rem); }
       .role-responsibilities { padding-top: 60px; }
       .context-stats { grid-template-columns: 1fr; }
     }
@@ -899,7 +870,6 @@
     <div class="nav-dot" data-section="quotes" data-label="Voices"></div>
     <div class="nav-dot" data-section="solution" data-label="Solution"></div>
     <div class="nav-dot" data-section="impact" data-label="Impact"></div>
-    <div class="nav-dot" data-section="decisions" data-label="Decisions"></div>
     <div class="nav-dot" data-section="reflections" data-label="Reflections"></div>
     <div class="nav-dot" data-section="outro" data-label="Close"></div>
   </nav>
@@ -1277,39 +1247,6 @@
           <div class="impact-card-emoji">⚙️</div>
           <div class="impact-card-title">Reusable framework</div>
           <p class="impact-card-desc">Design system re-purposed across multiple business loan products</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ─── KEY DESIGN DECISIONS ──────────────────────────────────── -->
-  <section id="decisions" class="section">
-    <div class="container section__inner">
-      <div class="decisions-heading-row">
-        <p class="section-label reveal">Design craft</p>
-        <h2 class="section-title reveal delay-1">Key Product Design Decisions</h2>
-        <p class="section-subtitle reveal delay-2" style="margin-top: 20px;">Four decisions that shaped the experience:</p>
-      </div>
-      <div class="decisions-grid">
-        <div class="decision-item reveal delay-1">
-          <span class="decision-emoji">😵‍💫</span>
-          <h3 class="decision-title">Designing for reassurance and clarity</h3>
-          <p class="decision-body">Users weren't always confident their actions were completed. Clear confirmation states were added to reduce uncertainty and help users move forward.</p>
-        </div>
-        <div class="decision-item reveal delay-2">
-          <span class="decision-emoji">⚖️</span>
-          <h3 class="decision-title">Simplifying complex financial terminology</h3>
-          <p class="decision-body">Users struggled to understand key banking terms, particularly the difference between borrower and guarantor. I worked with Content to simplify copy and CTA labels, balancing regulatory requirements with usability.</p>
-        </div>
-        <div class="decision-item reveal delay-3">
-          <span class="decision-emoji">⏱️</span>
-          <h3 class="decision-title">Prioritising speed over completeness</h3>
-          <p class="decision-body">Traditional lending flows were slowed by optional steps and branching paths. I worked with Product and Engineering to streamline the journey to its essentials, enabling funding in approximately 18 minutes.</p>
-        </div>
-        <div class="decision-item reveal delay-4">
-          <span class="decision-emoji">🤝</span>
-          <h3 class="decision-title">Designing within technical constraints</h3>
-          <p class="decision-body">Tight timelines required prioritising existing design system components. Where needed, I worked directly with engineers on custom solutions, maintaining quality without slowing delivery.</p>
         </div>
       </div>
     </div>
