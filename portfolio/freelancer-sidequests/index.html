@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Careers later. Side quests now. — Freelancer.com case study — Jason Lung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@600;800&family=Roboto+Mono:wght@400;500;700&family=Unbounded:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#171E2E; --navy-2:#1E2638; --navy-3:#252F45;
+  --paper:#F2F3F6; --white:#FFFFFF; --frame:#BFC5D4;
+  --blue:#29B2FF; --blue-deep:#1C7BE8; --pink:#E6007E;
+  --ink:#171E2E; --ink-mid:#4A5163; --ink-dim:#8A90A0;
+  --t-body:rgba(255,255,255,.80); --t-mid:rgba(255,255,255,.62); --t-dim:rgba(255,255,255,.42);
+  --border:rgba(255,255,255,.08);
+  --max-w:1200px; --pad:clamp(80px,11vw,140px);
+  --ease:cubic-bezier(.16,1,.3,1);
+  --step:4px;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:"Unbounded",sans-serif; font-weight:300; font-size:15px; line-height:1.75;
+  color:var(--t-body); background:var(--navy); overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+img { display:block; max-width:100%; height:auto; }
+.pixel img, img.pixel { image-rendering:pixelated; }
+strong { font-weight:600; }
+.container { max-width:var(--max-w); margin:0 auto; padding:0 48px; }
+section { position:relative; overflow:hidden; }
+
+/* ---------- Type ---------- */
+.eyebrow { font-family:"Roboto Mono",monospace; font-size:11px; font-weight:500; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--t-dim); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+.eyebrow::before { content:""; width:7px; height:12px; background:var(--blue);
+  clip-path:polygon(0 0,40% 0,40% 17%,70% 17%,70% 34%,100% 34%,100% 66%,70% 66%,70% 83%,40% 83%,40% 100%,0 100%); }
+.eyebrow.accent { color:var(--blue); }
+.light .eyebrow { color:var(--ink-dim); }
+.light .eyebrow.accent { color:var(--blue-deep); }
+.h2 { font-weight:700; font-size:clamp(28px,3.4vw,44px); line-height:1.08; letter-spacing:-.01em; color:var(--white); text-transform:uppercase; }
+.light .h2 { color:var(--ink); }
+.h3 { font-weight:600; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--blue); margin-bottom:6px; }
+.light .h3 { color:var(--blue-deep); }
+.lead { font-size:17px; line-height:1.75; color:var(--t-mid); max-width:640px; }
+.light .lead { color:var(--ink-mid); }
+.light { background:var(--paper); color:var(--ink-mid); }
+.light strong { color:var(--ink); }
+.gothic { font-family:"Grenze Gotisch",serif; font-weight:800; letter-spacing:.005em; text-transform:none; }
+ul.px-list { list-style:none; }
+ul.px-list li { position:relative; padding-left:18px; margin:6px 0; }
+ul.px-list li::before { content:""; position:absolute; left:0; top:.72em; width:6px; height:6px; background:currentColor; opacity:.55; }
+.divider-bar { width:36px; height:4px; background:var(--blue); margin:22px 0; }
+
+/* ---------- Reveal ---------- */
+.reveal { opacity:0; transform:translateY(24px); transition:opacity .75s var(--ease), transform .75s var(--ease); }
+.reveal.visible { opacity:1; transform:none; }
+.delay-1 { transition-delay:.1s; } .delay-2 { transition-delay:.2s; } .delay-3 { transition-delay:.32s; }
+.delay-4 { transition-delay:.44s; } .delay-5 { transition-delay:.56s; }
+@media (prefers-reduced-motion:reduce) { .reveal { opacity:1; transform:none; transition:none; } html { scroll-behavior:auto; } *{animation:none!important;} }
+
+/* highlight sweep (portfolio signature) */
+.hl { background:linear-gradient(var(--blue),var(--blue)) no-repeat left center / 0% 88%; -webkit-box-decoration-break:clone; box-decoration-break:clone;
+  padding:0 4px; transition:background-size .6s cubic-bezier(.4,0,.2,1), color .2s .3s; }
+.hl.on { background-size:100% 88%; color:var(--navy); }
+.hl.pink { background-image:linear-gradient(var(--pink),var(--pink)); } .hl.pink.on { color:#fff; }
+
+/* ---------- Chrome ---------- */
+#progress { position:fixed; top:0; left:0; height:4px; width:0; background:var(--blue); z-index:1000; }
+#nav-dots { position:fixed; right:26px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:12px; z-index:999; opacity:0; transition:opacity .4s; }
+#nav-dots.visible { opacity:1; }
+.nav-dot { width:8px; height:8px; border:2px solid rgba(255,255,255,.45); background:transparent; cursor:pointer; position:relative; transition:all .3s var(--ease); padding:0; }
+#nav-dots.on-light .nav-dot { border-color:rgba(23,30,46,.35); }
+.nav-dot.active { background:var(--blue); border-color:var(--blue)!important; transform:scale(1.35); }
+.nav-dot:hover::after, .nav-dot:focus-visible::after { content:attr(data-label); position:absolute; right:20px; top:50%; transform:translateY(-50%);
+  font-family:"Roboto Mono",monospace; font-size:10px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; white-space:nowrap;
+  color:#fff; background:rgba(23,30,46,.95); border:1px solid var(--border); padding:4px 9px; pointer-events:none; }
+.dot-grid { position:absolute; inset:0; background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px); background-size:28px 28px; pointer-events:none; }
+.light .dot-grid { background-image:radial-gradient(circle,rgba(23,30,46,.07) 1px,transparent 1px); }
+
+/* ---------- Pixel shapes ---------- */
+.px { clip-path:polygon(0 calc(var(--step)*2),var(--step) calc(var(--step)*2),var(--step) var(--step),calc(var(--step)*2) var(--step),calc(var(--step)*2) 0,
+  calc(100% - var(--step)*2) 0,calc(100% - var(--step)*2) var(--step),calc(100% - var(--step)) var(--step),calc(100% - var(--step)) calc(var(--step)*2),100% calc(var(--step)*2),
+  100% calc(100% - var(--step)*2),calc(100% - var(--step)) calc(100% - var(--step)*2),calc(100% - var(--step)) calc(100% - var(--step)),calc(100% - var(--step)*2) calc(100% - var(--step)),calc(100% - var(--step)*2) 100%,
+  calc(var(--step)*2) 100%,calc(var(--step)*2) calc(100% - var(--step)),var(--step) calc(100% - var(--step)),var(--step) calc(100% - var(--step)*2),0 calc(100% - var(--step)*2)); }
+.pxcard { position:relative; padding-top:26px; }
+.pxcard .tab { position:absolute; top:0; left:50%; transform:translateX(-50%); z-index:2; padding:6px 22px 8px; background:var(--navy);
+  font-family:"Grenze Gotisch",serif; font-weight:800; font-size:30px; line-height:1; color:#fff; white-space:nowrap; }
+.pxcard .pxbox { background:var(--navy); padding:5px; height:100%; }
+.pxcard .pxinner { background:var(--paper); padding:52px 34px 34px; height:100%; color:var(--ink-mid); }
+.pxcard.blue .tab, .pxcard.blue .pxbox { background:var(--blue); }
+.pxcard.pink .tab, .pxcard.pink .pxbox { background:var(--pink); }
+.pxcard.on-dark .pxinner { background:var(--navy-2); color:var(--t-body); }
+.brk { padding:34px 36px; }
+.brk.navy{background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%23171E2E%27%3E%3Crect%20x%3D%2712%27%20y%3D%270%27%20width%3D%2712%27%20height%3D%276%27/%3E%3Crect%20x%3D%276%27%20y%3D%276%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%270%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%2712%27/%3E%3C/svg%3E") top left / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%23171E2E%27%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%2712%27%20height%3D%276%27/%3E%3Crect%20x%3D%2712%27%20y%3D%276%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%2718%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%2712%27/%3E%3C/svg%3E") top right / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%23171E2E%27%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%276%27%20height%3D%2712%27/%3E%3Crect%20x%3D%276%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%2712%27%20y%3D%2718%27%20width%3D%2712%27%20height%3D%276%27/%3E%3C/svg%3E") bottom left / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%23171E2E%27%3E%3Crect%20x%3D%2718%27%20y%3D%270%27%20width%3D%276%27%20height%3D%2712%27/%3E%3Crect%20x%3D%2712%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%270%27%20y%3D%2718%27%20width%3D%2712%27%20height%3D%276%27/%3E%3C/svg%3E") bottom right / 24px 24px no-repeat;}
+.brk.blue{background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%2329B2FF%27%3E%3Crect%20x%3D%2712%27%20y%3D%270%27%20width%3D%2712%27%20height%3D%276%27/%3E%3Crect%20x%3D%276%27%20y%3D%276%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%270%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%2712%27/%3E%3C/svg%3E") top left / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%2329B2FF%27%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%2712%27%20height%3D%276%27/%3E%3Crect%20x%3D%2712%27%20y%3D%276%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%2718%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%2712%27/%3E%3C/svg%3E") top right / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%2329B2FF%27%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%276%27%20height%3D%2712%27/%3E%3Crect%20x%3D%276%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%2712%27%20y%3D%2718%27%20width%3D%2712%27%20height%3D%276%27/%3E%3C/svg%3E") bottom left / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%2329B2FF%27%3E%3Crect%20x%3D%2718%27%20y%3D%270%27%20width%3D%276%27%20height%3D%2712%27/%3E%3Crect%20x%3D%2712%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%270%27%20y%3D%2718%27%20width%3D%2712%27%20height%3D%276%27/%3E%3C/svg%3E") bottom right / 24px 24px no-repeat;}
+.brk.pink{background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%23E6007E%27%3E%3Crect%20x%3D%2712%27%20y%3D%270%27%20width%3D%2712%27%20height%3D%276%27/%3E%3Crect%20x%3D%276%27%20y%3D%276%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%270%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%2712%27/%3E%3C/svg%3E") top left / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%23E6007E%27%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%2712%27%20height%3D%276%27/%3E%3Crect%20x%3D%2712%27%20y%3D%276%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%2718%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%2712%27/%3E%3C/svg%3E") top right / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%23E6007E%27%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%276%27%20height%3D%2712%27/%3E%3Crect%20x%3D%276%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%2712%27%20y%3D%2718%27%20width%3D%2712%27%20height%3D%276%27/%3E%3C/svg%3E") bottom left / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%23E6007E%27%3E%3Crect%20x%3D%2718%27%20y%3D%270%27%20width%3D%276%27%20height%3D%2712%27/%3E%3Crect%20x%3D%2712%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%270%27%20y%3D%2718%27%20width%3D%2712%27%20height%3D%276%27/%3E%3C/svg%3E") bottom right / 24px 24px no-repeat;}
+.brk.white{background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%23FFFFFF%27%3E%3Crect%20x%3D%2712%27%20y%3D%270%27%20width%3D%2712%27%20height%3D%276%27/%3E%3Crect%20x%3D%276%27%20y%3D%276%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%270%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%2712%27/%3E%3C/svg%3E") top left / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%23FFFFFF%27%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%2712%27%20height%3D%276%27/%3E%3Crect%20x%3D%2712%27%20y%3D%276%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%2718%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%2712%27/%3E%3C/svg%3E") top right / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%23FFFFFF%27%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%276%27%20height%3D%2712%27/%3E%3Crect%20x%3D%276%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%2712%27%20y%3D%2718%27%20width%3D%2712%27%20height%3D%276%27/%3E%3C/svg%3E") bottom left / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27%23FFFFFF%27%3E%3Crect%20x%3D%2718%27%20y%3D%270%27%20width%3D%276%27%20height%3D%2712%27/%3E%3Crect%20x%3D%2712%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%270%27%20y%3D%2718%27%20width%3D%2712%27%20height%3D%276%27/%3E%3C/svg%3E") bottom right / 24px 24px no-repeat;}
+.brk.dim{background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27rgba%28255%2C255%2C255%2C0.35%29%27%3E%3Crect%20x%3D%2712%27%20y%3D%270%27%20width%3D%2712%27%20height%3D%276%27/%3E%3Crect%20x%3D%276%27%20y%3D%276%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%270%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%2712%27/%3E%3C/svg%3E") top left / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27rgba%28255%2C255%2C255%2C0.35%29%27%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%2712%27%20height%3D%276%27/%3E%3Crect%20x%3D%2712%27%20y%3D%276%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%2718%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%2712%27/%3E%3C/svg%3E") top right / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27rgba%28255%2C255%2C255%2C0.35%29%27%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%276%27%20height%3D%2712%27/%3E%3Crect%20x%3D%276%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%2712%27%20y%3D%2718%27%20width%3D%2712%27%20height%3D%276%27/%3E%3C/svg%3E") bottom left / 24px 24px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2724%27%20height%3D%2724%27%20fill%3D%27rgba%28255%2C255%2C255%2C0.35%29%27%3E%3Crect%20x%3D%2718%27%20y%3D%270%27%20width%3D%276%27%20height%3D%2712%27/%3E%3Crect%20x%3D%2712%27%20y%3D%2712%27%20width%3D%276%27%20height%3D%276%27/%3E%3Crect%20x%3D%270%27%20y%3D%2718%27%20width%3D%2712%27%20height%3D%276%27/%3E%3C/svg%3E") bottom right / 24px 24px no-repeat;}
+.tag { display:inline-block; margin-top:14px; font-family:"Roboto Mono",monospace; font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  padding:4px 12px; border-radius:20px; background:rgba(41,178,255,.16); color:var(--blue-deep); }
+.tag.parked { background:rgba(23,30,46,.10); color:var(--ink-dim); }
+.tag.dark { background:rgba(41,178,255,.16); color:var(--blue); }
+
+/* ---------- Hero ---------- */
+#hero { min-height:100vh; display:grid; place-items:center; text-align:center; padding:120px 24px 160px; background:var(--navy); }
+.hero-grid { position:absolute; inset:0; background-image:radial-gradient(circle,rgba(255,255,255,.055) 1px,transparent 1px); background-size:30px 30px; animation:drift 30s linear infinite; }
+@keyframes drift { to { background-position:30px 30px; } }
+.hero-glow { position:absolute; width:800px; height:800px; border-radius:50%; background:radial-gradient(circle,rgba(41,178,255,.10) 0%,transparent 65%); top:-260px; left:50%; transform:translateX(-50%); pointer-events:none; }
+.hero-inner { position:relative; z-index:2; max-width:900px; }
+.hero-inner .eyebrow { justify-content:center; }
+.hero-crest { width:min(250px,48vw); margin:22px auto 34px; animation:float 6s ease-in-out infinite; }
+@keyframes float { 50% { transform:translateY(-12px); } }
+.hero-title { width:min(640px,86vw); margin:0 auto; }
+.hero-tag { font-family:"Roboto Mono",monospace; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--t-mid); max-width:560px; margin:34px auto 0; line-height:1.7; }
+.hero-knight { position:absolute; left:max(2vw,calc(50% - 680px)); bottom:0; width:clamp(130px,17vw,240px); z-index:1; }
+.hero-meta { position:absolute; left:0; right:0; bottom:0; border-top:1px solid var(--border); z-index:2; background:rgba(23,30,46,.75); backdrop-filter:blur(6px); }
+.hero-meta .container { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; padding-top:20px; padding-bottom:20px; text-align:left; }
+.meta-k { font-family:"Roboto Mono",monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--t-dim); }
+.meta-v { font-size:12.5px; color:#fff; font-weight:400; line-height:1.5; margin-top:4px; }
+.scroll-cue { position:absolute; bottom:110px; left:50%; transform:translateX(-50%); z-index:2; font-family:"Roboto Mono",monospace; font-size:10px; letter-spacing:.2em; color:var(--t-dim); text-transform:uppercase; }
+.scroll-cue::after { content:""; display:block; width:8px; height:8px; background:var(--blue); margin:10px auto 0; animation:blink 1.4s steps(2) infinite; }
+@keyframes blink { 50% { opacity:0; } }
+
+/* ---------- Layout ---------- */
+.block { padding:var(--pad) 0; }
+.block.tight { padding-top:0; }
+.two-col { display:grid; grid-template-columns:340px 1fr; gap:90px; align-items:start; }
+.sticky { position:sticky; top:90px; }
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:36px; }
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+.head-row { margin-bottom:56px; max-width:760px; }
+.head-row .lead { margin-top:18px; }
+
+/* Summary */
+.summary-grid { grid-template-columns:minmax(0,1fr) minmax(0,1.3fr); }
+.summary-heading { font-weight:800; font-size:clamp(30px,3.6vw,48px); overflow-wrap:break-word; line-height:1.02; letter-spacing:-.02em; text-transform:uppercase; color:var(--ink); }
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:70px; border-top:2px solid var(--ink); }
+.stat { padding:28px 24px 0 0; }
+.stat-v { font-weight:800; font-size:clamp(40px,5vw,64px); line-height:1; color:var(--ink); letter-spacing:-.03em; }
+.stat-l { font-size:13px; color:var(--ink-mid); margin-top:12px; max-width:240px; }
+
+/* Chapter breaks */
+.chapter { min-height:88vh; display:flex; align-items:center; padding:var(--pad) 0; background:var(--navy); }
+.ch-a { background:#171E2E; }
+.ch-b { background:#E50578; }
+.ch-b .eyebrow.accent { color:#fff; } .ch-b .eyebrow::before { background:#fff; } .ch-b .chapter-sub { color:rgba(255,255,255,.88); }
+.ch-b .dot-grid { background-image:radial-gradient(circle,rgba(255,255,255,.12) 1px,transparent 1px); }
+.chapter-ghost { position:absolute; right:30px; top:50%; transform:translateY(-50%); font-weight:800; font-size:clamp(90px,15vw,220px); text-transform:uppercase;
+  color:rgba(255,255,255,.028); letter-spacing:-.04em; user-select:none; pointer-events:none; white-space:nowrap; }
+.chapter-content { position:relative; z-index:2; width:100%; }
+.chapter-title { font-weight:800; font-size:clamp(48px,8vw,108px); line-height:.92; text-transform:uppercase; color:#fff; letter-spacing:-.02em; }
+.chapter-sub { margin-top:30px; font-size:clamp(16px,1.6vw,20px); color:var(--t-mid); max-width:620px; }
+
+/* Audit */
+.pxcard { display:flex; flex-direction:column; } .pxcard .pxbox { flex:1; height:auto; }
+.callout { margin-top:70px; text-align:center; font-weight:700; font-size:clamp(22px,2.6vw,34px); color:var(--ink); line-height:1.3; }
+
+/* Research */
+.stat-brk { text-align:left; }
+.stat-brk .stat-v { color:#fff; font-size:clamp(52px,6vw,80px); }
+.stat-brk .stat-l { color:var(--t-mid); max-width:none; }
+.respond { grid-column:span 2; }
+.respond h3 { font-weight:700; font-size:16px; letter-spacing:.04em; text-transform:uppercase; color:#fff; margin-bottom:10px; }
+.respond ul { columns:2; column-gap:40px; }
+.respond li { break-inside:avoid; }
+.sources { font-family:"Roboto Mono",monospace; font-size:10.5px; color:var(--t-dim); margin-top:30px; letter-spacing:.02em; }
+.directions { display:grid; grid-template-columns:repeat(6,1fr); gap:20px; }
+.directions > div { grid-column:span 2; }
+.directions > div:nth-child(4) { grid-column:2 / span 2; }
+.directions h3 { font-weight:700; font-size:15px; text-transform:uppercase; color:var(--ink); letter-spacing:.02em; margin-bottom:8px; }
+.directions p { font-size:13px; }
+.directions .parked-card { opacity:.72; }
+
+/* Strategy */
+.answer-wrap { max-width:620px; margin:0 auto; }
+.answer-wrap .pxinner { text-align:center; font-size:17px; line-height:1.7; }
+.campaign-line { margin:110px auto 0; text-align:center; }
+.campaign-line img { width:min(780px,90%); margin:20px auto 0; }
+.pillars { margin-top:90px; display:grid; grid-template-columns:repeat(3,1fr); gap:44px; border-top:2px solid var(--ink); padding-top:34px; }
+.pillar .k { font-family:"Roboto Mono",monospace; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--blue-deep); font-weight:500; }
+.pillar h3 { font-weight:700; font-size:18px; text-transform:uppercase; color:var(--ink); margin:8px 0 12px; line-height:1.2; }
+.pillar p { font-size:14px; }
+.tone h3 { font-weight:700; font-size:15px; text-transform:uppercase; margin-bottom:10px; letter-spacing:.04em; }
+.tone .are h3 { color:var(--blue); } .tone .arent h3 { color:var(--pink); }
+.rule { max-width:560px; margin:40px auto 0; }
+.rule h3 { color:#fff; }
+
+/* Journey */
+.journey { position:relative; display:grid; grid-template-columns:repeat(5,1fr); gap:0; margin-top:20px; }
+.journey::before { content:""; position:absolute; top:22px; left:10%; right:10%; height:4px;
+  background:repeating-linear-gradient(90deg,var(--ink) 0 12px,transparent 12px 20px); }
+.step { position:relative; text-align:center; padding:0 12px; }
+.node { width:48px; height:48px; margin:0 auto 22px; display:grid; place-items:center; background:var(--blue); color:var(--navy);
+  font-weight:800; font-size:14px; position:relative; z-index:1; }
+.step h3 { font-weight:700; font-size:14px; text-transform:uppercase; color:var(--ink); line-height:1.25; }
+.step p { font-size:12.5px; margin-top:6px; }
+.loop { margin-top:46px; display:flex; align-items:center; justify-content:center; gap:14px; font-family:"Roboto Mono",monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--blue-deep); }
+.loop::before, .loop::after { content:""; flex:0 1 160px; height:0; border-top:3px dashed var(--blue); }
+
+/* Characters */
+.frankee { display:grid; grid-template-columns:minmax(260px,400px) 1fr; gap:80px; align-items:center; }
+.frankee-fig img { width:100%; }
+.frankee-fig figcaption { font-size:12.5px; text-align:center; color:var(--t-mid); margin-top:14px; max-width:340px; margin-inline:auto; }
+.facts { display:grid; grid-template-columns:1fr 1fr; gap:30px 40px; }
+.facts p { color:var(--t-body); font-size:14.5px; }
+.quote { font-family:"Grenze Gotisch",serif; font-weight:600; font-size:clamp(28px,3vw,40px); line-height:1.15; color:#fff; margin-top:56px; }
+.quote span { color:var(--blue); }
+.duo { display:grid; grid-template-columns:1fr 1fr; gap:70px; margin-top:20px; }
+.persona-title { font-family:"Grenze Gotisch",serif; font-weight:800; font-size:clamp(40px,4vw,56px); color:var(--blue-deep); line-height:1; margin-bottom:22px; }
+.bubble { position:relative; display:inline-block; margin-bottom:22px; --step:5px; }
+.bubble .pxbox { background:var(--frame); padding:5px; }
+.bubble .pxinner { background:#fff; padding:14px 22px; color:var(--ink); font-size:15px; font-weight:400; line-height:1.45; }
+.bubble::after { content:""; position:absolute; bottom:-14px; left:44px; width:20px; height:16px; background:var(--frame);
+  clip-path:polygon(0 0,100% 0,100% 25%,75% 25%,75% 50%,50% 50%,50% 75%,25% 75%,25% 100%,0 100%); }
+.persona-art { display:grid; grid-template-columns:1fr 1.1fr; gap:18px; align-items:end; }
+.persona-art img { width:100%; }
+.persona-art img.portrait { background:#fff; border:6px solid var(--frame); outline:6px solid #fff; outline-offset:-12px; box-shadow:0 0 0 6px var(--paper), 0 0 0 12px var(--frame); margin:12px; width:calc(100% - 24px); }
+.persona-copy { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:28px; }
+.persona-copy p { font-size:14px; }
+.lockup { display:grid; grid-template-columns:1.1fr 1fr; gap:80px; align-items:center; }
+.lockup-art { text-align:center; }
+.lockup-art .crest { width:min(280px,60%); margin:0 auto 26px; }
+.lockup-art .line { width:min(520px,100%); margin:0 auto 40px; }
+.lockup-art .variants { width:100%; }
+.lockup-copy h3 { font-weight:700; font-size:15px; text-transform:uppercase; color:var(--ink); margin-bottom:8px; letter-spacing:.04em; }
+.lockup-copy .brk + .brk { margin-top:18px; }
+
+/* Deliverables */
+.sub-head { display:flex; align-items:baseline; justify-content:space-between; gap:20px; margin-bottom:40px; border-bottom:1px solid var(--border); padding-bottom:18px; }
+.light .sub-head { border-color:rgba(23,30,46,.12); }
+.sub-head h3 { font-weight:700; font-size:clamp(20px,2.2vw,28px); text-transform:uppercase; color:#fff; letter-spacing:-.005em; }
+.light .sub-head h3 { color:var(--ink); }
+.sub-head p { font-size:13.5px; color:var(--t-mid); max-width:440px; text-align:right; }
+.light .sub-head p { color:var(--ink-mid); }
+.fig-label { font-weight:700; font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--blue); margin-bottom:12px; }
+.light .fig-label { color:var(--blue-deep); }
+.phones { display:grid; grid-template-columns:repeat(3,1fr); gap:56px 40px; max-width:960px; margin:0 auto; }
+.phone { text-align:center; }
+.phone img { width:100%; max-width:280px; margin:0 auto; box-shadow:0 30px 60px rgba(0,0,0,.35); }
+.light .phone img { box-shadow:0 24px 50px rgba(23,30,46,.22); }
+.phones.single { grid-template-columns:1fr; max-width:320px; }
+.deliv + .deliv { margin-top:clamp(100px,12vw,160px); }
+.strip { display:grid; grid-auto-flow:column; grid-auto-columns:clamp(220px,24vw,280px); gap:22px; overflow-x:auto; scroll-snap-type:x mandatory;
+  padding:4px 48px 26px; margin:0 -48px; scrollbar-width:thin; scrollbar-color:var(--blue) transparent; }
+.strip:focus-visible { outline:2px solid var(--blue); outline-offset:4px; }
+.sq { scroll-snap-align:start; }
+.sq img { width:100%; box-shadow:0 20px 40px rgba(0,0,0,.3); }
+.strip-label { display:flex; justify-content:center; align-items:center; margin:46px 0 16px; }
+.strip-label:first-of-type { margin-top:0; }
+.strip-label span:first-child { font-family:"Grenze Gotisch",serif; font-weight:800; font-size:28px; color:#fff; }
+.hint { font-family:"Roboto Mono",monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--t-dim); }
+.series-intro { display:grid; grid-template-columns:1fr auto; gap:40px; align-items:end; margin-bottom:50px; }
+.series-title { font-family:"Grenze Gotisch",serif; font-weight:800; font-size:clamp(46px,6vw,80px); color:#fff; line-height:.95; }
+.series-title span { color:var(--blue); }
+.ep-label { font-family:"Roboto Mono",monospace; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--blue); margin:60px 0 22px; font-weight:700; }
+.frames { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.frame { display:grid; grid-template-columns:96px 1fr; gap:16px; background:var(--navy-2); padding:14px; border:1px solid var(--border); }
+.frame-img img { width:100%; }
+.frame-head { display:flex; justify-content:space-between; gap:8px; font-weight:700; font-size:12px; text-transform:uppercase; color:#fff; letter-spacing:.03em; margin-bottom:10px; line-height:1.3; }
+.frame-time { color:var(--blue); font-family:"Roboto Mono",monospace; font-weight:500; white-space:nowrap; }
+.frame dl { display:grid; grid-template-columns:auto 1fr; gap:4px 10px; font-size:11.5px; line-height:1.5; }
+.frame dt { font-family:"Roboto Mono",monospace; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--t-dim); padding-top:2px; }
+.frame dd { color:var(--t-body); }
+.caption-box { display:flex; flex-direction:column; justify-content:center; }
+.caption-box h4 { font-weight:700; font-size:14px; text-transform:uppercase; color:#fff; letter-spacing:.05em; margin-bottom:10px; }
+.caption-box p { font-size:15px; color:var(--t-body); }
+.caption-box p + p { margin-top:14px; color:var(--blue); }
+
+
+/* Devices */
+.device { --w:300px; width:var(--w); margin:0 auto; padding:11px; border-radius:54px; background:#0B0E15;
+  box-shadow:inset 0 0 0 2px #2C3448, inset 0 0 0 5px #0B0E15, 0 40px 80px rgba(0,0,0,.45); position:relative; }
+.light .device { box-shadow:inset 0 0 0 2px #2C3448, inset 0 0 0 5px #0B0E15, 0 30px 60px rgba(23,30,46,.28); }
+.device::before { content:""; position:absolute; right:-3px; top:120px; width:3px; height:64px; background:#2C3448; border-radius:0 2px 2px 0; }
+.device::after { content:""; position:absolute; left:-3px; top:100px; width:3px; height:40px; background:#2C3448; border-radius:2px 0 0 2px; box-shadow:0 60px 0 #2C3448; }
+.device-screen { position:relative; border-radius:43px; overflow:hidden; background:#171E2E; height:calc((var(--w) - 22px) * 1008 / 566 + 38px); display:flex; flex-direction:column; }
+.statusbar { flex:0 0 38px; display:flex; justify-content:space-between; align-items:center; padding:4px 26px 0 30px; font-family:-apple-system,"SF Pro Text","Inter",sans-serif; font-weight:600; font-size:14px; color:#fff; background:#171E2E; }
+.sb-icons { display:flex; gap:5px; align-items:center; }
+.island { position:absolute; top:9px; left:50%; transform:translateX(-50%); width:88px; height:25px; border-radius:20px; background:#000; z-index:5; }
+.device-screen > img { width:100%; }
+.phone { text-align:center; }
+.phone .device img { box-shadow:none; max-width:none; }
+.screen-scroll { flex:1; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:none; position:relative; }
+.screen-scroll::-webkit-scrollbar { display:none; }
+.screen-scroll:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
+.screen-scroll.snap { scroll-snap-type:y mandatory; }
+.screen-scroll.snap .screen-sec { scroll-snap-align:start; }
+.screen-head { position:sticky; top:0; z-index:3; }
+.screen-sec img { width:100%; }
+
+/* Scroll demo */
+.demo { display:grid; grid-template-columns:auto minmax(0,1fr); gap:90px; align-items:center; max-width:980px; margin:0 auto; }
+.demo-phone { text-align:center; }
+.demo-hint { font-family:"Roboto Mono",monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--t-dim); margin-top:22px; }
+.light .demo-hint { color:var(--ink-dim); }
+.demo-count { font-weight:800; line-height:1; letter-spacing:-.03em; }
+.demo-cur { font-size:clamp(64px,7vw,96px); color:var(--blue); }
+.light .demo-cur { color:var(--blue-deep); }
+.demo-tot { font-size:22px; color:var(--ink-dim); }
+.demo-title { font-weight:800; font-size:clamp(28px,3vw,42px); text-transform:uppercase; line-height:1.05; color:var(--ink); margin-top:18px; letter-spacing:-.01em; }
+.demo-desc { font-size:15.5px; margin-top:16px; max-width:440px; min-height:5.4em; }
+.demo-title, .demo-desc { transition:opacity .25s, transform .25s var(--ease); }
+.demo.swap .demo-title, .demo.swap .demo-desc { opacity:0; transform:translateY(8px); }
+.demo-steps { list-style:none; margin-top:26px; border-top:1px solid rgba(23,30,46,.12); }
+.demo-steps li { border-bottom:1px solid rgba(23,30,46,.12); }
+.demo-steps button { all:unset; cursor:pointer; display:flex; gap:16px; width:100%; padding:11px 0; font-size:12.5px; font-weight:500; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-dim); transition:color .2s, padding .3s var(--ease); }
+.demo-steps button span { font-family:"Roboto Mono",monospace; font-size:11px; padding-top:1px; }
+.demo-steps button:hover { color:var(--ink); }
+.demo-steps button:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+.demo-steps button.active { color:var(--ink); padding-left:10px; box-shadow:inset 4px 0 0 var(--blue); }
+.stories { display:grid; grid-template-columns:repeat(3,1fr); gap:30px; max-width:1040px; margin:0 auto; }
+.stories .device { --w:min(300px,100%); }
+@media (max-width:980px) {
+  .demo { grid-template-columns:1fr; gap:40px; }
+  .demo-copy { order:-1; text-align:left; }
+  .demo-steps { display:none; }
+  .demo-desc { min-height:0; }
+  .stories { grid-template-columns:1fr; gap:60px; max-width:320px; }
+}
+
+
+/* Story demo */
+.story { position:relative; flex:1; overflow:hidden; background:#171E2E; }
+.sframe { position:absolute; inset:0; opacity:0; transition:opacity .35s var(--ease); }
+.sframe.on { opacity:1; }
+.sframe img { width:100%; height:100%; object-fit:cover; object-position:top; }
+.sbars { position:absolute; top:6px; left:10px; right:10px; display:flex; gap:4px; z-index:4; }
+.sbar { flex:1; height:3px; border-radius:2px; background:rgba(255,255,255,.3); overflow:hidden; }
+.sbar i { display:block; height:100%; width:0; background:#fff; transition:width .35s var(--ease); }
+.sbar.done i { width:100%; }
+.stap { all:unset; position:absolute; top:0; bottom:0; z-index:3; cursor:pointer; }
+.stap.prev { left:0; width:35%; } .stap.next { right:0; width:65%; }
+.stap:focus-visible { outline:2px solid var(--blue); outline-offset:-4px; }
+.stap-hint { position:absolute; right:10px; top:16px; display:flex; z-index:4; pointer-events:none; transition:opacity .4s; }
+.stap-hint span { font-family:"Roboto Mono",monospace; font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:9px; color:#fff; background:rgba(23,30,46,.85); border:1px solid rgba(255,255,255,.25); padding:5px 9px; animation:nudge 1.6s ease-in-out infinite; }
+@keyframes nudge { 50% { transform:translateX(5px); } }
+.story-hint { color:var(--blue)!important; font-weight:700; } .story-hint span { display:inline-block; animation:nudge 1.6s ease-in-out infinite; }
+.story-demo .demo-title { color:#fff; }
+.story-demo .demo-desc { color:var(--t-mid); }
+.story-demo .demo-tot { color:var(--t-dim); }
+.story-demo .demo-steps, .story-demo .demo-steps li { border-color:var(--border); }
+.story-demo .demo-steps button { color:var(--t-dim); }
+.story-demo .demo-steps button:hover, .story-demo .demo-steps button.active { color:#fff; }
+
+
+/* Carousel viewer */
+.cfl { --sw:min(430px,68vw); max-width:780px; margin:0 auto; }
+.cfl-track { position:relative; display:flex; gap:22px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; padding:14px calc(50% - var(--sw) / 2) 18px;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14%,#000 86%,transparent 100%); mask-image:linear-gradient(90deg,transparent 0,#000 14%,#000 86%,transparent 100%); }
+.cfl-track::-webkit-scrollbar { display:none; }
+.cfl-track:focus-visible { outline:none; }
+.cfl-track:focus-visible .cfl-slide.on img { outline:2px solid var(--blue); outline-offset:4px; }
+.cfl-slide { flex:0 0 var(--sw); scroll-snap-align:center; opacity:.35; transform:scale(.86); transition:opacity .4s var(--ease), transform .4s var(--ease); cursor:pointer; }
+.cfl-slide.on { opacity:1; transform:none; cursor:default; }
+.cfl-slide img { width:100%; box-shadow:0 26px 50px rgba(0,0,0,.4); }
+.cfl-ui { display:flex; align-items:center; justify-content:center; gap:28px; margin-top:18px; }
+.cfl-btn { all:unset; cursor:pointer; width:44px; height:44px; display:grid; place-items:center; background:var(--navy-3); color:#fff; font-size:18px; transition:background .2s; }
+.cfl-btn:hover { background:var(--blue); color:var(--navy); }
+.cfl-btn:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
+.cfl-btn:disabled { opacity:.3; pointer-events:none; }
+.cfl-meta { display:flex; flex-direction:column; align-items:center; gap:6px; min-width:210px; }
+.cfl-num { font-family:"Roboto Mono",monospace; font-size:11px; letter-spacing:.14em; color:var(--t-dim); }
+.cfl-name { font-weight:700; font-size:14px; text-transform:uppercase; letter-spacing:.05em; color:var(--blue); }
+.cfl-dots { display:flex; gap:6px; margin-top:4px; }
+.cfl-dot { all:unset; cursor:pointer; width:7px; height:7px; background:rgba(255,255,255,.25); transition:background .2s, transform .2s; }
+.cfl-dot.on { background:var(--blue); transform:scale(1.3); }
+.cfl-dot:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+
+
+/* Episode player */
+.ep-player.flip { grid-template-columns:minmax(0,1fr) auto; margin-top:130px; }
+.ep-player.flip .ep-copy { grid-column:1; grid-row:1; }
+.ep-player.flip .ep-phone { grid-column:2; grid-row:1; }
+.ep-player.flip .ep-timeline { grid-row:2; }
+.ep-player { display:grid; grid-template-columns:auto minmax(0,1fr); gap:24px 90px; align-items:center; max-width:980px; margin:20px auto 0; }
+.ep-screen { position:relative; flex:1; background:#000; display:flex; flex-direction:column; }
+.ep-frame { position:absolute; left:0; right:0; top:0; height:calc(100% - 64px); display:grid; place-items:center; opacity:0; transition:opacity .35s var(--ease); }
+.ep-frame.on { opacity:1; }
+.ep-frame img { height:100%; width:auto; max-width:100%; object-fit:contain; }
+.ep-tag { position:absolute; top:10px; left:12px; z-index:3; font-family:"Roboto Mono",monospace; font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#fff; background:var(--pink); padding:4px 8px; }
+.ep-cap { position:absolute; left:0; right:0; bottom:0; height:64px; padding:9px 14px; font-size:10.5px; line-height:1.45; color:rgba(255,255,255,.85); background:#000; }
+.ep-cap b { color:#fff; font-weight:600; } .ep-cap span { color:var(--blue); }
+.ep-copy .demo-title { color:#fff; }
+.ep-copy .demo-tot { color:var(--t-dim); }
+.ep-time { font-family:"Roboto Mono",monospace; font-size:13px; color:var(--blue); margin-top:8px; letter-spacing:.06em; }
+.ep-dl { display:grid; grid-template-columns:96px 1fr; gap:10px 16px; margin-top:24px; font-size:14.5px; min-height:9.5em; align-content:start; }
+.ep-dl dt { font-family:"Roboto Mono",monospace; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--t-dim); padding-top:4px; }
+.ep-dl dd { color:var(--t-body); }
+.ep-player .ep-title, .ep-player .ep-time, .ep-player .ep-dl { transition:opacity .2s; }
+.ep-player.swap .ep-title, .ep-player.swap .ep-time, .ep-player.swap .ep-dl { opacity:0; }
+.ep-controls { display:flex; gap:12px; align-items:center; margin-top:26px; }
+.ep-play { all:unset; cursor:pointer; height:44px; padding:0 20px; display:flex; align-items:center; gap:10px; background:var(--blue); color:var(--navy); font-weight:700; font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+.ep-play:hover { background:#fff; }
+.ep-play:focus-visible { outline:2px solid #fff; outline-offset:3px; }
+.ep-ico { font-size:11px; width:12px; text-align:center; }
+.ep-timeline { grid-column:1 / -1; margin-top:30px; }
+.ep-track { position:relative; display:flex; gap:3px; height:46px; }
+.ep-seg { all:unset; cursor:pointer; position:relative; flex-basis:0; background:var(--navy-3); display:flex; align-items:flex-end; padding:0 0 7px 8px; transition:background .2s; }
+.ep-seg span { position:relative; z-index:2; font-family:"Roboto Mono",monospace; font-size:10.5px; color:var(--t-dim); }
+.ep-seg:hover { background:#2E3953; }
+.ep-seg.on { background:#2E3953; box-shadow:inset 0 -3px 0 var(--blue); }
+.ep-seg.on span { color:#fff; }
+.ep-seg:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+.ep-fill { position:absolute; left:0; top:0; bottom:0; width:0; background:rgba(41,178,255,.16); pointer-events:none; }
+.ep-head { position:absolute; top:-6px; bottom:-6px; left:0; width:3px; background:var(--blue); pointer-events:none; }
+.ep-scale { display:flex; justify-content:space-between; margin-top:8px; font-family:"Roboto Mono",monospace; font-size:10px; color:var(--t-dim); }
+@media (max-width:980px) {
+  .ep-player { grid-template-columns:1fr; gap:30px; }
+  .ep-copy { order:-1; }
+  .ep-player.flip { grid-template-columns:1fr; }
+  .ep-player.flip .ep-copy, .ep-player.flip .ep-phone, .ep-player.flip .ep-timeline { grid-column:1; grid-row:auto; }
+  .ep-dl { min-height:0; }
+  .ep-seg span { display:none; }
+}
+
+
+/* Onboarding prototype */
+.pstage { position:relative; flex:1; overflow:hidden; background:#171E2E; }
+.pscreen { position:absolute; inset:0; transform:translateX(100%); transition:transform .45s var(--ease), opacity .45s; opacity:0; }
+.pscreen.on { transform:none; opacity:1; z-index:2; }
+.pscreen.past { transform:translateX(-30%); opacity:0; }
+.pscreen img { width:100%; height:100%; object-fit:cover; object-position:top; }
+.hot { all:unset; position:absolute; cursor:pointer; z-index:3; border-radius:2px; }
+.hot:focus-visible { outline:2px solid #fff; outline-offset:2px; }
+.pstage.flash .pscreen.on .hot { background:rgba(41,178,255,.35); box-shadow:0 0 0 2px var(--blue); transition:background .2s; }
+.proto-hint { color:var(--pink)!important; font-weight:700; }
+.proto-hint span { display:inline-block; animation:nudge 1.6s ease-in-out infinite; }
+.proto-ctl { display:flex; gap:12px; margin-top:22px; align-items:center; }
+.proto-restart { all:unset; cursor:pointer; height:44px; padding:0 18px; display:flex; align-items:center; font-weight:700; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink); border:2px solid var(--ink); }
+.proto-restart:hover { background:var(--ink); color:#fff; }
+.proto-restart:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
+.proto-demo .cfl-btn { background:var(--ink); }
+.proto-demo .cfl-btn:disabled { opacity:.25; }
+
+/* Measurement */
+.metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.metrics h3 { font-weight:700; font-size:14.5px; text-transform:uppercase; color:var(--ink); margin-bottom:8px; }
+.metrics li { font-size:13.5px; }
+.metrics .overall h3 { color:var(--pink); }
+
+/* End */
+#end { min-height:100vh; display:grid; place-items:center; text-align:center; padding:120px 24px 180px; background:var(--navy); }
+.end-crest { width:min(220px,46vw); margin:0 auto 30px; }
+.thanks { font-family:"Grenze Gotisch",serif; font-weight:800; font-size:clamp(64px,10vw,140px); color:#fff; line-height:.9; }
+.end-meta { font-family:"Roboto Mono",monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--t-dim); margin-top:28px; line-height:2; }
+.to-top { display:inline-block; margin-top:40px; font-family:"Roboto Mono",monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--blue); text-decoration:none; border-bottom:1px solid currentColor; padding-bottom:2px; }
+.end-knight { position:absolute; right:max(3vw,calc(50% - 640px)); bottom:0; width:clamp(120px,14vw,200px); transform:scaleX(-1); }
+
+/* ---------- Responsive ---------- */
+@media (max-width:980px) {
+  .container { padding:0 24px; }
+  .two-col, .frankee, .lockup, .duo { grid-template-columns:1fr; gap:48px; }
+  .sticky { position:static; }
+  .grid-3, .metrics, .frames { grid-template-columns:1fr 1fr; }
+  .directions { grid-template-columns:1fr 1fr; }
+  .directions > div, .directions > div:nth-child(4) { grid-column:auto; }
+  .pillars { grid-template-columns:1fr; gap:30px; }
+  .journey { grid-template-columns:1fr; gap:26px; }
+  .journey::before { top:0; bottom:0; left:23px; right:auto; width:4px; height:auto; background:repeating-linear-gradient(180deg,var(--ink) 0 12px,transparent 12px 20px); }
+  .step { display:grid; grid-template-columns:48px 1fr; gap:18px; text-align:left; padding:0; }
+  .node { margin:0; }
+  .hero-meta .container { grid-template-columns:1fr 1fr; gap:14px 20px; }
+  .strip { padding:4px 24px 22px; margin:0 -24px; }
+  #nav-dots { display:none; }
+}
+@media (max-width:640px) {
+  body { font-size:14px; }
+  .grid-2, .grid-3, .metrics, .frames, .stats, .facts, .persona-copy, .directions { grid-template-columns:1fr; }
+  .respond { grid-column:auto; } .respond ul { columns:1; }
+  .phones { grid-template-columns:1fr 1fr; gap:36px 16px; }
+  .phones.single { grid-template-columns:1fr; max-width:240px; }
+  .sub-head { flex-direction:column; } .sub-head p { text-align:left; }
+  .series-intro { grid-template-columns:1fr; }
+  .hero-knight { opacity:.35; }
+  .scroll-cue { display:none; }
+  .pxcard .pxinner { padding:48px 22px 26px; }
+  .pxcard .tab { font-size:26px; }
+  .stats { gap:0; } .stat { padding:24px 0 0; }
+}
+</style>
+</head>
+<body>
+<div id="progress" aria-hidden="true"></div>
+<nav id="nav-dots" aria-label="Sections"></nav>
+
+<!-- ============ HERO ============ -->
+<section id="hero" data-label="Intro">
+  <div class="hero-grid"></div><div class="hero-glow"></div>
+  <div class="hero-inner">
+    <p class="eyebrow accent reveal visible">Case study · Freelancer.com creative exercise</p>
+    <img src="img/crest-light.png" alt="Pixel crest: a shield with a crown and two hummingbirds" width="618" height="401" class="hero-crest pixel">
+    <h1><img src="img/headline-white.png" alt="Careers later. Side quests now." width="1226" height="387" class="hero-title"></h1>
+    <p class="hero-tag">A campaign that positions Freelancer as the side quest platform for university students.</p>
+  </div>
+  <img src="img/knight.png" alt="Frankee Lancerlot, a pixel-art knight" width="402" height="502" class="hero-knight pixel">
+  <div class="scroll-cue">Scroll</div>
+  <div class="hero-meta">
+    <div class="container">
+      <div><div class="meta-k">Client</div><div class="meta-v">Freelancer.com (creative exercise)</div></div>
+      <div><div class="meta-k">Audience</div><div class="meta-v">University students</div></div>
+      <div><div class="meta-k">Scope</div><div class="meta-v">Strategy, brand, characters, landing page, social, onboarding</div></div>
+      <div><div class="meta-k">Designer</div><div class="meta-v">Jason Lung</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SUMMARY ============ -->
+<section class="light block" id="summary" data-label="Overview">
+  <div class="dot-grid"></div>
+  <div class="container" style="position:relative">
+    <div class="two-col summary-grid">
+      <div class="sticky">
+        <p class="eyebrow accent reveal">Overview</p>
+        <h2 class="summary-heading reveal delay-1">Small, real, finishable work.</h2>
+      </div>
+      <div class="lead reveal delay-2" style="max-width:none">
+        <p>Freelancer.com wanted university students to take action on the platform: hire a freelancer for a passion project, or offer their own skills. The brief also asked to encourage early entrepreneurship, side hustles and creative alternatives to the 9-to-5.</p>
+        <p style="margin-top:20px">The answer was to stop selling freelancing as a career and reframe it as a <strong>side quest</strong>: work students can start this week, alongside or before a career. A silent pixel knight, two student characters and a five-stage campaign carry the idea from a campus sighting to a first job and a first review.</p>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat reveal"><div class="stat-v">2</div><div class="stat-l">Sides of the platform: hire a freelancer, or earn as one</div></div>
+      <div class="stat reveal delay-1"><div class="stat-v">5</div><div class="stat-l">Campaign stages, from first sighting to first review</div></div>
+      <div class="stat reveal delay-2"><div class="stat-v">6</div><div class="stat-l">Deliverable sets: landing page, stories, carousels, video series, onboarding, platform</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 PROBLEM ============ -->
+<section class="chapter ch-a" id="problem" data-label="The Problem">
+  <div class="dot-grid"></div>
+  <div class="container chapter-content">
+    <p class="eyebrow accent reveal">Chapter 01</p>
+    <h2 class="chapter-title reveal delay-1">The problem</h2>
+    <p class="chapter-sub reveal delay-2">Students already want side hustles. Freelancer.com wasn’t speaking to them.</p>
+  </div>
+</section>
+
+<section class="light block audit">
+  <div class="container">
+    <div class="two-col">
+      <div class="sticky">
+        <p class="eyebrow accent reveal">The brief</p>
+        <h2 class="h2 reveal delay-1">Get students to take action.</h2>
+      </div>
+      <div>
+        <div class="pxcard navy reveal">
+  <div class="tab px"><span>The ask</span></div>
+  <div class="pxbox px"><div class="pxinner px"><p style="text-align:center;font-size:16px">Get university students to take action on Freelancer: hire a freelancer for a passion project, or offer their own skills.</p><p style="text-align:center;font-size:16px;margin-top:16px">Encourage early entrepreneurship, side hustles and creative alternatives to the 9-to-5.</p></div></div>
+</div>
+      </div>
+    </div>
+
+    <div class="head-row" style="margin-top:120px">
+      <p class="eyebrow accent reveal">Platform audit · Freelancer.com</p>
+      <h2 class="h2 reveal delay-1">The mechanics fit. The voice didn’t.</h2>
+      <p class="lead reveal delay-2">The platform already works in ways that suit students. The problem is who it looks like it’s for.</p>
+    </div>
+    <div class="grid-2">
+      <div class="pxcard blue reveal">
+  <div class="tab px"><span>What works</span></div>
+  <div class="pxbox px"><div class="pxinner px"><ul class="px-list"><li>Clients post a job and freelancers bid, so talent comes to you</li><li>Contests: see finished options before choosing</li><li>Small budgets suit student wallets</li><li>Payment held until the work is approved</li></ul></div></div>
+</div>
+      <div class="pxcard pink reveal">
+  <div class="tab px"><span>Pain points</span></div>
+  <div class="pxbox px"><div class="pxinner px"><ul class="px-list"><li>No TikTok presence</li><li>Legacy website with a corporate tone</li><li>Skewed to experienced freelancers: beginners with no reviews lose bids</li><li>Nothing speaks to students yet</li></ul></div></div>
+</div>
+    </div>
+    <p class="callout reveal">Beginners with no reviews lose bids, and <span class="hl pink">nothing speaks to students yet.</span></p>
+  </div>
+</section>
+
+<!-- ============ 02 RESEARCH ============ -->
+<section class="chapter ch-b" id="research" data-label="The Research">
+  <div class="dot-grid"></div>
+  <div class="container chapter-content">
+    <p class="eyebrow accent reveal">Chapter 02</p>
+    <h2 class="chapter-title reveal delay-1">The research</h2>
+    <p class="chapter-sub reveal delay-2">Side hustles are already normal. Job hunting is draining.</p>
+  </div>
+</section>
+
+<section class="block" style="background:var(--navy)">
+  <div class="container">
+    <div class="head-row">
+      <p class="eyebrow accent reveal">Target audience</p>
+      <h2 class="h2 reveal delay-1">Gen Z is hustling, and tired of applying.</h2>
+    </div>
+    <div class="grid-3">
+      <div class="brk blue stat-brk reveal"><div class="stat-v">57%</div><div class="stat-l">of Gen Z have a side gig. Side hustles are already normal.</div></div>
+      <div class="brk blue stat-brk reveal delay-1"><div class="stat-v">51%</div><div class="stat-l">of Australian job seekers have been ghosted. Job hunting is draining.</div></div>
+      <div class="brk blue stat-brk reveal delay-2"><div class="stat-v">46%</div><div class="stat-l">of job seekers abandon tedious applications. Gen Z more likely.</div></div>
+      <div class="brk white respond reveal" style="grid-column:1 / -1">
+        <h3>What they respond to</h3>
+        <ul class="px-list">
+          <li>Entertainment first, the sell second</li>
+          <li>Brands that act like creators, with a recurring character</li>
+          <li>Gaming language as everyday language (side quests)</li>
+          <li>Taking part, not just watching</li>
+          <li>Friends’ recommendations over ads</li>
+          <li>No brand-made slang: it gets parodied</li>
+        </ul>
+      </div>
+    </div>
+    <p class="sources">Sources: Harris Poll (US); LinkedIn job search data 2025 (Australia); Indeed State of the Job Seeker 2026; Gen Z trend reporting 2025–26.</p>
+  </div>
+</section>
+
+<section class="light block">
+  <div class="container">
+    <div class="head-row">
+      <p class="eyebrow accent reveal">The process · Early directions</p>
+      <h2 class="h2 reveal delay-1">Five routes in. Two survived.</h2>
+      <p class="lead reveal delay-2">Each direction was tested against the research. The keepers were the ones students already speak and the ones that give the brand a face.</p>
+    </div>
+    <div class="directions">
+      <div class="brk blue reveal"><h3>Side quests</h3><p>University is the main quest; a side hustle is the side quest.</p><span class="tag">Used</span></div>
+      <div class="brk blue reveal delay-1"><h3>A face for the brand</h3><p>A recurring character to give Freelancer a personality on social channels.</p><span class="tag">Used</span></div>
+      <div class="brk navy parked-card reveal delay-2"><h3>City POV quests</h3><p>Creator-style clips of absurd quests around the city.</p><span class="tag parked">Parked</span></div>
+      <div class="brk navy parked-card reveal"><h3>GTA VI</h3><p>The city as a game map. Too close to existing game IP.</p><span class="tag parked">Parked</span></div>
+      <div class="brk navy parked-card reveal delay-1"><h3>Live stream format</h3><p>Chat sets the quest live. Not student-specific enough.</p><span class="tag parked">Parked</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 STRATEGY ============ -->
+<section class="chapter ch-a" id="strategy" data-label="The Strategy">
+  <div class="dot-grid"></div>
+  <div class="container chapter-content">
+    <p class="eyebrow accent reveal">Chapter 03</p>
+    <h2 class="chapter-title reveal delay-1">The strategy</h2>
+    <p class="chapter-sub reveal delay-2">Position Freelancer as the side quest platform.</p>
+  </div>
+</section>
+
+<section class="light block">
+  <div class="container">
+    <div class="answer-wrap">
+      <div class="pxcard blue reveal">
+  <div class="tab px"><span>The answer</span></div>
+  <div class="pxbox px"><div class="pxinner px">Position Freelancer as the side quest platform: <strong>small, real, finishable work</strong> students can start this week, alongside or before a career.</div></div>
+</div>
+    </div>
+    <div class="campaign-line">
+      <p class="eyebrow accent reveal" style="justify-content:center">Campaign line</p>
+      <h2 class="reveal delay-1"><img src="img/headline-dark.png" alt="Careers later. Side quests now." width="983" height="310" loading="lazy"></h2>
+    </div>
+    <div class="pillars">
+      <div class="pillar reveal"><div class="k">Hire-side</div><h3>Find a freelancer</h3><p>For students with a passion project: a band, a brand, a club. You don’t need a company to hire someone. Post the job, freelancers bid, you pick.</p></div>
+      <div class="pillar reveal delay-1"><div class="k">Earn-side</div><h3>Unlock Starter Quests</h3><p>For students with a skill but no reviews. Starter Quests are small jobs only students can bid on, so their first real job comes before their first real career.</p></div>
+      <div class="pillar reveal delay-2"><div class="k">The face</div><h3>Frankee Lancerlot</h3><p>A silent knight who could be any student. Frankee gets the attention, on campus and on social, then points to both sides of the platform.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="background:var(--navy)">
+  <div class="dot-grid"></div>
+  <div class="container" style="position:relative">
+    <div class="head-row">
+      <p class="eyebrow accent reveal">Tone of voice</p>
+      <h2 class="h2 reveal delay-1">Absurd in situation, never in claims.</h2>
+    </div>
+    <div class="grid-2 tone">
+      <div class="brk blue are reveal"><h3>What we are</h3><ul class="px-list"><li>Dry and deadpan</li><li>Plain-spoken: one job, one price</li><li>Absurd in situation, never in claims</li><li>On the student’s side</li></ul></div>
+      <div class="brk pink arent reveal delay-1"><h3>What we aren’t</h3><ul class="px-list"><li>Hustle-bro or “build your empire”</li><li>Anti-career or anti-uni</li><li>Full of brand-made slang</li><li>Promising income or replies</li></ul></div>
+    </div>
+    <div class="brk white rule reveal"><h3 class="h3" style="color:#fff">Rule of thumb</h3><ul class="px-list"><li>The 8-bit visuals carry the theme</li><li>The copy stays plain, using game words only where the campaign needs them (Side Quests, Starter Quests, New Quest Unlocked)</li></ul></div>
+  </div>
+</section>
+
+<section class="light block">
+  <div class="container">
+    <div class="head-row">
+      <p class="eyebrow accent reveal">The campaign · Overview</p>
+      <h2 class="h2 reveal delay-1">From a sighting to a first review.</h2>
+      <p class="lead reveal delay-2">Five stages move students from noticing Frankee to finishing their first quest, and each first quest feeds the next episode.</p>
+    </div>
+    <div class="journey">
+      <div class="step reveal"><div class="node px">01</div><div><h3>Get noticed</h3><p>Frankee sightings on campus</p><span class="tag">Sightings</span></div></div>
+      <div class="step reveal delay-1"><div class="node px">02</div><div><h3>Meet Frankee</h3><p>O-Week stall and the big reveal</p><span class="tag">Activation</span></div></div>
+      <div class="step reveal delay-2"><div class="node px">03</div><div><h3>Try it or hire it?</h3><p>Weekly TikTok / IG series based on user submissions</p><span class="tag">Social content</span></div></div>
+      <div class="step reveal delay-3"><div class="node px">04</div><div><h3>Choose a side</h3><p>Hire or earn.</p><span class="tag">Landing page</span></div></div>
+      <div class="step reveal delay-4"><div class="node px" style="background:var(--pink);color:#fff">05</div><div><h3>First quest</h3><p>First job, first review</p><span class="tag">Starter Quests</span></div></div>
+    </div>
+    <p class="loop reveal">First quests become the next episodes</p>
+  </div>
+</section>
+
+<!-- ============ 04 CREATIVE DIRECTION ============ -->
+<section class="chapter ch-b" id="creative" data-label="Creative Direction">
+  <div class="dot-grid"></div>
+  <div class="container chapter-content">
+    <p class="eyebrow accent reveal">Chapter 04</p>
+    <h2 class="chapter-title reveal delay-1">Creative direction</h2>
+    <p class="chapter-sub reveal delay-2">A knight for hire, back for the student era.</p>
+  </div>
+</section>
+
+<section class="block" style="background:var(--navy)">
+  <div class="container">
+    <div class="head-row">
+      <p class="eyebrow accent reveal">The characters · The face</p>
+      <h2 class="h2 reveal delay-1">Meet Frankee Lancerlot.</h2>
+    </div>
+    <div class="frankee">
+      <figure class="frankee-fig reveal">
+        <div class="pxcard on-dark" style="padding-top:0"><div class="pxbox px" style="background:var(--frame)"><div class="pxinner px" style="background:var(--paper);padding:26px"><img src="img/frankee.webp" alt="Frankee Lancerlot pixel-art knight with sword and shield" width="589" height="686" loading="lazy" class="pixel"></div></div></div>
+        <figcaption>Fittingly, ‘freelance’ started as a knight’s word: a free lance was a knight for hire. Frankee Lancerlot is that knight, back for the student era.</figcaption>
+      </figure>
+      <div>
+        <div class="brk white facts reveal delay-1">
+          <div><h3 class="h3">Who is Frankee?</h3><p>Silent, faceless and gender-neutral, so anyone can be Frankee.</p></div>
+          <div><h3 class="h3">Catchphrase</h3><p>“I’m Frankee Lancerlot, and I like to freelance a lot.”</p></div>
+          <div><h3 class="h3">Rules</h3><p>Never speaks or shows their face, no pronouns in copy, humour at no one’s expense.</p></div>
+          <div><h3 class="h3">Personality</h3><p>Deadpan, serious about absurd tasks, mysterious, camera-aware. Imagine the Stig’s silence with Deadpool’s cheekiness.</p></div>
+        </div>
+        <p class="quote reveal delay-2">“I’m Frankee Lancerlot, and I like to <span>freelance a lot.</span>”</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="light block">
+  <div class="container">
+    <div class="head-row">
+      <p class="eyebrow accent reveal">The characters · Hirer &amp; earner</p>
+      <h2 class="h2 reveal delay-1">One person’s gap is another’s skill.</h2>
+      <p class="lead reveal delay-2">Two students stand in for both sides of the platform. Each has exactly the gap the other can fill.</p>
+    </div>
+    <div class="duo">
+      <div class="reveal">
+        <div class="persona-title">The Hirer</div>
+        <div class="bubble"><div class="pxbox px"><div class="pxinner px">My name is Kieran &amp;<br>I like to <strong>make music</strong> a lot.</div></div></div>
+        <div class="persona-art"><img src="img/kieran-card.webp" alt="Kieran’s profile card: BA Creative Arts, 0 hires, top skill songwriting; making music high, album art low" width="555" height="504" loading="lazy" class="pixel"><img src="img/kieran.webp" alt="Pixel portrait of Kieran in a green hoodie" width="320" height="490" loading="lazy" class="pixel portrait"></div>
+        <div class="persona-copy">
+          <div><h3 class="h3">Who is Kieran?</h3><p>A student with a passion project: a band and an EP.</p></div>
+          <div><h3 class="h3">The gap</h3><p>Can’t make everything himself.</p></div>
+        </div>
+      </div>
+      <div class="reveal delay-1">
+        <div class="persona-title">The Earner</div>
+        <div class="bubble"><div class="pxbox px"><div class="pxinner px">My name is Jennifer &amp;<br>I like to <strong>illustrate</strong> a lot.</div></div></div>
+        <div class="persona-art"><img src="img/jennifer.webp" alt="Pixel portrait of Jennifer with long dark hair" width="320" height="490" loading="lazy" class="pixel portrait"><img src="img/jennifer-card.webp" alt="Jennifer’s profile card: BA Visual Comms, 0 reviews, top skill character design; illustrating high, finding clients low" width="544" height="504" loading="lazy" class="pixel"></div>
+        <div class="persona-copy">
+          <div><h3 class="h3">Who is Jennifer?</h3><p>A student with a skill she’s already good at.</p></div>
+          <div><h3 class="h3">The gap</h3><p>No reviews, so no one picks her.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="light block tight">
+  <div class="container">
+    <div class="head-row">
+      <p class="eyebrow accent reveal">Brand guidelines · Campaign lockup</p>
+      <h2 class="h2 reveal delay-1">A pixel crest with Freelancer’s hummingbirds.</h2>
+    </div>
+    <div class="lockup">
+      <div class="lockup-art reveal">
+        <img src="img/crest-dark.png" alt="Pixel crest: shield, crown and two hummingbirds" width="496" height="322" loading="lazy" class="crest pixel">
+        <img src="img/headline-dark.png" alt="Careers later. Side quests now. in blackletter" width="983" height="310" loading="lazy" class="line">
+        <img src="img/crest-variants.webp" alt="Crest variants on white, navy and blue backgrounds" width="1164" height="274" loading="lazy" class="variants pixel">
+      </div>
+      <div class="lockup-copy">
+        <div class="brk navy reveal delay-1"><h3>The parts</h3><ul class="px-list"><li>Pixel crest: shield, crown and two hummingbirds, a nod to Freelancer’s logo</li><li>Headline: “Careers later. Side quests now.” in blackletter</li><li>Always with the Freelancer logo on the same piece</li></ul></div>
+        <div class="brk navy reveal delay-2"><h3>Usage</h3><ul class="px-list"><li>Use the full lockup on covers, story headers and end cards</li><li>Use the crest alone at small sizes (avatars, app icon, notifications)</li><li>Keep clear space of one crest-width around the lockup</li><li>Don’t recolour, stretch or redraw the crest</li></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 DELIVERABLES ============ -->
+<section class="chapter ch-a" id="deliver" data-label="The Deliverables">
+  <div class="dot-grid"></div>
+  <div class="container chapter-content">
+    <p class="eyebrow accent reveal">Chapter 05</p>
+    <h2 class="chapter-title reveal delay-1">The deliverables</h2>
+    <p class="chapter-sub reveal delay-2">One idea, carried from the feed to a first quest.</p>
+  </div>
+</section>
+
+<section class="light block">
+  <div class="container">
+    <div class="deliv">
+      <div class="sub-head"><h3 class="reveal">Landing page</h3><p class="reveal delay-1">Stage 04, choose a side. Introduces the gap, then splits into hire and earn.</p></div>
+      <div class="demo reveal" id="demo-lp" data-sections="Default load~The campaign lockup and Frankee lead, with both doors open from the first screen: find a freelancer, or unlock Starter Quests.|Context~One person’s gap is another’s skill. Kieran and Jennifer introduce the two sides of the platform in their own words.|Find a freelancer~The hire-side. New Quest Unlocked: post a job, freelancers bid, you pick. No company or agency budget required.|Unlock Starter Quests~The earn-side. Small jobs only students can bid on, with help on the first bid and a path to a first review.|Try it or hire it?~The weekly series lives on the page too, so the content and the platform keep pointing at each other.|FAQs + footer~Answers the practical questions, then repeats both calls to action before the footer.">
+  <div class="demo-phone"><div class="device "><div class="device-screen"><div class="statusbar"><span>9:41</span><span class="sb-icons"><svg width="17" height="11" viewBox="0 0 17 11" fill="#fff"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="15" height="11" viewBox="0 0 15 11" fill="#fff"><path d="M7.5 2.2c2.2 0 4.2.8 5.7 2.2l1.1-1.1C12.5 1.6 10.1.6 7.5.6S2.5 1.6.7 3.3l1.1 1.1c1.5-1.4 3.5-2.2 5.7-2.2zm0 3.2c1.3 0 2.5.5 3.4 1.3l1.1-1.1C10.8 4.5 9.2 3.8 7.5 3.8S4.2 4.5 3 5.6l1.1 1.1c.9-.8 2.1-1.3 3.4-1.3zm0 3.2c.5 0 .9.2 1.2.5L7.5 10.3 6.3 9.1c.3-.3.7-.5 1.2-.5z"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3" stroke="#fff" opacity=".5"/><rect x="2" y="2" width="18" height="8" rx="1.8" fill="#fff"/><rect x="23" y="4" width="1.6" height="4" rx=".8" fill="#fff" opacity=".5"/></svg></span></div><div class="island"></div><div class="screen-scroll" tabindex="0" aria-label="Scrollable phone preview"><div class="screen-head"><img src="img/lp-head.webp" alt="" width="566" height="82"></div><div class="screen-sec" data-i="0"><img src="img/lpb/1.webp" alt="Landing page default load" width="566" height="926" loading="lazy"></div><div class="screen-sec" data-i="1"><img src="img/lpb/2.webp" alt="Landing page context section with Kieran and Jennifer" width="566" height="926" loading="lazy"></div><div class="screen-sec" data-i="2"><img src="img/lpb/3.webp" alt="Landing page find a freelancer section" width="566" height="926" loading="lazy"></div><div class="screen-sec" data-i="3"><img src="img/lpb/4.webp" alt="Landing page Starter Quests section" width="566" height="926" loading="lazy"></div><div class="screen-sec" data-i="4"><img src="img/lpb/5.webp" alt="Landing page weekly series section" width="566" height="926" loading="lazy"></div><div class="screen-sec" data-i="5"><img src="img/lpb/6.webp" alt="Landing page FAQs and footer" width="566" height="926" loading="lazy"></div></div></div></div>
+    <p class="demo-hint">Scroll inside the phone ↕</p>
+  </div>
+  <div class="demo-copy">
+    <p class="eyebrow accent">Landing page · mobile</p>
+    <div class="demo-count"><span class="demo-cur">01</span><span class="demo-tot"> / 06</span></div>
+    <h4 class="demo-title">Default load</h4>
+    <p class="demo-desc">The campaign lockup and Frankee lead, with both doors open from the first screen: find a freelancer, or unlock Starter Quests.</p>
+    <ol class="demo-steps"><li><button type="button" data-i="0"><span>01</span>Default load</button></li><li><button type="button" data-i="1"><span>02</span>Context</button></li><li><button type="button" data-i="2"><span>03</span>Find a freelancer</button></li><li><button type="button" data-i="3"><span>04</span>Unlock Starter Quests</button></li><li><button type="button" data-i="4"><span>05</span>Try it or hire it?</button></li><li><button type="button" data-i="5"><span>06</span>FAQs + footer</button></li></ol>
+  </div>
+</div>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="background:var(--navy)">
+  <div class="container">
+    <div class="deliv">
+      <div class="sub-head"><h3 class="reveal">TikTok + IG stories</h3><p class="reveal delay-1">One story per character, each ending on the side of the platform it serves. Tap the phone to move through them.</p></div>
+      <div class="demo story-demo reveal" id="demo-story" data-sections="Frankee Lancerlot~The campaign face. Frankee’s profile card leads to Your Side Quest, with a route to both hiring and earning.|Kieran~Hire-side. Kieran’s profile card leads to Find an Illustrator: describe what you need, set a budget, freelancers bid.|Jennifer~Earn-side. Jennifer’s profile card leads to Starter Quests: small jobs, students only, no reviews needed.">
+  <div class="demo-phone"><div class="device "><div class="device-screen"><div class="statusbar"><span>9:41</span><span class="sb-icons"><svg width="17" height="11" viewBox="0 0 17 11" fill="#fff"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="15" height="11" viewBox="0 0 15 11" fill="#fff"><path d="M7.5 2.2c2.2 0 4.2.8 5.7 2.2l1.1-1.1C12.5 1.6 10.1.6 7.5.6S2.5 1.6.7 3.3l1.1 1.1c1.5-1.4 3.5-2.2 5.7-2.2zm0 3.2c1.3 0 2.5.5 3.4 1.3l1.1-1.1C10.8 4.5 9.2 3.8 7.5 3.8S4.2 4.5 3 5.6l1.1 1.1c.9-.8 2.1-1.3 3.4-1.3zm0 3.2c.5 0 .9.2 1.2.5L7.5 10.3 6.3 9.1c.3-.3.7-.5 1.2-.5z"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3" stroke="#fff" opacity=".5"/><rect x="2" y="2" width="18" height="8" rx="1.8" fill="#fff"/><rect x="23" y="4" width="1.6" height="4" rx=".8" fill="#fff" opacity=".5"/></svg></span></div><div class="island"></div><div class="story"><div class="sbars"><span class="sbar"><i></i></span><span class="sbar"><i></i></span><span class="sbar"><i></i></span></div><div class="sframe on"><img src="img/story-1.webp" alt="Story featuring Frankee Lancerlot" width="566" height="1008"></div><div class="sframe"><img src="img/story-2.webp" alt="Story featuring Kieran" width="566" height="1008"></div><div class="sframe"><img src="img/story-3.webp" alt="Story featuring Jennifer" width="566" height="1008"></div><button type="button" class="stap prev" aria-label="Previous character"></button><button type="button" class="stap next" aria-label="Next character"></button></div></div></div>
+    <p class="demo-hint story-hint"><span>Tap for next character →</span></p>
+  </div>
+  <div class="demo-copy">
+    <p class="eyebrow accent">TikTok + IG stories · tap through</p>
+    <div class="demo-count"><span class="demo-cur">01</span><span class="demo-tot"> / 03</span></div>
+    <h4 class="demo-title">Frankee Lancerlot</h4>
+    <p class="demo-desc">The campaign face. Frankee’s profile card leads to Your Side Quest, with a route to both hiring and earning.</p>
+    <ol class="demo-steps"><li><button type="button" data-i="0"><span>01</span>Frankee Lancerlot</button></li><li><button type="button" data-i="1"><span>02</span>Kieran</button></li><li><button type="button" data-i="2"><span>03</span>Jennifer</button></li></ol>
+  </div>
+</div>
+    </div>
+
+    <div class="deliv">
+      <div class="sub-head"><h3 class="reveal">TikTok + IG carousels</h3><p class="reveal delay-1">Seven slides each: meet the student, name the problem, show the fix.</p></div>
+      <div class="strip-label"><span>Kieran · hire-side</span></div>
+      <div class="cfl" data-labels="Cover|Meet Kieran|The side quest|The problem?|The fix|How it works|Call to action">
+  <div class="cfl-track" tabindex="0" aria-label="Kieran carousel. Swipe, scroll or use the arrows"><figure class="cfl-slide on" data-i="0"><img src="img/ck-1.webp" alt="Kieran carousel slide 1: Cover" width="900" height="900" loading="lazy"></figure><figure class="cfl-slide" data-i="1"><img src="img/ck-2.webp" alt="Kieran carousel slide 2: Meet Kieran" width="900" height="900" loading="lazy"></figure><figure class="cfl-slide" data-i="2"><img src="img/ck-3.webp" alt="Kieran carousel slide 3: The side quest" width="900" height="900" loading="lazy"></figure><figure class="cfl-slide" data-i="3"><img src="img/ck-4.webp" alt="Kieran carousel slide 4: The problem?" width="900" height="900" loading="lazy"></figure><figure class="cfl-slide" data-i="4"><img src="img/ck-5.webp" alt="Kieran carousel slide 5: The fix" width="900" height="900" loading="lazy"></figure><figure class="cfl-slide" data-i="5"><img src="img/ck-6.webp" alt="Kieran carousel slide 6: How it works" width="900" height="900" loading="lazy"></figure><figure class="cfl-slide" data-i="6"><img src="img/ck-7.webp" alt="Kieran carousel slide 7: Call to action" width="900" height="900" loading="lazy"></figure></div>
+  <div class="cfl-ui">
+    <button type="button" class="cfl-btn prev" aria-label="Previous slide">←</button>
+    <div class="cfl-meta"><span class="cfl-num">01 / 07</span><span class="cfl-name">Cover</span><div class="cfl-dots"><button type="button" class="cfl-dot on" data-i="0" aria-label="Slide 1: Cover"></button><button type="button" class="cfl-dot" data-i="1" aria-label="Slide 2: Meet Kieran"></button><button type="button" class="cfl-dot" data-i="2" aria-label="Slide 3: The side quest"></button><button type="button" class="cfl-dot" data-i="3" aria-label="Slide 4: The problem?"></button><button type="button" class="cfl-dot" data-i="4" aria-label="Slide 5: The fix"></button><button type="button" class="cfl-dot" data-i="5" aria-label="Slide 6: How it works"></button><button type="button" class="cfl-dot" data-i="6" aria-label="Slide 7: Call to action"></button></div></div>
+    <button type="button" class="cfl-btn next" aria-label="Next slide">→</button>
+  </div>
+</div>
+      <div class="strip-label" style="margin-top:80px"><span>Jennifer · earn-side</span></div>
+      <div class="cfl" data-labels="Cover|Meet Jennifer|The problem?|Why?|The fix|How it works|Call to action">
+  <div class="cfl-track" tabindex="0" aria-label="Jennifer carousel. Swipe, scroll or use the arrows"><figure class="cfl-slide on" data-i="0"><img src="img/cj-1.webp" alt="Jennifer carousel slide 1: Cover" width="900" height="900" loading="lazy"></figure><figure class="cfl-slide" data-i="1"><img src="img/cj-2.webp" alt="Jennifer carousel slide 2: Meet Jennifer" width="900" height="900" loading="lazy"></figure><figure class="cfl-slide" data-i="2"><img src="img/cj-3.webp" alt="Jennifer carousel slide 3: The problem?" width="900" height="900" loading="lazy"></figure><figure class="cfl-slide" data-i="3"><img src="img/cj-4.webp" alt="Jennifer carousel slide 4: Why?" width="900" height="900" loading="lazy"></figure><figure class="cfl-slide" data-i="4"><img src="img/cj-5.webp" alt="Jennifer carousel slide 5: The fix" width="900" height="900" loading="lazy"></figure><figure class="cfl-slide" data-i="5"><img src="img/cj-6.webp" alt="Jennifer carousel slide 6: How it works" width="900" height="900" loading="lazy"></figure><figure class="cfl-slide" data-i="6"><img src="img/cj-7.webp" alt="Jennifer carousel slide 7: Call to action" width="900" height="900" loading="lazy"></figure></div>
+  <div class="cfl-ui">
+    <button type="button" class="cfl-btn prev" aria-label="Previous slide">←</button>
+    <div class="cfl-meta"><span class="cfl-num">01 / 07</span><span class="cfl-name">Cover</span><div class="cfl-dots"><button type="button" class="cfl-dot on" data-i="0" aria-label="Slide 1: Cover"></button><button type="button" class="cfl-dot" data-i="1" aria-label="Slide 2: Meet Jennifer"></button><button type="button" class="cfl-dot" data-i="2" aria-label="Slide 3: The problem?"></button><button type="button" class="cfl-dot" data-i="3" aria-label="Slide 4: Why?"></button><button type="button" class="cfl-dot" data-i="4" aria-label="Slide 5: The fix"></button><button type="button" class="cfl-dot" data-i="5" aria-label="Slide 6: How it works"></button><button type="button" class="cfl-dot" data-i="6" aria-label="Slide 7: Call to action"></button></div></div>
+    <button type="button" class="cfl-btn next" aria-label="Next slide">→</button>
+  </div>
+</div>
+    </div>
+
+    <div class="deliv">
+      <div class="series-intro">
+        <div>
+          <p class="eyebrow accent reveal">Weekly series · 30s episodes</p>
+          <h3 class="series-title reveal delay-1">Try it or <span>hire it?</span></h3>
+        </div>
+        <p class="lead reveal delay-2" style="max-width:420px">Frankee attempts a student’s task while a Starter Quest freelancer does it properly. Viewers submit the next task.</p>
+      </div>
+
+      <div class="ep-player reveal" id="ep1" data-total="30" data-frames='[{&quot;n&quot;: &quot;01&quot;, &quot;t&quot;: &quot;Title card&quot;, &quot;time&quot;: &quot;0\u20132s&quot;, &quot;shot&quot;: &quot;8-bit title screen, task card drops in.&quot;, &quot;text&quot;: &quot;TRY IT OR HIRE IT? Task: Album art for Kieran\u2019s EP&quot;, &quot;sound&quot;: &quot;Theme jingle&quot;, &quot;a&quot;: 0, &quot;b&quot;: 2}, {&quot;n&quot;: &quot;02&quot;, &quot;t&quot;: &quot;The ask&quot;, &quot;time&quot;: &quot;2\u20134s&quot;, &quot;shot&quot;: &quot;Kieran to camera, phone showing an empty EP cover.&quot;, &quot;text&quot;: &quot;\u201cOur EP drops Friday. No cover.\u201d&quot;, &quot;sound&quot;: &quot;Kieran speaking&quot;, &quot;a&quot;: 2, &quot;b&quot;: 4}, {&quot;n&quot;: &quot;03&quot;, &quot;t&quot;: &quot;Try it&quot;, &quot;time&quot;: &quot;4\u201310s&quot;, &quot;shot&quot;: &quot;Frankee hunched over a laptop with a stylus.&quot;, &quot;text&quot;: &quot;TRY IT. Hour 1. Hour 5.&quot;, &quot;sound&quot;: &quot;Armour clanks, keyboard thuds, clock ticking&quot;, &quot;a&quot;: 4, &quot;b&quot;: 10}, {&quot;n&quot;: &quot;04&quot;, &quot;t&quot;: &quot;The attempt&quot;, &quot;time&quot;: &quot;10\u201312s&quot;, &quot;shot&quot;: &quot;Frankee turns laptop to camera, showing stick figures.&quot;, &quot;text&quot;: &quot;Attempt #1&quot;, &quot;sound&quot;: &quot;Silence, muffled groaning, fail sound&quot;, &quot;a&quot;: 10, &quot;b&quot;: 12}, {&quot;n&quot;: &quot;05&quot;, &quot;t&quot;: &quot;Hire it&quot;, &quot;time&quot;: &quot;12\u201316s&quot;, &quot;shot&quot;: &quot;Kieran posts the job on his phone.&quot;, &quot;text&quot;: &quot;HIRE IT. Posted on Freelancer.com&quot;, &quot;sound&quot;: &quot;A chime per bid&quot;, &quot;a&quot;: 12, &quot;b&quot;: 16}, {&quot;n&quot;: &quot;06&quot;, &quot;t&quot;: &quot;The maker&quot;, &quot;time&quot;: &quot;16\u201321s&quot;, &quot;shot&quot;: &quot;Time-lapse of Jennifer illustrating.&quot;, &quot;text&quot;: &quot;Made by Jennifer, a student on Starter Quests&quot;, &quot;sound&quot;: &quot;Positive jingle&quot;, &quot;a&quot;: 16, &quot;b&quot;: 21}, {&quot;n&quot;: &quot;07&quot;, &quot;t&quot;: &quot;The reveal&quot;, &quot;time&quot;: &quot;21\u201324s&quot;, &quot;shot&quot;: &quot;Split screen of Frankee\u2019s attempt and Jennifer\u2019s cover.&quot;, &quot;text&quot;: &quot;N/A&quot;, &quot;sound&quot;: &quot;Dramatic buildup music&quot;, &quot;a&quot;: 21, &quot;b&quot;: 24}, {&quot;n&quot;: &quot;08&quot;, &quot;t&quot;: &quot;The verdict&quot;, &quot;time&quot;: &quot;24\u201327s&quot;, &quot;shot&quot;: &quot;Frankee raises the \u2018HIRE IT\u2019 sign + Kieran nods.&quot;, &quot;text&quot;: &quot;N/A&quot;, &quot;sound&quot;: &quot;Victory jingle&quot;, &quot;a&quot;: 24, &quot;b&quot;: 27}, {&quot;n&quot;: &quot;09&quot;, &quot;t&quot;: &quot;End card&quot;, &quot;time&quot;: &quot;27\u201330s&quot;, &quot;shot&quot;: &quot;Campaign lockup, CTA, what\u2019s next.&quot;, &quot;text&quot;: &quot;What should Frankee try next? #TryItOrHireIt&quot;, &quot;sound&quot;: &quot;Theme jingle&quot;, &quot;a&quot;: 27, &quot;b&quot;: 30}]'>
+  <div class="ep-phone"><div class="device "><div class="device-screen"><div class="statusbar"><span>9:41</span><span class="sb-icons"><svg width="17" height="11" viewBox="0 0 17 11" fill="#fff"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="15" height="11" viewBox="0 0 15 11" fill="#fff"><path d="M7.5 2.2c2.2 0 4.2.8 5.7 2.2l1.1-1.1C12.5 1.6 10.1.6 7.5.6S2.5 1.6.7 3.3l1.1 1.1c1.5-1.4 3.5-2.2 5.7-2.2zm0 3.2c1.3 0 2.5.5 3.4 1.3l1.1-1.1C10.8 4.5 9.2 3.8 7.5 3.8S4.2 4.5 3 5.6l1.1 1.1c.9-.8 2.1-1.3 3.4-1.3zm0 3.2c.5 0 .9.2 1.2.5L7.5 10.3 6.3 9.1c.3-.3.7-.5 1.2-.5z"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3" stroke="#fff" opacity=".5"/><rect x="2" y="2" width="18" height="8" rx="1.8" fill="#fff"/><rect x="23" y="4" width="1.6" height="4" rx=".8" fill="#fff" opacity=".5"/></svg></span></div><div class="island"></div><div class="ep-screen"><div class="ep-frame on"><img src="img/ep1-1.webp" alt="Storyboard frame 01: Title card" width="357" height="575"></div><div class="ep-frame"><img src="img/ep1-2.webp" alt="Storyboard frame 02: The ask" width="357" height="575"></div><div class="ep-frame"><img src="img/ep1-3.webp" alt="Storyboard frame 03: Try it" width="357" height="575"></div><div class="ep-frame"><img src="img/ep1-4.webp" alt="Storyboard frame 04: The attempt" width="357" height="575"></div><div class="ep-frame"><img src="img/ep1-5.webp" alt="Storyboard frame 05: Hire it" width="357" height="575"></div><div class="ep-frame"><img src="img/ep1-6.webp" alt="Storyboard frame 06: The maker" width="357" height="575"></div><div class="ep-frame"><img src="img/ep1-7.webp" alt="Storyboard frame 07: The reveal" width="357" height="575"></div><div class="ep-frame"><img src="img/ep1-8.webp" alt="Storyboard frame 08: The verdict" width="357" height="575"></div><div class="ep-frame"><img src="img/ep1-9.webp" alt="Storyboard frame 09: End card" width="357" height="575"></div><div class="ep-cap"><b>@freelancer</b> Frankee gave it five hours. Jennifer gave it a weekend. What should Frankee try next? <span>#TryItOrHireIt</span></div></div></div></div></div>
+  <div class="ep-copy">
+    <p class="eyebrow accent">EP.01 — Hire it · 30s</p>
+    <div class="demo-count"><span class="demo-cur">01</span><span class="demo-tot"> / 09</span></div>
+    <h4 class="demo-title ep-title">Title card</h4>
+    <p class="ep-time">0–2s</p>
+    <dl class="ep-dl">
+      <dt>Shot</dt><dd class="ep-shot">8-bit title screen, task card drops in.</dd>
+      <dt>On screen</dt><dd class="ep-text">TRY IT OR HIRE IT? Task: Album art for Kieran’s EP</dd>
+      <dt>Sound</dt><dd class="ep-sound">Theme jingle</dd>
+    </dl>
+    <div class="ep-controls">
+      <button type="button" class="cfl-btn ep-prev" aria-label="Previous frame">←</button>
+      <button type="button" class="ep-play" aria-label="Play storyboard"><span class="ep-ico">▶</span><span class="ep-play-l">Play 30s</span></button>
+      <button type="button" class="cfl-btn ep-next" aria-label="Next frame">→</button>
+    </div>
+  </div>
+  <div class="ep-timeline">
+    <div class="ep-track"><button type="button" class="ep-seg" style="flex-grow:2" data-i="0" aria-label="Frame 01: Title card, 0–2s"><span>01</span></button><button type="button" class="ep-seg" style="flex-grow:2" data-i="1" aria-label="Frame 02: The ask, 2–4s"><span>02</span></button><button type="button" class="ep-seg" style="flex-grow:6" data-i="2" aria-label="Frame 03: Try it, 4–10s"><span>03</span></button><button type="button" class="ep-seg" style="flex-grow:2" data-i="3" aria-label="Frame 04: The attempt, 10–12s"><span>04</span></button><button type="button" class="ep-seg" style="flex-grow:4" data-i="4" aria-label="Frame 05: Hire it, 12–16s"><span>05</span></button><button type="button" class="ep-seg" style="flex-grow:5" data-i="5" aria-label="Frame 06: The maker, 16–21s"><span>06</span></button><button type="button" class="ep-seg" style="flex-grow:3" data-i="6" aria-label="Frame 07: The reveal, 21–24s"><span>07</span></button><button type="button" class="ep-seg" style="flex-grow:3" data-i="7" aria-label="Frame 08: The verdict, 24–27s"><span>08</span></button><button type="button" class="ep-seg" style="flex-grow:3" data-i="8" aria-label="Frame 09: End card, 27–30s"><span>09</span></button><div class="ep-fill"></div><div class="ep-head"></div></div>
+    <div class="ep-scale"><span>0s</span><span>15s</span><span>30s</span></div>
+  </div>
+</div>
+
+      <div class="ep-player flip reveal" id="ep2" data-total="30" data-frames='[{&quot;n&quot;: &quot;01&quot;, &quot;t&quot;: &quot;Title card&quot;, &quot;time&quot;: &quot;0\u20132s&quot;, &quot;shot&quot;: &quot;8-bit title screen; task card drops in.&quot;, &quot;text&quot;: &quot;TRY IT OR HIRE IT? \u00b7 Task: a birthday card for Kieran\u2019s nan&quot;, &quot;sound&quot;: &quot;8-bit jingle&quot;, &quot;a&quot;: 0, &quot;b&quot;: 2}, {&quot;n&quot;: &quot;02&quot;, &quot;t&quot;: &quot;The ask&quot;, &quot;time&quot;: &quot;2\u20134s&quot;, &quot;shot&quot;: &quot;Kieran to camera, holding a blank birthday card.&quot;, &quot;text&quot;: &quot;\u201cNan turns 90 on Sunday.\u201d&quot;, &quot;sound&quot;: &quot;Kieran speaks&quot;, &quot;a&quot;: 2, &quot;b&quot;: 4}, {&quot;n&quot;: &quot;03&quot;, &quot;t&quot;: &quot;Try it&quot;, &quot;time&quot;: &quot;4\u201310s&quot;, &quot;shot&quot;: &quot;Frankee in full armour, gauntlet gripping a tiny pen. Glitter everywhere. Clock: 9pm to midnight.&quot;, &quot;text&quot;: &quot;TRY IT \u00b7 Hour 1\u2026 Hour 3&quot;, &quot;sound&quot;: &quot;Armour clanks, pen scratching&quot;, &quot;a&quot;: 4, &quot;b&quot;: 10}, {&quot;n&quot;: &quot;04&quot;, &quot;t&quot;: &quot;The attempt&quot;, &quot;time&quot;: &quot;10\u201312s&quot;, &quot;shot&quot;: &quot;Frankee holds up the card: crooked letters, a lopsided heart, far too much glitter.&quot;, &quot;text&quot;: &quot;Attempt #1&quot;, &quot;sound&quot;: &quot;Silence, one hopeful 8-bit note&quot;, &quot;a&quot;: 10, &quot;b&quot;: 12}, {&quot;n&quot;: &quot;05&quot;, &quot;t&quot;: &quot;Hire it&quot;, &quot;time&quot;: &quot;12\u201316s&quot;, &quot;shot&quot;: &quot;Kieran posts the job on his phone; bids pop in.&quot;, &quot;text&quot;: &quot;HIRE IT \u00b7 Posted on Freelancer&quot;, &quot;sound&quot;: &quot;A chime per bid&quot;, &quot;a&quot;: 12, &quot;b&quot;: 16}, {&quot;n&quot;: &quot;06&quot;, &quot;t&quot;: &quot;The maker&quot;, &quot;time&quot;: &quot;16\u201321s&quot;, &quot;shot&quot;: &quot;Time-lapse: Jennifer painting a watercolour card at her desk.&quot;, &quot;text&quot;: &quot;Made by Jennifer, a student on Starter Quests&quot;, &quot;sound&quot;: &quot;Up-tempo 8-bit loop&quot;, &quot;a&quot;: 16, &quot;b&quot;: 21}, {&quot;n&quot;: &quot;07&quot;, &quot;t&quot;: &quot;The reveal&quot;, &quot;time&quot;: &quot;21\u201324s&quot;, &quot;shot&quot;: &quot;Split screen of both cards. Cut to Nan opening Frankee\u2019s card and holding it to her chest.&quot;, &quot;text&quot;: &quot;\u2014&quot;, &quot;sound&quot;: &quot;Build, then a music-box version of the theme&quot;, &quot;a&quot;: 21, &quot;b&quot;: 24}, {&quot;n&quot;: &quot;08&quot;, &quot;t&quot;: &quot;The verdict&quot;, &quot;time&quot;: &quot;24\u201327s&quot;, &quot;shot&quot;: &quot;Frankee raises the TRY IT sign; Jennifer gives a thumbs-up from her desk.&quot;, &quot;text&quot;: &quot;TRY IT \u00b7 Some quests are better done yourself.&quot;, &quot;sound&quot;: &quot;Gentle victory jingle&quot;, &quot;a&quot;: 24, &quot;b&quot;: 27}, {&quot;n&quot;: &quot;09&quot;, &quot;t&quot;: &quot;End card&quot;, &quot;time&quot;: &quot;27\u201330s&quot;, &quot;shot&quot;: &quot;Crest and lockup, both actions, next-week prompt.&quot;, &quot;text&quot;: &quot;Careers later. Side quests now. \u00b7 What should Frankee try next?&quot;, &quot;sound&quot;: &quot;Jingle tail&quot;, &quot;a&quot;: 27, &quot;b&quot;: 30}]'>
+  <div class="ep-phone"><div class="device "><div class="device-screen"><div class="statusbar"><span>9:41</span><span class="sb-icons"><svg width="17" height="11" viewBox="0 0 17 11" fill="#fff"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="15" height="11" viewBox="0 0 15 11" fill="#fff"><path d="M7.5 2.2c2.2 0 4.2.8 5.7 2.2l1.1-1.1C12.5 1.6 10.1.6 7.5.6S2.5 1.6.7 3.3l1.1 1.1c1.5-1.4 3.5-2.2 5.7-2.2zm0 3.2c1.3 0 2.5.5 3.4 1.3l1.1-1.1C10.8 4.5 9.2 3.8 7.5 3.8S4.2 4.5 3 5.6l1.1 1.1c.9-.8 2.1-1.3 3.4-1.3zm0 3.2c.5 0 .9.2 1.2.5L7.5 10.3 6.3 9.1c.3-.3.7-.5 1.2-.5z"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3" stroke="#fff" opacity=".5"/><rect x="2" y="2" width="18" height="8" rx="1.8" fill="#fff"/><rect x="23" y="4" width="1.6" height="4" rx=".8" fill="#fff" opacity=".5"/></svg></span></div><div class="island"></div><div class="ep-screen"><div class="ep-frame on"><img src="img/ep2-1.webp" alt="Storyboard frame 01: Title card" width="357" height="575"></div><div class="ep-frame"><img src="img/ep2-2.webp" alt="Storyboard frame 02: The ask" width="357" height="575"></div><div class="ep-frame"><img src="img/ep2-3.webp" alt="Storyboard frame 03: Try it" width="357" height="575"></div><div class="ep-frame"><img src="img/ep2-4.webp" alt="Storyboard frame 04: The attempt" width="357" height="575"></div><div class="ep-frame"><img src="img/ep2-5.webp" alt="Storyboard frame 05: Hire it" width="357" height="575"></div><div class="ep-frame"><img src="img/ep2-6.webp" alt="Storyboard frame 06: The maker" width="357" height="575"></div><div class="ep-frame"><img src="img/ep2-7.webp" alt="Storyboard frame 07: The reveal" width="357" height="575"></div><div class="ep-frame"><img src="img/ep2-8.webp" alt="Storyboard frame 08: The verdict" width="357" height="575"></div><div class="ep-frame"><img src="img/ep2-9.webp" alt="Storyboard frame 09: End card" width="357" height="575"></div><div class="ep-cap"><b>@freelancer</b> Jennifer’s was prettier. Nan kept Frankee’s. What should Frankee try next? <span>#TryItOrHireIt</span></div></div></div></div></div>
+  <div class="ep-copy">
+    <p class="eyebrow accent">EP.02 — Try it · 30s</p>
+    <div class="demo-count"><span class="demo-cur">01</span><span class="demo-tot"> / 09</span></div>
+    <h4 class="demo-title ep-title">Title card</h4>
+    <p class="ep-time">0–2s</p>
+    <dl class="ep-dl">
+      <dt>Shot</dt><dd class="ep-shot">8-bit title screen; task card drops in.</dd>
+      <dt>On screen</dt><dd class="ep-text">TRY IT OR HIRE IT? · Task: a birthday card for Kieran’s nan</dd>
+      <dt>Sound</dt><dd class="ep-sound">8-bit jingle</dd>
+    </dl>
+    <div class="ep-controls">
+      <button type="button" class="cfl-btn ep-prev" aria-label="Previous frame">←</button>
+      <button type="button" class="ep-play" aria-label="Play storyboard"><span class="ep-ico">▶</span><span class="ep-play-l">Play 30s</span></button>
+      <button type="button" class="cfl-btn ep-next" aria-label="Next frame">→</button>
+    </div>
+  </div>
+  <div class="ep-timeline">
+    <div class="ep-track"><button type="button" class="ep-seg" style="flex-grow:2" data-i="0" aria-label="Frame 01: Title card, 0–2s"><span>01</span></button><button type="button" class="ep-seg" style="flex-grow:2" data-i="1" aria-label="Frame 02: The ask, 2–4s"><span>02</span></button><button type="button" class="ep-seg" style="flex-grow:6" data-i="2" aria-label="Frame 03: Try it, 4–10s"><span>03</span></button><button type="button" class="ep-seg" style="flex-grow:2" data-i="3" aria-label="Frame 04: The attempt, 10–12s"><span>04</span></button><button type="button" class="ep-seg" style="flex-grow:4" data-i="4" aria-label="Frame 05: Hire it, 12–16s"><span>05</span></button><button type="button" class="ep-seg" style="flex-grow:5" data-i="5" aria-label="Frame 06: The maker, 16–21s"><span>06</span></button><button type="button" class="ep-seg" style="flex-grow:3" data-i="6" aria-label="Frame 07: The reveal, 21–24s"><span>07</span></button><button type="button" class="ep-seg" style="flex-grow:3" data-i="7" aria-label="Frame 08: The verdict, 24–27s"><span>08</span></button><button type="button" class="ep-seg" style="flex-grow:3" data-i="8" aria-label="Frame 09: End card, 27–30s"><span>09</span></button><div class="ep-fill"></div><div class="ep-head"></div></div>
+    <div class="ep-scale"><span>0s</span><span>15s</span><span>30s</span></div>
+  </div>
+</div>
+    </div>
+  </div>
+</section>
+
+<section class="light block">
+  <div class="container">
+    <div class="deliv">
+      <div class="sub-head"><h3 class="reveal">Starter Quests onboarding + platform</h3><p class="reveal delay-1">Stage 05, first quest. A clickable prototype: tap the pink buttons to sign up the way a student would.</p></div>
+      <div class="demo proto-demo reveal" id="demo-onb" data-sections="Splash page~Welcome to your Starter Quest. Frankee greets new students and gets them started.|What to expect~Sets expectations up front: students only, small clear jobs, help with the first bid, and a first review.|Verify~A university email keeps Starter Quests student-only.|Verification code~A one-time code confirms the student’s email.|Profile~Display name, course, a one-line intro and an optional portfolio link.|Skill tags~Students pick up to three skills, which match them to jobs.|New quests~The payoff: new quests unlocked, matched to the student’s skills.">
+  <div class="demo-phone"><div class="device "><div class="device-screen"><div class="statusbar"><span>9:41</span><span class="sb-icons"><svg width="17" height="11" viewBox="0 0 17 11" fill="#fff"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="15" height="11" viewBox="0 0 15 11" fill="#fff"><path d="M7.5 2.2c2.2 0 4.2.8 5.7 2.2l1.1-1.1C12.5 1.6 10.1.6 7.5.6S2.5 1.6.7 3.3l1.1 1.1c1.5-1.4 3.5-2.2 5.7-2.2zm0 3.2c1.3 0 2.5.5 3.4 1.3l1.1-1.1C10.8 4.5 9.2 3.8 7.5 3.8S4.2 4.5 3 5.6l1.1 1.1c.9-.8 2.1-1.3 3.4-1.3zm0 3.2c.5 0 .9.2 1.2.5L7.5 10.3 6.3 9.1c.3-.3.7-.5 1.2-.5z"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3" stroke="#fff" opacity=".5"/><rect x="2" y="2" width="18" height="8" rx="1.8" fill="#fff"/><rect x="23" y="4" width="1.6" height="4" rx=".8" fill="#fff" opacity=".5"/></svg></span></div><div class="island"></div><div class="pstage"><div class="pscreen on" data-i="0"><img src="img/proto-1.webp" alt="Onboarding splash page" width="720" height="1280"><button type="button" class="hot" style="left:12.6%;top:81.4%;width:74.8%;height:5.6%" aria-label="Get started: go to next screen"></button></div><div class="pscreen" data-i="1"><img src="img/proto-2.webp" alt="Onboarding what to expect" width="720" height="1280"><button type="button" class="hot" style="left:12.6%;top:68.8%;width:74.8%;height:5.6%" aria-label="Continue: go to next screen"></button></div><div class="pscreen" data-i="2"><img src="img/proto-3.webp" alt="Onboarding verify student email" width="720" height="1280"><button type="button" class="hot" style="left:12.6%;top:57.8%;width:74.8%;height:5.6%" aria-label="Send verification code: go to next screen"></button></div><div class="pscreen" data-i="3"><img src="img/proto-4.webp" alt="Onboarding verification code" width="720" height="1280"><button type="button" class="hot" style="left:12.6%;top:54.3%;width:74.8%;height:5.6%" aria-label="Verify: go to next screen"></button></div><div class="pscreen" data-i="4"><img src="img/proto-5.webp" alt="Onboarding profile setup" width="720" height="1280"><button type="button" class="hot" style="left:12.6%;top:74.1%;width:74.8%;height:5.6%" aria-label="Save: go to next screen"></button></div><div class="pscreen" data-i="5"><img src="img/proto-6.webp" alt="Onboarding skill tags" width="720" height="1280"><button type="button" class="hot" style="left:12.6%;top:62.5%;width:74.8%;height:5.6%" aria-label="View job matches: go to next screen"></button></div><div class="pscreen" data-i="6"><img src="img/proto-7.webp" alt="Platform new quests list" width="720" height="1280"></div></div></div></div>
+    <p class="demo-hint proto-hint"><span>Tap the pink button to continue</span></p>
+  </div>
+  <div class="demo-copy">
+    <p class="eyebrow accent">Onboarding prototype · tap through</p>
+    <div class="demo-count"><span class="demo-cur">01</span><span class="demo-tot"> / 07</span></div>
+    <h4 class="demo-title">Splash page</h4>
+    <p class="demo-desc">Welcome to your Starter Quest. Frankee greets new students and gets them started.</p>
+    <ol class="demo-steps"><li><button type="button" data-i="0"><span>01</span>Splash page</button></li><li><button type="button" data-i="1"><span>02</span>What to expect</button></li><li><button type="button" data-i="2"><span>03</span>Verify</button></li><li><button type="button" data-i="3"><span>04</span>Verification code</button></li><li><button type="button" data-i="4"><span>05</span>Profile</button></li><li><button type="button" data-i="5"><span>06</span>Skill tags</button></li><li><button type="button" data-i="6"><span>07</span>New quests</button></li></ol>
+    <div class="proto-ctl"><button type="button" class="cfl-btn proto-back" aria-label="Previous screen">←</button><button type="button" class="proto-restart">↺ Restart prototype</button></div>
+  </div>
+</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MEASUREMENT ============ -->
+<section class="block" id="measurement" data-label="Measurement" style="background:var(--navy)">
+  <div class="dot-grid"></div>
+  <div class="container" style="position:relative">
+    <div class="head-row">
+      <p class="eyebrow accent reveal">The measurement · Success metrics</p>
+      <h2 class="h2 reveal delay-1">Measure action, not just attention.</h2>
+      <p class="lead reveal delay-2">The first four weeks set the baseline. Each stage has its own signal; the campaign succeeds when students start, and come back.</p>
+    </div>
+    <div class="metrics" style="--x:0">
+      <div class="brk white reveal"><h3 style="color:#fff">01. Get noticed</h3><ul class="px-list"><li>Sighting posts and tags</li><li>Shares and mentions</li></ul><span class="tag dark">Sightings</span></div>
+      <div class="brk white reveal delay-1"><h3 style="color:#fff">02. Meet Frankee</h3><ul class="px-list"><li>O-Week stall visits</li><li>QR scans and sign-ups</li></ul><span class="tag dark">Activation</span></div>
+      <div class="brk white reveal delay-2"><h3 style="color:#fff">03. Try it or hire it?</h3><ul class="px-list"><li>Views and watch-through rate</li><li>Saves, shares and comments</li><li>Task submissions</li></ul><span class="tag dark">Social content</span></div>
+      <div class="brk white reveal"><h3 style="color:#fff">04. Choose a side</h3><ul class="px-list"><li>Landing page visits</li><li>Click-through to hire or earn</li></ul><span class="tag dark">Landing page</span></div>
+      <div class="brk white reveal delay-1"><h3 style="color:#fff">05. First quest</h3><ul class="px-list"><li>Jobs posted via /hire</li><li>Starter Quests completed</li><li>First reviews earned</li></ul><span class="tag dark">Starter Quests</span></div>
+      <div class="brk pink overall reveal delay-2"><h3>Overall success</h3><p style="font-size:13px;margin-bottom:6px">First four weeks set the baseline</p><ul class="px-list"><li><strong style="color:#fff">Action:</strong> first quests started</li><li><strong style="color:#fff">Growth:</strong> new student accounts</li><li><strong style="color:#fff">Retention:</strong> students coming back for a second quest</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ END ============ -->
+<section id="end" data-label="Thank you">
+  <div class="hero-grid"></div>
+  <div style="position:relative;z-index:2">
+    <img src="img/crest-light.png" alt="Pixel crest" width="618" height="401" loading="lazy" class="end-crest pixel">
+    <p class="thanks reveal">Thank you.</p>
+    <p class="end-meta">Jason Lung<br>Freelancer.com creative exercise</p>
+    <a class="to-top" href="#hero">↑ Back to top</a>
+  </div>
+  <img src="img/knight.png" alt="" width="402" height="502" loading="lazy" class="end-knight pixel">
+</section>
+
+<script>
+(() => {
+  // Reveal on scroll
+  const io = new IntersectionObserver(es => es.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); }
+  }), { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Highlight sweep
+  const ho = new IntersectionObserver(es => es.forEach(en => {
+    if (en.isIntersecting) { setTimeout(() => en.target.classList.add('on'), 250); ho.unobserve(en.target); }
+  }), { threshold: 1 });
+  document.querySelectorAll('.hl').forEach(el => ho.observe(el));
+
+
+  // Phone scroll demos
+  document.querySelectorAll('.demo:not(.story-demo):not(.proto-demo)').forEach(demo => {
+    const scr = demo.querySelector('.screen-scroll');
+    const secs = [...scr.querySelectorAll('.screen-sec')];
+    const head = scr.querySelector('.screen-head');
+    const data = demo.dataset.sections.split('|').map(x => x.split('~'));
+    const cur = demo.querySelector('.demo-cur'), title = demo.querySelector('.demo-title'), desc = demo.querySelector('.demo-desc');
+    const btns = [...demo.querySelectorAll('.demo-steps button')];
+    let active = -1, t;
+    const set = i => {
+      if (i === active) return; active = i;
+      btns.forEach((b, j) => b.classList.toggle('active', j === i));
+      cur.textContent = String(i + 1).padStart(2, '0');
+      demo.classList.add('swap'); clearTimeout(t);
+      t = setTimeout(() => { title.textContent = data[i][0]; desc.textContent = data[i][1]; demo.classList.remove('swap'); }, 180);
+    };
+    const hh = () => head ? head.offsetHeight : 0;
+    const check = () => {
+      const y = scr.scrollTop + hh() + (scr.clientHeight - hh()) * 0.45;
+      let i = 0; secs.forEach((s, j) => { if (s.offsetTop <= y) i = j; });
+      if (scr.scrollTop + scr.clientHeight >= scr.scrollHeight - 2) i = secs.length - 1;
+      set(i);
+    };
+    scr.addEventListener('scroll', check, { passive: true });
+    btns.forEach((b, j) => b.addEventListener('click', () => scr.scrollTo({ top: secs[j].offsetTop - hh(), behavior: 'smooth' })));
+    set(0);
+  });
+
+
+  // Story tap-through
+  document.querySelectorAll('.story-demo').forEach(demo => {
+    const story = demo.querySelector('.story');
+    const frames = [...story.querySelectorAll('.sframe')], bars = [...story.querySelectorAll('.sbar')];
+    const data = demo.dataset.sections.split('|').map(x => x.split('~'));
+    const cur = demo.querySelector('.demo-cur'), title = demo.querySelector('.demo-title'), desc = demo.querySelector('.demo-desc');
+    const btns = [...demo.querySelectorAll('.demo-steps button')];
+    const hint = demo.querySelector('.story-hint span');
+    let i = 0, t;
+    const show = n => {
+      i = (n + frames.length) % frames.length;
+      frames.forEach((f, j) => f.classList.toggle('on', j === i));
+      bars.forEach((b, j) => b.classList.toggle('done', j <= i));
+      btns.forEach((b, j) => b.classList.toggle('active', j === i));
+      cur.textContent = String(i + 1).padStart(2, '0');
+      hint.textContent = i === frames.length - 1 ? 'Tap to start again ↺' : 'Tap for next character →';
+      demo.classList.add('swap'); clearTimeout(t);
+      t = setTimeout(() => { title.textContent = data[i][0]; desc.textContent = data[i][1]; demo.classList.remove('swap'); }, 180);
+    };
+    story.querySelector('.next').addEventListener('click', () => show(i + 1));
+    story.querySelector('.prev').addEventListener('click', () => show(i - 1));
+    btns.forEach((b, j) => b.addEventListener('click', () => show(j)));
+    show(0);
+  });
+
+
+  // Carousel viewers
+  document.querySelectorAll('.cfl').forEach(c => {
+    const track = c.querySelector('.cfl-track'), slides = [...track.children];
+    const labels = c.dataset.labels.split('|'), n = slides.length;
+    const num = c.querySelector('.cfl-num'), name = c.querySelector('.cfl-name');
+    const dots = [...c.querySelectorAll('.cfl-dot')], prev = c.querySelector('.prev'), next = c.querySelector('.next');
+    let cur = 0;
+    const left = i => slides[i].offsetLeft - (track.clientWidth - slides[i].offsetWidth) / 2;
+    const go = i => track.scrollTo({ left: left(Math.max(0, Math.min(n - 1, i))), behavior: 'smooth' });
+    const mark = i => {
+      if (i === cur && slides[i].classList.contains('on')) return; cur = i;
+      slides.forEach((s, j) => s.classList.toggle('on', j === i));
+      dots.forEach((d, j) => d.classList.toggle('on', j === i));
+      num.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(n).padStart(2, '0');
+      name.textContent = labels[i];
+      prev.disabled = i === 0; next.disabled = i === n - 1;
+    };
+    track.addEventListener('scroll', () => {
+      const mid = track.scrollLeft + track.clientWidth / 2;
+      let best = 0, d = 1e9;
+      slides.forEach((s, j) => { const dd = Math.abs(s.offsetLeft + s.offsetWidth / 2 - mid); if (dd < d) { d = dd; best = j; } });
+      mark(best);
+    }, { passive: true });
+    slides.forEach((s, j) => s.addEventListener('click', () => { if (j !== cur) go(j); }));
+    dots.forEach((b, j) => b.addEventListener('click', () => go(j)));
+    prev.addEventListener('click', () => go(cur - 1)); next.addEventListener('click', () => go(cur + 1));
+    track.addEventListener('keydown', ev => { if (ev.key === 'ArrowRight') { ev.preventDefault(); go(cur + 1); } if (ev.key === 'ArrowLeft') { ev.preventDefault(); go(cur - 1); } });
+    cur = -1; mark(0);
+  });
+
+
+  // Episode players
+  document.querySelectorAll('.ep-player').forEach(p => {
+    const F = JSON.parse(p.dataset.frames), total = +p.dataset.total;
+    const frames = [...p.querySelectorAll('.ep-frame')], segs = [...p.querySelectorAll('.ep-seg')];
+    const q = c => p.querySelector(c);
+    const cur = q('.demo-cur'), title = q('.ep-title'), time = q('.ep-time'), shot = q('.ep-shot'), text = q('.ep-text'), sound = q('.ep-sound');
+    const fill = q('.ep-fill'), head = q('.ep-head'), track = q('.ep-track'), play = q('.ep-play'), ico = q('.ep-ico'), lab = q('.ep-play-l');
+    let t = 0, idx = -1, playing = false, last = 0, tm;
+    const at = s => { let i = 0; F.forEach((f, j) => { if (s >= f.a) i = j; }); return i; };
+    const render = () => {
+      const pct = Math.min(1, t / total) * 100;
+      fill.style.width = pct + '%'; head.style.left = `calc(${pct}% - ${pct ? 3 : 0}px)`;
+      const i = at(Math.min(t, total - 0.001));
+      if (i === idx) return; idx = i; const f = F[i];
+      frames.forEach((el, j) => el.classList.toggle('on', j === i));
+      segs.forEach((el, j) => el.classList.toggle('on', j === i));
+      cur.textContent = f.n;
+      p.classList.add('swap'); clearTimeout(tm);
+      tm = setTimeout(() => { title.textContent = f.t; time.textContent = f.time; shot.textContent = f.shot; text.textContent = f.text; sound.textContent = f.sound; p.classList.remove('swap'); }, 150);
+    };
+    const setPlaying = v => { playing = v; ico.textContent = v ? '❚❚' : '▶'; lab.textContent = v ? 'Pause' : (t > 0 && t < total ? 'Resume' : 'Play 30s'); play.setAttribute('aria-label', v ? 'Pause storyboard' : 'Play storyboard'); };
+    const loop = now => {
+      if (!playing) return;
+      t += (now - last) / 1000; last = now;
+      if (t >= total) { t = total; render(); setPlaying(false); t = 0; lab.textContent = 'Replay'; return; }
+      render(); requestAnimationFrame(loop);
+    };
+    play.addEventListener('click', () => {
+      if (playing) { setPlaying(false); return; }
+      if (t >= total) t = 0;
+      setPlaying(true); last = performance.now(); requestAnimationFrame(loop);
+    });
+    const jump = i => { i = Math.max(0, Math.min(F.length - 1, i)); t = F[i].a; render(); if (!playing) setPlaying(false); };
+    segs.forEach((b, j) => b.addEventListener('click', () => jump(j)));
+    q('.ep-prev').addEventListener('click', () => jump(idx - 1));
+    q('.ep-next').addEventListener('click', () => jump(idx + 1));
+    // drag to scrub
+    let drag = false;
+    const scrub = ev => { const r = track.getBoundingClientRect(); t = Math.max(0, Math.min(total - 0.01, (ev.clientX - r.left) / r.width * total)); render(); };
+    track.addEventListener('pointerdown', ev => { drag = true; track.setPointerCapture(ev.pointerId); scrub(ev); });
+    track.addEventListener('pointermove', ev => { if (drag) scrub(ev); });
+    track.addEventListener('pointerup', () => { drag = false; if (!playing) setPlaying(false); });
+    // pause when scrolled away
+    new IntersectionObserver(es => es.forEach(en => { if (!en.isIntersecting && playing) setPlaying(false); })).observe(p);
+    render();
+  });
+
+
+  // Onboarding prototype
+  document.querySelectorAll('.proto-demo').forEach(demo => {
+    const stage = demo.querySelector('.pstage'), screens = [...stage.querySelectorAll('.pscreen')];
+    const data = demo.dataset.sections.split('|').map(x => x.split('~'));
+    const cur = demo.querySelector('.demo-cur'), title = demo.querySelector('.demo-title'), desc = demo.querySelector('.demo-desc');
+    const btns = [...demo.querySelectorAll('.demo-steps button')], back = demo.querySelector('.proto-back');
+    const hint = demo.querySelector('.proto-hint span');
+    let i = 0, t, ft;
+    const show = n => {
+      i = Math.max(0, Math.min(screens.length - 1, n));
+      screens.forEach((s, j) => { s.classList.toggle('on', j === i); s.classList.toggle('past', j < i); });
+      btns.forEach((b, j) => b.classList.toggle('active', j === i));
+      cur.textContent = String(i + 1).padStart(2, '0');
+      back.disabled = i === 0;
+      hint.textContent = i === screens.length - 1 ? 'Onboarding complete: restart to replay' : 'Tap the pink button to continue';
+      demo.classList.add('swap'); clearTimeout(t);
+      t = setTimeout(() => { title.textContent = data[i][0]; desc.textContent = data[i][1]; demo.classList.remove('swap'); }, 180);
+    };
+    stage.querySelectorAll('.hot').forEach(h => h.addEventListener('click', ev => { ev.stopPropagation(); show(i + 1); }));
+    stage.addEventListener('click', () => { stage.classList.add('flash'); clearTimeout(ft); ft = setTimeout(() => stage.classList.remove('flash'), 600); });
+    btns.forEach((b, j) => b.addEventListener('click', () => show(j)));
+    back.addEventListener('click', () => show(i - 1));
+    demo.querySelector('.proto-restart').addEventListener('click', () => show(0));
+    show(0);
+  });
+
+  // Progress bar + nav dots
+  const bar = document.getElementById('progress');
+  const nav = document.getElementById('nav-dots');
+  const secs = [...document.querySelectorAll('section[data-label]')];
+  const dots = secs.map(s => {
+    const b = document.createElement('button');
+    b.className = 'nav-dot'; b.dataset.label = s.dataset.label; b.setAttribute('aria-label', s.dataset.label);
+    b.addEventListener('click', () => s.scrollIntoView({ behavior: 'smooth' }));
+    nav.appendChild(b); return b;
+  });
+  const onScroll = () => {
+    const h = document.documentElement;
+    const p = h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight);
+    bar.style.width = (p * 100) + '%';
+    nav.classList.toggle('visible', h.scrollTop > innerHeight * .5);
+    const mid = innerHeight / 2;
+    let idx = 0;
+    secs.forEach((s, i) => { if (s.getBoundingClientRect().top <= mid) idx = i; });
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    // light/dark detection under the dots
+    const el = document.elementFromPoint(innerWidth - 70, mid);
+    nav.classList.toggle('on-light', !!(el && el.closest('.light')));
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>
